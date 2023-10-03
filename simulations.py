@@ -4,8 +4,14 @@ import numpy as np
 import time
 
 
-def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False, drift=True):
+def generate_simulations(p, plot=False, drift=True):
     n, k, eta_plus, eta_minus, lambda_plus, lambda_minus, T, xi, sigma, theta, s0, A, dalpha, q_max, Delta, epsilon = p.n, p.k, p.eta, p.eta, p.lambda_plus, p.lambda_minus, p.T, p.xi, p.sigma, p.theta, p.s0, p.A, p.dalpha, p.q_max, p.Delta, p.epsilon
+
+    alpha = np.load(f"alpha_{p.phi_}_{p.dalpha}.npy")
+    l_p = np.load(f"l_plus_{p.phi_}_{p.dalpha}.npy")
+    l_m = np.load(f"l_minus_{p.phi_}_{p.dalpha}.npy")
+    mo_p = np.load(f"mo_plus_{p.phi_}_{p.dalpha}.npy")
+    mo_m = np.load(f"mo_minus_{p.phi_}_{p.dalpha}.npy")
 
     Upsilon = Delta + epsilon
 
@@ -140,10 +146,6 @@ def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False, drift=True):
         mo_p_executions[:,i] = np.where(dMt_plus[:, i]==0, np.nan, (s[:,i]+Upsilon)*dMt_plus[:, i])
         mo_m_executions[:,i] = np.where(dMt_minus[:, i]==0, np.nan, (s[:,i]-Upsilon)*dMt_minus[:, i])
 
-        X[:,i+1] = X[:,i] + np.where(p_executions[:,i+1] > 0, s[:, i+1] + Delta, 0) - np.where(m_executions[:,i+1] > 0, s[:, i+1]-Delta, 0)\
-            - np.where(mo_p_executions[:,i+1] > 0, s[:, i+1] + Upsilon, 0) \
-            + np.where(mo_m_executions[:,i+1] > 0, s[:, i+1] - Upsilon, 0)
-
         pnl[:,i+1] = pnl[:,i] + np.where(p_executions[:,i] > 0, Delta, 0) + np.where(m_executions[:,i] > 0, Delta, 0)\
             + q[:, i] * (s[:, i+1] - s[:, i]) \
             - np.where(mo_p_executions[:,i+1] > 0, Upsilon, 0) \
@@ -154,8 +156,6 @@ def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False, drift=True):
 
     print(f"Mean of PNL:{np.average(pnl[:,-1])}")
     print(f"Stde of PNL:{np.std(pnl[:,-1])}")
-    print(f"Mean of X:{np.average(X[:,-1])}")
-    print(f"Stde of X:{np.std(X[:,-1])}")
 
     if plot:
         plt_i = 1
@@ -241,7 +241,15 @@ def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False, drift=True):
         # plt.savefig("../Propuesta/figuras/pnl_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
         
         
-    return alpha, mu_plus, mu_minus, dJ_plus, dJ_minus, s, l_p_position, l_m_position, q, dMt0_plus, dMt0_minus, pnl, dMt_plus, dMt_minus,p_executions_count, m_executions_count, pnl, X
+    #return alpha, mu_plus, mu_minus, dJ_plus, dJ_minus, s, l_p_position, l_m_position, q, dMt0_plus, dMt0_minus, pnl, dMt_plus, dMt_minus,p_executions_count, m_executions_count, pnl, X
+    return {
+        "pnl": pnl,
+        "p_postings": p_postings,
+        "m_executions_count": m_executions_count,
+        "p_executions_count": p_executions_count,
+        "dMt_minus": dMt_minus,
+        "dMt_plus": dMt_plus
+    }
 # _ = generate_simulations(n, k, eta_plus, eta_minus, lambda_plus, lambda_minus, T, dt, xi, sigma, theta, s0, plot=True)
 np.random.seed(2)
 # example_params = SimpleNamespace(n=1, k=1, eta_plus=1, eta_minus=1, lambda_plus=1, lambda_minus=1, T=50, dt=0.01, xi=1, sigma=0.1, theta=1, s0=10)
