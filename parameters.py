@@ -1,4 +1,5 @@
 from types import SimpleNamespace
+import pandas as pd
 
 
 class Parameters(SimpleNamespace):
@@ -10,12 +11,13 @@ base_simulation_parameters_dict = {
     'q_max': 4,
     'T': 60,
     'A': 300,
-    'dalpha': 10,
+    'dalpha': 5,
     'Delta': 0.005,
     'epsilon': 0.005,
     'psi': 0.01,
     'phi_': 1e-6,
-    'eta': 60.0,
+    'eta_plus': 60.0,
+    'eta_minus': 60.0,
     'sigma': 0.01,
     'k': 200.0,
     'xi': 1.0,
@@ -26,3 +28,13 @@ base_simulation_parameters_dict = {
     'n': 200
 }
 base_p = Parameters(**base_simulation_parameters_dict)
+
+def load_parameters_from_excel(ticker='DEFAULT', path='/Users/federico/Library/CloudStorage/GoogleDrive-fc.cavallo@gmail.com/My Drive/1 Projects/2021-22-23 Tesis Quant UdeSA/Parameters_NASDAQ.xlsx'):
+    pd.read_excel(path)
+    df = pd.read_excel(path)
+    df.set_index("TICKER")
+    df[df['TICKER'] == ticker].iloc[0].to_dict()
+
+    p = Parameters(**base_simulation_parameters_dict)
+    p.__dict__.update(df[df['TICKER'] == ticker].iloc[0].to_dict())
+    return p
