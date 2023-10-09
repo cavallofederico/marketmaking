@@ -4,7 +4,8 @@ import numpy as np
 import time
 
 
-def generate_simulations(p, plot=False, drift=True):
+def generate_simulations(p, plot=False):
+    drift = True if p.drift=='Yes' else False
     alpha = np.load(f"alpha_{p.phi_}_{p.dalpha}.npy")
     l_p = np.load(f"l_plus_{p.phi_}_{p.dalpha}.npy")
     l_m = np.load(f"l_minus_{p.phi_}_{p.dalpha}.npy")
@@ -245,4 +246,26 @@ def generate_simulations(p, plot=False, drift=True):
         "p_executions_count": p_executions_count,
         "dMt_minus": dMt_minus,
         "dMt_plus": dMt_plus
+    }
+
+def generate_simulations_bunchs(p, plot=False):
+    np.random.seed(2)
+    b = 100
+    n_bunchs = p.n // b
+    p.n = b
+
+    bunch = []
+    for i in range(n_bunchs):
+        data = generate_simulations(p, plot)
+        bunch.append(data)
+
+    p.n = n_bunchs * b
+    print(p.n)
+    return {
+        "pnl": np.concatenate([d["pnl"] for d in bunch]),
+        "p_postings": np.concatenate([d["p_postings"] for d in bunch]),
+        "m_executions_count": np.concatenate([d["m_executions_count"] for d in bunch]),
+        "p_executions_count": np.concatenate([d["p_executions_count"] for d in bunch]),
+        "dMt_minus": np.concatenate([d["dMt_minus"] for d in bunch]),
+        "dMt_plus": np.concatenate([d["dMt_plus"] for d in bunch])
     }
