@@ -29,12 +29,17 @@ base_simulation_parameters_dict = {
 }
 base_p = Parameters(**base_simulation_parameters_dict)
 
-def load_parameters_from_excel(ticker='DEFAULT', path='/Users/federico/Library/CloudStorage/GoogleDrive-fc.cavallo@gmail.com/My Drive/1 Projects/2021-22-23 Tesis Quant UdeSA/Parameters_NASDAQ.xlsx'):
-    pd.read_excel(path)
-    df = pd.read_excel(path)
+def load_parameters_from_excel(ticker='DEFAULT', path='/Users/federico/Library/CloudStorage/GoogleDrive-fc.cavallo@gmail.com/My Drive/1 Projects/2021-22-23 Tesis Quant UdeSA/', file_name='Parameters_NASDAQ.xlsx'):
+    df = pd.read_excel(path + file_name)
     df.set_index("TICKER")
     df[df['TICKER'] == ticker].iloc[0].to_dict()
 
     p = Parameters(**base_simulation_parameters_dict)
     p.__dict__.update(df[df['TICKER'] == ticker].iloc[0].to_dict())
     return p
+
+
+def load_simulation_parameters_from_excel(path='/Users/federico/Library/CloudStorage/GoogleDrive-fc.cavallo@gmail.com/My Drive/1 Projects/2021-22-23 Tesis Quant UdeSA/', file_name='Simulations_1.xlsx'):
+    pd.read_excel(path + file_name)
+    df = pd.read_excel(path + file_name).to_dict('records')
+    return df
