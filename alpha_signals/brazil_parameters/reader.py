@@ -35,8 +35,10 @@ class MDProcessor:
 
     def _add_midprice(self, df):
         df["midprice"] = ((df["bidprice_1"] + df["askprice_1"])/2).ffill()
-        df["ismoplus"] = (~df.price.isnull()) & (df['price'] > df['mid_price'])
-        df["ismominus"] = (~df.price.isnull()) & (df['price'] < df['mid_price'])
+        df["ismoplus"] = (~df.price.isnull()) & (df['price'] > df['midprice'])
+        df["ismominus"] = (~df.price.isnull()) & (df['price'] < df['midprice'])
+        df["isjumpplus"] = (df['midprice'] - df['midprice'].shift(1)) > 0
+        df["isjumpminus"] = (df['midprice'] - df['midprice'].shift(1)) < 0
         return df
 
     def get_n_levels_book(self, n, export_csv=False):
