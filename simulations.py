@@ -1,10 +1,7 @@
 # TODO: Create class Simulator or similar
 from matplotlib import pyplot as plt
 import numpy as np
-
-np.random.seed(2)
-dMt_minus = 0
-dMt_plus = 0
+import time
 
 
 def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False, drift=True):
@@ -103,7 +100,9 @@ def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False, drift=True):
     # Simulations
     print(f"Amount of simulations: {n}")
     for i in range(m-1):
-        print(f"%{float(i)/float(m)*100.}", end="\r")
+        time_1 = time.time()
+        print(f"%{float(i)/float(m)*100.} - {(m-i) * (time_1 - time_2)/3600} h                          ", end="\r")
+        time_2 = time.time()
         # Set market order and limit order strategy
         # consider alpha for positining or not
         if drift:  
@@ -164,7 +163,7 @@ def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False, drift=True):
         plt.xlabel('t')
         plt.ylabel('alfa')
         plt.step(np.linspace(0,T,m),alpha[plt_i])
-        plt.savefig("../Propuesta/figuras/alpha_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
+        # plt.savefig("../Propuesta/figuras/alpha_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
 
         plt.figure(figsize=(25/2,7/2))
 
@@ -182,7 +181,7 @@ def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False, drift=True):
         plt.scatter(np.linspace(0,T,m), mo_m_executions[plt_i], marker='s', c='b')
         plt.scatter(np.linspace(0,T,m), mo_p_executions[plt_i], marker='s', c='r')
         
-        plt.savefig("../Propuesta/figuras/orders_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
+        # plt.savefig("../Propuesta/figuras/orders_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
 
         print(f"MO_p: {np.nansum(dMt_plus[plt_i])}")
         print(f"MO_m: {np.nansum(dMt_minus[plt_i])}")
@@ -194,28 +193,28 @@ def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False, drift=True):
         plt.xlabel('Ordenes ejecutadas')
         plt.ylabel('Conteo')
         plt.hist(m_executions_count[:,:-1].sum(axis=1))
-        plt.savefig("../Propuesta/figuras/limit_orders_minus_executions_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
+        # plt.savefig("../Propuesta/figuras/limit_orders_minus_executions_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
         
         plt.figure(figsize=(5,5))
         # plt.title('Limit Orders Plus Executions')
         plt.xlabel('Ordenes ejecutadas')
         plt.ylabel('Conteo')
         plt.hist(p_executions_count[:,:-1].sum(axis=1))
-        plt.savefig("../Propuesta/figuras/limit_orders_plus_executions_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
+        # plt.savefig("../Propuesta/figuras/limit_orders_plus_executions_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
 
         plt.figure(figsize=(5,5))
         # plt.title('Market Orders Minus Executions')
         plt.xlabel('Ordenes ejecutadas')
         plt.ylabel('Conteo')
         plt.hist(dMt_minus[:, :-1].sum(axis=1))
-        plt.savefig("../Propuesta/figuras/market_orders_minus_executions_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
+        # plt.savefig("../Propuesta/figuras/market_orders_minus_executions_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
         
         plt.figure(figsize=(5,5))
         # plt.title('Market Orders Plus Executions')
         plt.xlabel('Ordenes ejecutadas')
         plt.ylabel('Conteo')
         plt.hist(dMt_plus[:, :-1].sum(axis=1))
-        plt.savefig("../Propuesta/figuras/market_orders_plus_executions_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
+        # plt.savefig("../Propuesta/figuras/market_orders_plus_executions_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
 
         if False:
             plt.figure()
@@ -231,14 +230,14 @@ def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False, drift=True):
         plt.xlabel('t')
         plt.ylabel('q')
         plt.step(np.linspace(0,T,m),q[plt_i])
-        plt.savefig("../Propuesta/figuras/q_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
+        # plt.savefig("../Propuesta/figuras/q_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
 
         plt.figure(figsize=(25/2,7/2))
         # plt.title('$pnl$')
         plt.xlabel('t')
         plt.ylabel('PnL')
         plt.step(np.linspace(0,T,m),pnl[plt_i])
-        plt.savefig("../Propuesta/figuras/pnl_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
+        # plt.savefig("../Propuesta/figuras/pnl_final",dpi=150,bbox_inches="tight",pad_inches=0.1)
         
         
     return alpha, mu_plus, mu_minus, dJ_plus, dJ_minus, s, l_p_position, l_m_position, q, dMt0_plus, dMt0_minus, pnl, dMt_plus, dMt_minus,p_executions_count, m_executions_count, pnl, X
