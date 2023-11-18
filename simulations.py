@@ -99,6 +99,7 @@ def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False, drift=True):
 
     # Simulations
     print(f"Amount of simulations: {n}")
+    time_2 = time.time()
     for i in range(m-1):
         time_1 = time.time()
         print(f"%{float(i)/float(m)*100.} - {(m-i) * (time_1 - time_2)/3600} h                          ", end="\r")
