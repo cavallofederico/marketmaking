@@ -24,12 +24,13 @@ class MDProcessor:
         df2_mod.index = df2_mod.index.astype('datetime64[ms]')
         df2_mod.to_csv(f'md_{self._date}.csv', na_rep='', header=False)
 
-    def get_n_level_df(self, n):
+    def get_n_level_df(self, n, add_midprice=True):
         book = self.get_n_levels_book(n)
         trades = self.get_trades()
         df = pd.concat([trades, book])
         df.sort_index(ascending=True, inplace=True)
-        df._add_midprice(df)
+        if add_midprice:
+            df = df._add_midprice(df)
         return df
 
     def _add_midprice(self, df):
