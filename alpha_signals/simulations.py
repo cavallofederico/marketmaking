@@ -3,14 +3,16 @@ from matplotlib import pyplot as plt
 import numpy as np
 import time
 
+from h import generate_h
 
-def generate_simulations(p, plot=False):
+
+def generate_simulations(p, l_p, l_m, alpha, mo_p, mo_m, plot=False):
     drift = True if p.drift=='Yes' else False
-    alpha = np.load(f"alpha_{p.phi_}_{p.dalpha}.npy")
-    l_p = np.load(f"l_plus_{p.phi_}_{p.dalpha}.npy")
-    l_m = np.load(f"l_minus_{p.phi_}_{p.dalpha}.npy")
-    mo_p = np.load(f"mo_plus_{p.phi_}_{p.dalpha}.npy")
-    mo_m = np.load(f"mo_minus_{p.phi_}_{p.dalpha}.npy")
+    # alpha = np.load(f"alpha_{p.phi_}_{p.dalpha}.npy")
+    # l_p = np.load(f"l_plus_{p.phi_}_{p.dalpha}.npy")
+    # l_m = np.load(f"l_minus_{p.phi_}_{p.dalpha}.npy")
+    # mo_p = np.load(f"mo_plus_{p.phi_}_{p.dalpha}.npy")
+    # mo_m = np.load(f"mo_minus_{p.phi_}_{p.dalpha}.npy")
 
     Upsilon = p.Delta + p.epsilon
 
@@ -249,14 +251,19 @@ def generate_simulations(p, plot=False):
     }
 
 def generate_simulations_bunchs(p, plot=False):
+    print("Calculating h")
+    h, l_p, l_m, alpha, mo_p, mo_m = generate_h(p)
+    del h
+    print("Finished calculating h")
+
     np.random.seed(2)
-    b = 100
+    b = 500
     n_bunchs = p.n // b
     p.n = b
 
     bunch = []
     for i in range(n_bunchs):
-        data = generate_simulations(p, plot)
+        data = generate_simulations(p, l_p, l_m, alpha, mo_p, mo_m, plot)
         bunch.append(data)
 
     p.n = n_bunchs * b
