@@ -29,6 +29,7 @@ class MDProcessor:
         trades = self.get_trades()
         df = pd.concat([trades, book])
         df.sort_index(ascending=True, inplace=True)
+        df["midprice"] = ((df["bidprice_1"] + df["askprice_1"])/2).ffill()
         return df
 
     def get_n_levels_book(self, n, export_csv=False):
