@@ -13,8 +13,8 @@ class MDProcessor:
         self._base_path = base_path
         self._export_csv = export_csv
 
-    def export_n_level_book_and_trades_csv(self, n):
-        df2 = self.get_n_level_book_and_trades(n)
+    def export_n_level_df_csv(self, n):
+        df2 = self.get_n_level_df(n)
         df2['bidprice_1'] = df2['price'].where(np.isnan(df2['bidprice_1']), df2['bidprice_1'])
         df2['bidquantity_1'] = df2['quantity'].where(np.isnan(df2['bidquantity_1']), df2['bidquantity_1'])
         df2['askquantity_1'] = df2['askquantity_1'].fillna(0)
@@ -24,12 +24,18 @@ class MDProcessor:
         df2_mod.index = df2_mod.index.astype('datetime64[ms]')
         df2_mod.to_csv(f'md_{self._date}.csv', na_rep='', header=False)
 
-    def get_n_level_book_and_trades(self, n):
+    def get_n_level_df(self, n):
         book = self.get_n_levels_book(n)
         trades = self.get_trades()
         df = pd.concat([trades, book])
         df.sort_index(ascending=True, inplace=True)
+        df._add_midprice(df)
+        return df
+
+    def _add_midprice(self, df):
         df["midprice"] = ((df["bidprice_1"] + df["askprice_1"])/2).ffill()
+        df["ismoplus"] = ~df['price'].isna() & df['price'] > df['midprice']
+        df["ismominus"] = ~df['price'].isna() & df['price'] < df['midprice']
         return df
 
     def get_n_levels_book(self, n, export_csv=False):
