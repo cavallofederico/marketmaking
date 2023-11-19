@@ -30,7 +30,7 @@ class MDProcessor:
         df = pd.concat([trades, book])
         df.sort_index(ascending=True, inplace=True)
         if add_midprice:
-            df = df._add_midprice(df)
+            df = self._add_midprice(df)
         return df
 
     def _add_midprice(self, df):
