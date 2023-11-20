@@ -14,7 +14,7 @@ class MDProcessor:
         self._export_csv = export_csv
 
     def export_n_level_df_csv(self, n):
-        df2 = self.get_n_level_df(n)
+        df2 = self.get_n_level_book_and_trades(n)
         df2['bidprice_1'] = df2['price'].where(np.isnan(df2['bidprice_1']), df2['bidprice_1'])
         df2['bidquantity_1'] = df2['quantity'].where(np.isnan(df2['bidquantity_1']), df2['bidquantity_1'])
         df2['askquantity_1'] = df2['askquantity_1'].fillna(0)
