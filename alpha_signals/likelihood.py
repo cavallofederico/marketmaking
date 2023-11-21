@@ -1,11 +1,3 @@
-# class Likelihood():
-#     def __init__(self, k, eta_plus, eta_minus, theta):
-#         self.k = k
-#         self.eta_plus = eta_plus
-#         self.eta_minus = eta_minus
-#         self.theta = theta
-
-
 import numpy as np
 
 
