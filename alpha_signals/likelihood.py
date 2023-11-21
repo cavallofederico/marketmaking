@@ -71,7 +71,7 @@ class MaximumLikelihood:
         return integral_alpha_s
 
     def sum_log_alpha_plus(self, k, eta_minus, eta_plus, theta):
-        eta_0, tau_0 = self._get_tau_eta(self, eta_minus, eta_plus)
+        eta_0, tau_0 = self._get_tau_eta(eta_minus, eta_plus)
         tau_matrix = tau_0 * np.ones([1, self._t_plus.shape[1]]).T
         eta_matrix = eta_0 * np.ones([1, self._t_plus.shape[1]]).T
 
@@ -106,7 +106,7 @@ class MaximumLikelihood:
         return eta_0, tau_0
 
     def sum_log_alpha_minus(self, k, eta_minus, eta_plus, theta):
-        eta_0, tau_0 = self._get_tau_eta(self, eta_minus, eta_plus)
+        eta_0, tau_0 = self._get_tau_eta(eta_minus, eta_plus)
         tau_matrix = tau_0 * np.ones([1, self._t_minus.shape[1]]).T
         eta_matrix = eta_0 * np.ones([1, self._t_minus.shape[1]]).T
         t_minus_matrix = self._t_minus.T * np.ones(
