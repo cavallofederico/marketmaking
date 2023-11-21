@@ -28,6 +28,10 @@ def likelihood(x):
     return likelihood
 
 
+def likelihood_to_minimize(x):
+    return -likelihood(x)
+
+
 def integral_alpha_s(k, eta_minus, eta_plus):
     tau_0 = np.concatenate(
         [
