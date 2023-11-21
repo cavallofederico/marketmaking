@@ -28,30 +28,6 @@ def likelihood(x, alpha, T=300):
     return likelihood
 
 
-# def integral_alpha_plus(k, alpha,  eta_minus, eta_plus, T):
-#     alpha_tau_i_0 = 0
-#     tau_0_plus = np.array([1, 3, 5])
-#     tau_0_minus = np.array([2, 4, 6])
-#     tau_0 = np.concatenate(
-#         [np.zeros([1, 1]), tau_0_minus, tau_0_plus, np.ones([1, 1]) * T]
-#     ).sort()
-#     result = np.zeros([len(tau_0), len(tau_0)])
-#     result
-#     summed = sum(
-#         tau_0 * (
-#             eta_plus * (something_summed_1_to_n_plus
-#             ) - eta_minus * (something_summed_1_to_n_minus))
-#     )
-#     eta_plus * sum()  # j=1 a n+
-#     i = 0
-#     j = 0
-#     np.exp(
-#         -k * ((np.logical_or(tau_0[i + 1], tau_0_plus[j])) - tau_0_plus[j])
-#     ) - np.exp(-k * ((np.logical_or(tau_0[i], tau_0_plus[j])) - tau_0_plus[j]))
-
-#     result = -1 / k * np.sum(result)
-
-
 def integral_alpha_s(k, alpha, eta_minus, eta_plus):
     tau_0 = np.concatenate(
         [np.zeros([1, 1]), tau_0_minus, tau_0_plus, np.ones([1, 1]) * T], axis=1
