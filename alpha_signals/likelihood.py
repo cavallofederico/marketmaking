@@ -9,6 +9,11 @@
 import numpy as np
 
 
+T = 10
+tau_0_plus = np.array([[0.1, 0.3, 0.5, 0.7, 0.9]]) * T
+tau_0_minus = np.array([[0.2, 0.4, 0.6]]) * T
+
+
 def likelihood(x, alpha, T=300):
     k = x[0]
     eta_plus = x[1]
@@ -16,25 +21,82 @@ def likelihood(x, alpha, T=300):
     theta = x[3]
     likelihood = (
         -2 * theta * T
-        + integral_alpha_plus(k, alpha, eta_plus, T)
-        - integral_alpha_minus()
+        + integral_alpha_s(k, alpha, eta_minus, eta_plus)
         + sum_log_alpha_plus()
         + sum_log_alpha_minus()
     )
+    return likelihood
 
 
-def integral_alpha_plus(k, alpha, eta_plus, T):
-    alpha_tau_i_0 = 0
-    tau_0_plus = np.array([1, 3, 5])
-    tau_0_minus = np.array([2, 4, 6])
+# def integral_alpha_plus(k, alpha,  eta_minus, eta_plus, T):
+#     alpha_tau_i_0 = 0
+#     tau_0_plus = np.array([1, 3, 5])
+#     tau_0_minus = np.array([2, 4, 6])
+#     tau_0 = np.concatenate(
+#         [np.zeros([1, 1]), tau_0_minus, tau_0_plus, np.ones([1, 1]) * T]
+#     ).sort()
+#     result = np.zeros([len(tau_0), len(tau_0)])
+#     result
+#     summed = sum(
+#         tau_0 * (
+#             eta_plus * (something_summed_1_to_n_plus
+#             ) - eta_minus * (something_summed_1_to_n_minus))
+#     )
+#     eta_plus * sum()  # j=1 a n+
+#     i = 0
+#     j = 0
+#     np.exp(
+#         -k * ((np.logical_or(tau_0[i + 1], tau_0_plus[j])) - tau_0_plus[j])
+#     ) - np.exp(-k * ((np.logical_or(tau_0[i], tau_0_plus[j])) - tau_0_plus[j]))
 
+#     result = -1 / k * np.sum(result)
+
+
+def integral_alpha_s(k, alpha, eta_minus, eta_plus):
     tau_0 = np.concatenate(
-        [np.zeros([1, 1]), tau_0_minus, tau_0_plus, np.ones([1, 1]) * T]
-    ).sort()
-    result = -1 / k * sum(alpha_tau_i_0)
-    eta_plus * sum()  # j=1 a n+
-    i = 0
-    j = 0
-    np.exp(
-        -k * ((np.logical_or(tau_0[i + 1], tau_0_plus[j])) - tau_0_plus[j])
-    ) - np.exp(-k * ((np.logical_or(tau_0[i], tau_0_plus[j])) - tau_0_plus[j]))
+        [np.zeros([1, 1]), tau_0_minus, tau_0_plus, np.ones([1, 1]) * T], axis=1
+    )
+
+    eta_minus_vector = -np.ones([tau_0_minus.shape[1], 1]) * eta_minus
+    eta_plus_vector = np.ones([tau_0_plus.shape[1], 1]) * eta_plus
+    eta_vector = np.concatenate(
+        [np.zeros([1, 1]), eta_minus_vector, eta_plus_vector, np.zeros([1, 1])], axis=0
+    ).T
+    tau_eta = np.concatenate([tau_0, eta_vector])
+    tau_eta = tau_eta[:, tau_eta[0, :].argsort()]
+    tau_0 = tau_eta[:, tau_eta[0, :].argsort()][0:1, :]
+    eta_0 = tau_eta[:, tau_eta[0, :].argsort()][1:2, :]
+
+    tau_matrix = tau_0 * np.ones([1, tau_0.shape[1]]).T
+    eta_matrix = eta_0 * np.ones([1, eta_0.shape[1]]).T
+    tau_matrix_1 = np.roll(
+        tau_matrix, -1
+    )  # numero de fila es j, numero de columna es i
+
+    tau_matrix_diff = tau_matrix - tau_matrix.T
+    tau_matrix_diff = np.where(tau_matrix_diff > 0, tau_matrix_diff, 0)
+    tau_matrix_diff_1 = tau_matrix_1 - tau_matrix.T
+    tau_matrix_diff_1 = np.where(tau_matrix_diff_1 > 0, tau_matrix_diff_1, 0)
+
+    alpha_tau_matrix = eta_matrix * (
+        np.exp(-k * tau_matrix_diff_1) - np.exp(-k * tau_matrix_diff)
+    )
+    alpha_tau = np.sum(alpha_tau_matrix, axis=0)
+    alpha_s_plus = np.sum(-np.where(alpha_tau >= 0, alpha_tau, 0) / k)
+    alpha_s_minus = np.sum(np.where(alpha_tau <= 0, alpha_tau, 0) / k)
+
+    integral_alpha_s = alpha_s_plus - alpha_s_minus
+
+    return integral_alpha_s
+
+
+def integral_alpha_minus():
+    return 0
+
+
+def sum_log_alpha_plus():
+    return 0
+
+
+def sum_log_alpha_minus():
+    return 0
