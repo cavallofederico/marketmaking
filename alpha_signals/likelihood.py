@@ -64,7 +64,7 @@ class MaximumLikelihood:
         alpha_tau = np.sum(alpha_tau_matrix, axis=0)
         # The signs seem to be wrong in the paper, keeping them anyway
         alpha_s_plus = np.sum(-np.where(alpha_tau >= 0, alpha_tau, 0) / k)
-        alpha_s_minus = np.sum(np.where(alpha_tau <= 0, alpha_tau, 0) / k)
+        alpha_s_minus = np.sum(np.where(alpha_tau <= 0, -alpha_tau, 0) / k)
 
         integral_alpha_s = alpha_s_plus - alpha_s_minus
 
