@@ -14,29 +14,39 @@ tau_0_plus = np.array([[0.1, 0.3, 0.5, 0.7, 0.9]]) * T
 tau_0_minus = np.array([[0.2, 0.4, 0.6]]) * T
 
 
-def likelihood(x, alpha, T=300):
+def likelihood(x):
     k = x[0]
     eta_plus = x[1]
     eta_minus = x[2]
     theta = x[3]
     likelihood = (
         -2 * theta * T
-        + integral_alpha_s(k, alpha, eta_minus, eta_plus)
+        + integral_alpha_s(k, eta_minus, eta_plus)
         + sum_log_alpha_plus()
         + sum_log_alpha_minus()
     )
     return likelihood
 
 
-def integral_alpha_s(k, alpha, eta_minus, eta_plus):
+def integral_alpha_s(k, eta_minus, eta_plus):
     tau_0 = np.concatenate(
-        [np.zeros([1, 1]), tau_0_minus, tau_0_plus, np.ones([1, 1]) * T], axis=1
+        [
+            np.zeros([1, 1]),
+            tau_0_minus,
+            tau_0_plus,
+            np.ones([1, 1]) * T
+        ], axis=1
     )
 
     eta_minus_vector = -np.ones([tau_0_minus.shape[1], 1]) * eta_minus
     eta_plus_vector = np.ones([tau_0_plus.shape[1], 1]) * eta_plus
     eta_vector = np.concatenate(
-        [np.zeros([1, 1]), eta_minus_vector, eta_plus_vector, np.zeros([1, 1])], axis=0
+        [
+            np.zeros([1, 1]),
+            eta_minus_vector,
+            eta_plus_vector,
+            np.zeros([1, 1])
+        ], axis=0
     ).T
     tau_eta = np.concatenate([tau_0, eta_vector])
     tau_eta = tau_eta[:, tau_eta[0, :].argsort()]
