@@ -21,7 +21,7 @@ def likelihood(x):
     theta = x[3]
     likelihood = (
         -2 * theta * T
-        + integral_alpha_s(k, eta_minus, eta_plus)
+        - integral_alpha_s(k, eta_minus, eta_plus)
         + sum_log_alpha_plus()
         + sum_log_alpha_minus()
     )
@@ -78,10 +78,6 @@ def integral_alpha_s(k, eta_minus, eta_plus):
     integral_alpha_s = alpha_s_plus - alpha_s_minus
 
     return integral_alpha_s
-
-
-def integral_alpha_minus():
-    return 0
 
 
 def sum_log_alpha_plus():
