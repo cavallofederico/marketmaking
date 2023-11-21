@@ -29,19 +29,16 @@ class MaximumLikelihood:
                 np.zeros([1, 1]),
                 self._tau_0_minus,
                 self._tau_0_plus,
-                np.ones([1, 1]) * self._T
-            ], axis=1
+                np.ones([1, 1]) * self._T,
+            ],
+            axis=1,
         )
 
         eta_minus_vector = -np.ones([self._tau_0_minus.shape[1], 1]) * eta_minus
         eta_plus_vector = np.ones([self._tau_0_plus.shape[1], 1]) * eta_plus
         eta_vector = np.concatenate(
-            [
-                np.zeros([1, 1]),
-                eta_minus_vector,
-                eta_plus_vector,
-                np.zeros([1, 1])
-            ], axis=0
+            [np.zeros([1, 1]), eta_minus_vector, eta_plus_vector, np.zeros([1, 1])],
+            axis=0,
         ).T
         tau_eta = np.concatenate([tau_0, eta_vector])
         tau_eta = tau_eta[:, tau_eta[0, :].argsort()]
