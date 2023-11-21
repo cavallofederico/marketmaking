@@ -2,10 +2,12 @@ import numpy as np
 
 
 class MaximumLikelihood:
-    def __init__(self, T, tau_0_plus, tau_0_minus) -> None:
+    def __init__(self, T, tau_0_plus, tau_0_minus, t_plus, t_minus) -> None:
         self._T = T
         self._tau_0_plus = tau_0_plus
         self._tau_0_minus = tau_0_minus
+        self._t_plus = t_plus
+        self._t_minus = t_minus
 
     def likelihood_to_minimize(self, x):
         return -self.likelihood(x)
@@ -18,8 +20,8 @@ class MaximumLikelihood:
         likelihood = (
             -2 * theta * self._T
             - self.integral_alpha_s(k, eta_minus, eta_plus)
-            + sum_log_alpha_plus()
-            + sum_log_alpha_minus()
+            + self.sum_log_alpha_plus(k, eta_minus, eta_plus, theta)
+            + self.sum_log_alpha_minus(k, eta_minus, eta_plus, theta)
         )
         return likelihood
 
@@ -68,10 +70,10 @@ class MaximumLikelihood:
 
         return integral_alpha_s
 
+    def sum_log_alpha_plus(self, k, eta_minus, eta_plus, theta):
+        self._t_minus
+        self._t_plus
+        return 0
 
-def sum_log_alpha_plus():
-    return 0
-
-
-def sum_log_alpha_minus():
-    return 0
+    def sum_log_alpha_minus(self, k, eta_minus, eta_plus, theta):
+        return 0
