@@ -25,7 +25,8 @@ base_simulation_parameters_dict = {
     'lambda_minus': 1.0,
     'theta': 0.1,
     's0': 100,
-    'n': 200
+    'n': 200,
+    'drift': True
 }
 base_p = Parameters(**base_simulation_parameters_dict)
 

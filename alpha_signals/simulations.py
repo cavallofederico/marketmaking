@@ -249,7 +249,6 @@ def generate_simulations(p, l_p, l_m, alpha, mo_p, mo_m, plot=False):
         "dMt_minus": dMt_minus,
         "dMt_plus": dMt_plus,
         "s": s,
-        "dt": dt
     }
 
 def generate_simulations_bunchs(p, plot=False):
@@ -260,8 +259,8 @@ def generate_simulations_bunchs(p, plot=False):
 
     np.random.seed(2)
     b = 500
-    n_bunchs = p.n // b
-    p.n = b
+    n_bunchs = p.n // b if p.n > b else 1
+    p.n = b if p.n > b else p.n
 
     bunch = []
     for i in range(n_bunchs):
@@ -278,5 +277,4 @@ def generate_simulations_bunchs(p, plot=False):
         "dMt_minus": np.concatenate([d["dMt_minus"] for d in bunch]),
         "dMt_plus": np.concatenate([d["dMt_plus"] for d in bunch]),
         "s": np.concatenate([d["s"] for d in bunch]),
-        "dt": np.concatenate([d["dt"] for d in bunch]),
     }
