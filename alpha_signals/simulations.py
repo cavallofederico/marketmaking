@@ -8,11 +8,6 @@ from h import generate_h
 
 def generate_simulations(p, l_p, l_m, alpha, mo_p, mo_m, plot=False):
     drift = True if p.drift=='Yes' else False
-    # alpha = np.load(f"alpha_{p.phi_}_{p.dalpha}.npy")
-    # l_p = np.load(f"l_plus_{p.phi_}_{p.dalpha}.npy")
-    # l_m = np.load(f"l_minus_{p.phi_}_{p.dalpha}.npy")
-    # mo_p = np.load(f"mo_plus_{p.phi_}_{p.dalpha}.npy")
-    # mo_m = np.load(f"mo_minus_{p.phi_}_{p.dalpha}.npy")
 
     Upsilon = p.Delta + p.epsilon
 
