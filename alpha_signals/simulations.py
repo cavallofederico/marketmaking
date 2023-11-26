@@ -248,6 +248,8 @@ def generate_simulations(p, l_p, l_m, alpha, mo_p, mo_m, plot=False):
         "p_executions_count": p_executions_count,
         "dMt_minus": dMt_minus,
         "dMt_plus": dMt_plus,
+        "dMt0_minus": dMt0_minus,
+        "dMt0_plus": dMt0_plus,
         "s": s,
     }
 
