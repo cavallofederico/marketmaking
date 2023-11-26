@@ -273,5 +273,7 @@ def generate_simulations_bunchs(p, plot=False):
         "p_executions_count": np.concatenate([d["p_executions_count"] for d in bunch]),
         "dMt_minus": np.concatenate([d["dMt_minus"] for d in bunch]),
         "dMt_plus": np.concatenate([d["dMt_plus"] for d in bunch]),
+        "dMt0_minus": np.concatenate([d["dMt0_minus"] for d in bunch]),
+        "dMt0_plus": np.concatenate([d["dMt0_plus"] for d in bunch]),
         "s": np.concatenate([d["s"] for d in bunch]),
     }
