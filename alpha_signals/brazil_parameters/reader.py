@@ -20,9 +20,9 @@ class MDProcessor:
         df2['askquantity_1'] = df2['askquantity_1'].fillna(0)
         df2['bidquantity_1'] = df2['bidquantity_1'].apply(lambda x: int(x))
         df2['askquantity_1'] = df2['askquantity_1'].apply(lambda x: int(x))
-        df2_mod = df2.copy()[['product', 'bidprice_1', 'bidquantity_1', 'askprice_1', 'askquantity_1']]
-        df2_mod.index = df2_mod.index.astype('datetime64[ms]')
-        df2_mod.to_csv(f'md_{self._date}.csv', na_rep='', header=False)
+        #df2_mod = df2.copy()[['product', 'bidprice_1', 'bidquantity_1', 'askprice_1', 'askquantity_1']]
+        df2.index = df2.index.astype('datetime64[ms]')
+        df2.to_csv(f'md_{self._date}.csv', na_rep='')
 
     def get_n_level_book_and_trades(self, n, add_midprice=True):
         book = self.get_n_levels_book(n)
