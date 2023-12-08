@@ -34,7 +34,7 @@ class MaximumLikelihood:
         theta = x[3]
         likelihood = (
             -2 * theta * self._T
-            - self.integral_alpha_s(k, eta_minus, eta_plus)
+            + self.integral_alpha_s(k, eta_minus, eta_plus)
             + self.sum_log_alpha_plus(k, eta_minus, eta_plus, theta)
             + self.sum_log_alpha_minus(k, eta_minus, eta_plus, theta)
         )
