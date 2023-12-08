@@ -40,6 +40,49 @@ class MaximumLikelihood:
         )
         return likelihood
 
+    @classmethod
+    def multi_integral_alpha(cls, params:list, x):
+        l = 0
+        for p in params:
+            instance = cls(**p)
+            l += instance.integral_alpha_s_x(x)
+        return l
+
+    def integral_alpha_s_x(self, x):
+        k = x[0]
+        eta_plus = x[1]
+        eta_minus = x[2]
+        return self.integral_alpha_s(k, eta_minus, eta_plus)
+
+    @classmethod
+    def multi_sum_log_alpha_plus(cls, params:list, x):
+        l = 0
+        for p in params:
+            instance = cls(**p)
+            l += instance.sum_log_alpha_plus_x(x)
+        return l
+    def sum_log_alpha_plus_x(self, x):
+        k = x[0]
+        eta_plus = x[1]
+        eta_minus = x[2]
+        theta = x[3]
+        return self.sum_log_alpha_plus(k, eta_minus, eta_plus, theta)
+
+    @classmethod
+    def multi_sum_log_alpha_minus(cls, params:list, x):
+        l = 0
+        for p in params:
+            instance = cls(**p)
+            l += instance.sum_log_alpha_minus_x(x)
+        return l
+
+    def sum_log_alpha_minus_x(self, x):
+        k = x[0]
+        eta_plus = x[1]
+        eta_minus = x[2]
+        theta = x[3]
+        return self.sum_log_alpha_minus(k, eta_minus, eta_plus, theta)
+
     def integral_alpha_s(self, k, eta_minus, eta_plus):
         tau_0 = np.concatenate(
             [
