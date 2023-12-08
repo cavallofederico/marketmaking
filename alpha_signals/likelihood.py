@@ -12,6 +12,21 @@ class MaximumLikelihood:
     def likelihood_to_minimize(self, x):
         return -self.likelihood(x)
 
+    @classmethod
+    def multi_likelihood_to_minimize(cls, params:list, x):
+        l = 0
+        for p in params:
+            instance = cls(**p)
+            l += instance.likelihood_to_minimize(x)
+        return l
+
+    @staticmethod
+    def get_times(simulation_zip, dt):
+        dict_ = {}
+        for k, v in list(simulation_zip):
+            dict_[k] = dict_.get(k, []) + [v * dt]
+        return dict_
+
     def likelihood(self, x):
         k = x[0]
         eta_plus = x[1]
