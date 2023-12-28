@@ -33,8 +33,8 @@ class MaximumLikelihood:
         eta_minus = x[2]
         theta = x[3]
         likelihood = (
-            -2 * theta * self._T
-            + self.integral_alpha_s(k, eta_minus, eta_plus)
+            - 2 * theta * self._T
+            - self.integral_alpha_s(k, eta_minus, eta_plus)
             + self.sum_log_alpha_plus(k, eta_minus, eta_plus, theta)
             + self.sum_log_alpha_minus(k, eta_minus, eta_plus, theta)
         )
@@ -45,7 +45,7 @@ class MaximumLikelihood:
         l = 0
         for p in params:
             instance = cls(**p)
-            l += instance.integral_alpha_s_x(x)
+            l -= instance.integral_alpha_s_x(x)
         return l
 
     def integral_alpha_s_x(self, x):
@@ -112,17 +112,17 @@ class MaximumLikelihood:
         )  # numero de fila es j, numero de columna es i
 
         tau_matrix_diff = tau_matrix - tau_matrix.T
-        tau_matrix_diff = np.where(tau_matrix_diff > 0, tau_matrix_diff, 0)
+        tau_matrix_diff = np.where(tau_matrix_diff > 0, tau_matrix_diff, 9e10)
         tau_matrix_diff_1 = tau_matrix_1 - tau_matrix.T
-        tau_matrix_diff_1 = np.where(tau_matrix_diff_1 > 0, tau_matrix_diff_1, 0)
+        tau_matrix_diff_1 = np.where(tau_matrix_diff_1 > 0, tau_matrix_diff_1, 9e10)
 
         alpha_tau_matrix = eta_matrix * (
             np.exp(-k * tau_matrix_diff_1) - np.exp(-k * tau_matrix_diff)
         )
         alpha_tau = np.sum(alpha_tau_matrix, axis=0)
         # The signs seem to be wrong in the paper, keeping them anyway
-        alpha_s_plus = np.sum(-np.where(alpha_tau >= 0, alpha_tau, 0) / k)
-        alpha_s_minus = np.sum(np.where(alpha_tau <= 0, -alpha_tau, 0) / k)
+        alpha_s_plus = np.sum(np.where(alpha_tau >= 0, alpha_tau, 0) / k)
+        alpha_s_minus = np.sum(-np.where(alpha_tau <= 0, -alpha_tau, 0) / k)
 
         integral_alpha_s = alpha_s_plus - alpha_s_minus
 
@@ -138,7 +138,7 @@ class MaximumLikelihood:
         )  # numero de fila es t, numero de columna es tau
 
         tau_matrix_diff = t_plus_matrix - tau_matrix
-        tau_matrix_diff = np.where(tau_matrix_diff > 0, tau_matrix_diff, 0)
+        tau_matrix_diff = np.where(tau_matrix_diff > 0, tau_matrix_diff, 9e10)
 
         alpha_tau_matrix = eta_matrix * (np.exp(-k * tau_matrix_diff))
         alpha_tau = np.sum(alpha_tau_matrix, axis=1)
@@ -172,7 +172,7 @@ class MaximumLikelihood:
         )  # numero de fila es t, numero de columna es tau
 
         tau_matrix_diff = t_minus_matrix - tau_matrix
-        tau_matrix_diff = np.where(tau_matrix_diff > 0, tau_matrix_diff, 0)
+        tau_matrix_diff = np.where(tau_matrix_diff > 0, tau_matrix_diff, 9e10)
 
         alpha_tau_matrix = eta_matrix * (np.exp(-k * tau_matrix_diff))
         alpha_tau = np.sum(alpha_tau_matrix, axis=1)
