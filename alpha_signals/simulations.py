@@ -11,7 +11,7 @@ def generate_simulations(p, l_p, l_m, alpha, mo_p, mo_m, plot=False):
 
     Upsilon = p.Delta + p.epsilon
 
-    dt = (p.k * p.A / p.dalpha + p.lambda_plus + p.lambda_minus)**(-1)
+    dt = p.dt
     
     m = int(p.T/dt)
     
