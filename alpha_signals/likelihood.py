@@ -112,9 +112,9 @@ class MaximumLikelihood:
         )  # numero de fila es j, numero de columna es i
 
         tau_matrix_diff = tau_matrix - tau_matrix.T
-        tau_matrix_diff = np.where(tau_matrix_diff > 0, tau_matrix_diff, 9e10)
+        tau_matrix_diff = np.where(tau_matrix_diff > 0, tau_matrix_diff, 0)
         tau_matrix_diff_1 = tau_matrix_1 - tau_matrix.T
-        tau_matrix_diff_1 = np.where(tau_matrix_diff_1 > 0, tau_matrix_diff_1, 9e10)
+        tau_matrix_diff_1 = np.where(tau_matrix_diff_1 > 0, tau_matrix_diff_1, 0)
 
         alpha_tau_matrix = eta_matrix * (
             np.exp(-k * tau_matrix_diff_1) - np.exp(-k * tau_matrix_diff)
