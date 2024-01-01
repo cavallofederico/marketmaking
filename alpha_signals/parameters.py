@@ -5,7 +5,13 @@ import pandas as pd
 class Parameters(SimpleNamespace):
     @property
     def dt(self):
-        return (self.k * self.A / self.dalpha + (self.xi**2) / (2 * self.dalpha ** 2) + self.lambda_plus + self.lambda_minus)**(-1)
+        return ((self.k * self.A / self.dalpha + (self.xi**2) / (2 * self.dalpha ** 2) + self.lambda_plus + self.lambda_minus)**(-1)) * self.dt_scaling
+
+    @property
+    def dt_scaling(self):
+        """Scaling dt to reduce size of h."""
+        return 2
+
 
 base_simulation_parameters_dict = {
     'q_max': 4,
