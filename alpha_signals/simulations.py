@@ -32,35 +32,35 @@ def generate_simulations(p, l_p, l_m, alpha, mo_p, mo_m, plot=False):
     s = np.full((p.n, m), np.nan)
     s[:, 0] = p.s0
 
-    mu_plus = np.full((p.n, m), np.nan)
+    mu_plus = np.full((p.n, m), np.nan, dtype=np.uint16)
     mu_plus[:, 0] = p.theta
-    mu_minus = np.full((p.n, m), np.nan)
+    mu_minus = np.full((p.n, m), np.nan, dtype=np.uint16)
     mu_minus[:, 0] = p.theta
 
-    dJ_plus = np.full((p.n, m), np.nan)
+    dJ_plus = np.full((p.n, m), np.nan, dtype=np.uint16)
     dJ_plus[:, 0] = 0
 
-    dJ_minus = np.full((p.n, m), np.nan)
+    dJ_minus = np.full((p.n, m), np.nan, dtype=np.uint16)
     dJ_minus[:, 0] = 0
 
     # Positions setup
-    l_p_position = np.full((p.n, m), np.nan)
-    l_m_position = np.full((p.n, m), np.nan)
+    l_p_position = np.full((p.n, m), np.nan, dtype=np.uint16)
+    l_m_position = np.full((p.n, m), np.nan, dtype=np.uint16)
 
-    p_postings = np.full((p.n, m), np.nan)
-    m_postings = np.full((p.n, m), np.nan)
+    p_postings = np.full((p.n, m), np.nan, dtype=np.uint16)
+    m_postings = np.full((p.n, m), np.nan, dtype=np.uint16)
 
-    p_executions = np.full((p.n, m), np.nan)
-    m_executions = np.full((p.n, m), np.nan)
+    p_executions = np.full((p.n, m), np.nan, dtype=np.uint16)
+    m_executions = np.full((p.n, m), np.nan, dtype=np.uint16)
 
-    p_executions_count = np.full((p.n, m), np.nan)
-    m_executions_count = np.full((p.n, m), np.nan)
+    p_executions_count = np.full((p.n, m), np.nan, dtype=np.uint16)
+    m_executions_count = np.full((p.n, m), np.nan, dtype=np.uint16)
 
-    mo_p_executions = np.full((p.n, m), np.nan)
-    mo_m_executions = np.full((p.n, m), np.nan)
+    mo_p_executions = np.full((p.n, m), np.nan, dtype=np.uint16)
+    mo_m_executions = np.full((p.n, m), np.nan, dtype=np.uint16)
 
-    dMt_plus = np.full((p.n, m), np.nan) # np.zeros((n, m))
-    dMt_minus = np.full((p.n, m), np.nan) # np.zeros((n, m))
+    dMt_plus = np.full((p.n, m), np.nan, dtype=np.uint16) # np.zeros((n, m))
+    dMt_minus = np.full((p.n, m), np.nan, dtype=np.uint16) # np.zeros((n, m))
 
     pnl = np.full((p.n, m), np.nan)
     pnl[:, 0] = 0
