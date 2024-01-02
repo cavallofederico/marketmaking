@@ -10,7 +10,7 @@ class Parameters(SimpleNamespace):
     @property
     def dt_scaling(self):
         """Scaling dt to reduce size of h."""
-        return 2
+        return 1
 
 
 base_simulation_parameters_dict = {
