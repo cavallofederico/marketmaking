@@ -23,8 +23,8 @@ def generate_h(p):
     d_alpha_h = np.zeros(n_alpha)
     dd_alpha_h = np.zeros(n_alpha)
 
-    l_plus = np.zeros((n_t, n_alpha, n_q), dtype=np.uint16)
-    l_minus = np.zeros((n_t, n_alpha, n_q), dtype=np.uint16)
+    l_plus = np.zeros((n_t, n_alpha, n_q))
+    l_minus = np.zeros((n_t, n_alpha, n_q))
 
     h_eta_up = np.full((n_t, n_alpha, n_q), np.nan)
     h_eta_down = np.full((n_t, n_alpha, n_q), np.nan)
@@ -72,8 +72,8 @@ def generate_h(p):
         return mo_plus_i, mo_minus_i
 
     def get_mo():
-        mo_plus = np.zeros((n_t, n_alpha, n_q), dtype=np.uint16)
-        mo_minus = np.zeros((n_t, n_alpha, n_q), dtype=np.uint16)
+        mo_plus = np.zeros((n_t, n_alpha, n_q))
+        mo_minus = np.zeros((n_t, n_alpha, n_q))
 
         for t_i in range(n_t - 2, -1, -1):
             for q_i in range(n_q):
@@ -181,7 +181,7 @@ def find_optimal_postings(p, h_eta_up, h_eta_down, n_alpha, q_a, h, t_i, q_i):
                             1] > h_eta_up[t_i + 1, :, q_i], 1, 0
         )
     else:
-        l_plus_i = np.zeros(n_alpha, dtype=np.uint16)
+        l_plus_i = np.zeros(n_alpha)
 
     h_eta_down[t_i + 1, :, q_i] = interpolate(p, h[t_i + 1, :, q_i], up=False)
     if q_a[q_i] < p.q_max:
@@ -192,7 +192,7 @@ def find_optimal_postings(p, h_eta_up, h_eta_down, n_alpha, q_a, h, t_i, q_i):
                             1] > h_eta_down[t_i + 1, :, q_i], 1, 0
         )
     else:
-        l_minus_i = np.zeros(n_alpha, dtype=np.uint16)
+        l_minus_i = np.zeros(n_alpha)
     return l_plus_i, l_minus_i
 
 
