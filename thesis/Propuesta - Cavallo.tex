@@ -1,0 +1,1083 @@
+%***********************************************************************************************************
+%*****************************************************************************PACKAGES*********************
+%Paquetes para español y matemática
+%Paquetes para incluir acentos
+%Paquetes para incluir graficos
+%para incluir códigos de matlab
+%***********************************************************************************************************
+%\input{tcilatex}
+
+\documentclass[12pt,a4paper,spanish]{article}%
+\usepackage[affil-it]{authblk}
+\usepackage{amsmath,amsbsy,amscd,amssymb,graphicx,epsfig,makeidx,multicol}
+\usepackage[round]{natbib}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{setspace}
+\usepackage[spanish]{babel}
+\usepackage[latin1]{inputenc}
+%\usepackage[sort&compress]{natbib}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+%\usepackage{biblatex} 
+\usepackage{cases}
+\usepackage{graphicx,subcaption}
+\usepackage{listings}
+\usepackage{color}%
+\usepackage{amsmath}%
+%\usepackage{bbm}
+\setcounter{MaxMatrixCols}{30}%
+\usepackage{amsfonts}%
+\usepackage{dsfont}%
+\usepackage{amssymb}%
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{floatrow}
+\usepackage{caption}
+\usepackage[titletoc,toc]{appendix}
+%\usepackage[title]{appendix}
+%\usepackage{epstopdf}
+%\usepackage{epsfig}
+\usepackage[section]{placeins}
+\newfloatcommand{capbtabbox}{table}[][\FBwidth]
+\providecommand{\U}[1]{\protect\rule{.1in}{.1in}}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{verbatim}
+\usepackage[toc]{glossaries}
+\usepackage{tocbibind}
+%EndMSIPreambleData
+\newcommand{\tb}[1]{\textcolor{blue}{#1}}
+\definecolor{dkgreen}{rgb}{0,0.5,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{   language=Matlab,                  basicstyle=\footnotesize,             keywordstyle=\color{blue},            commentstyle=\color{dkgreen},         stringstyle=\color{mauve},           escapeinside={\%*}{*)},                tabsize=2
+}
+\renewcommand{\appendixpagename}{Apéndices}
+\renewcommand{\appendixtocname}{Apéndices}
+\renewcommand{\appendixname}{Apéndices}
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{titlepage}
+
+%Upper part of the page
+\includegraphics[width=0.3\textwidth]{LogoUDESA} \\[2cm]    
+
+\begin{center}
+
+\textsc{\LARGE Universidad de San Andr\'{e}s}\\[1.0cm]
+
+\textsc{\Large Propuesta de Tesis de Maestr\'{i}a en Finanzas}
+\\[2.5cm]
+
+
+% Title
+%\HRule \\[0.4cm]
+\doublespacing
+
+{ \Large \bfseries \textit{Market making} con señales alfa en mercados emergentes}\\[0.4cm]
+
+\vspace{4cm}
+
+\bigskip
+\bigskip
+\begin{singlespace}
+
+% Author and supervisor
+\begin{minipage}{0.45\textwidth}
+\begin{flushleft} \large
+\emph{Autor:}\\
+Federico Cavallo
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+\begin{flushright} \large
+\emph{Tutor:} \\
+Javier Kreiner
+
+\emph{Co-Tutor:} \\
+Gabriel Basaluzzo
+\end{flushright}
+\end{minipage}
+
+\end{singlespace}
+
+\vfill
+
+% Bottom of the page
+{\large Febrero de 2023}
+
+\end{center}
+
+\end{titlepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{plainnat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+
+%{\thispagestyle{empty}} %DON`T DELETE THIS LINE
+
+\pagenumbering{arabic}
+
+\listoffigures
+
+%\listoftables
+
+\section*{Glosario}
+\begin{description}
+	\item[BOVESPA] Bolsa de Valores del Estado de San Pablo
+	\item[NASDAQ] Bolsa de Valores de Nueva York
+	\item[\textit{PnL}] \textit{Profit and Loss} o retorno
+\end{description}
+
+\hfill \break
+
+\noindent {\bf Resumen}
+Se analiza el problema de un agente de \textit{market making} para el caso de un mercado electrónico de alta frecuencia en el tope del libro de órdenes. Se intenta probar que un modelo óptimo de programación dinámica aplicado a \textit{market making} obtenido de la literatura logra resultados de retorno positivos frente a una estrategia base en un entorno de simulación con datos creados artificialmente en base a parámetros de mercados emergentes. Otro objetivo de este trabajo es desarrollar un simulador que permita probar esta estrategia frente a datos de la realidad para dichos mercados. Se explica dicho modelo y cómo se pueden estimar los parámetros del mercado. Se presentan resultados preeliminares exitosos de la replicación del modelo. Se presentan los pasos a seguir para concluir con la investigación.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introducción}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Contexto del proyecto o Intro de la intro: algo de MM
+En los mercados electrónicos modernos, donde se intercambian activos a velocidades de milisegundos, surge la problemática de la falta de liquidez o de contraparte generando a su vez el problema de faltante de precio y la consecuente necesidad de realizar una búsqueda de precio que determine cuál es el precio justo para un activo. Por esta razón, surgen actores que vienen a suplir esta necesidad ofreciendo liquidez de forma permanente. Es decir, ofrecen una punta vendedora y una punta compradora de forma simultánea y a lo largo del tiempo. Estos agentes son llamados \textit{market makers} o Creadores de Mercado. Estos participantes, en muchos casos, tienen acuerdos con el mercado quie los incentiva a tener este comportamiento de proveer liquididez. En cualquier caso deberán hacerlo de forma tal que el rendimiento sea positivo, si no, no podrán mantenerse en el mercado.
+
+En este contexto existen diferentes tipos de estrategias que pueden tomar estos agentes para decidir cómo ofrecer la liquidez al mercado de forma redituable. Esto dependerá del mercado, sus características, del modelo utilizado para analizar el problema y de los algoritmos elegidos para solucionarlo. Entre esas categorías se encuentran los algoritmos de programación dinámica donde se busca obtener una estrategia óptima que permita maximizar el resultado de una función de utilidad a lo largo del tiempo. Por otro lado, en los mercados de alta frecuencia se puede generar lo que se llama una señal alfa que consiste en un desbalance momentáneo entre la oferta y la demanda de órdenes de compra o venta que permitiría inferir en que dirección se va a mover el mercado en el cortísimo plazo. En general, estas estrategias han sido testeadas en mercados desarrollados que tienen particularidades y diferencias respecto a los mercados emergentes.
+
+\cite{Cartea2019} hacen uso de programación dinámica para desarrollar un algoritmo que permite ofrecer liquidez valiéndose de la señal alfa de forma tal de generar un mejor rendimiento que una estrategia de base. Analizan los parámetros del NASDAQ y realizan una simulación contra un escenario base. 
+
+En el presente trabajo se replican, en primer lugar, replicar los resultados obtenidos por \cite{Cartea2019}, implementando su algoritmo en base a los datos publicados y realizando una serie de simulaciones. Esto con la intención de luego tomar los datos de un activo de alta liquidez del mercado brasileño BOVESPA, estimar sus parámetros y responder la pregunta de si este modelo otorga retornos positivos contra un algoritmo de referencia en un mercado emergente como el brasileño. Finalmente, se diseñará un simulador que permita probar esta estrategia contra datos reales y ya no una simulación con parámetros obtenidos a partir de los datos de mercado. Con esto se intentará responder una segunda pregunta referente a si este modelo es capaz de entregar resultados de retorno superiores a una estrategia de base contra los datos reales. Se espera que ambas respuestas otorgen resultados positivos, dado que si bien se trata de un mercado emergente estamos frente a uno con una liquidez muy alta.
+
+En la Sección \ref{sec:revision} se hace una revisión de la bibliografía reelevante particularmente de programación dinámica y en menor medida de aprendizaje reforzado. En la Sección \ref{sec:problema} se define el problema de \textit{market making}. En la sección \ref{sec:modelo} se hace una descripción pormenorizada del modelo utilizado para la obtención de los resultados y se presenta cómo se pueden obtener parámetros de mercado. En la sección \ref{sec:metodo} se describe la metodología empleada para realizar las simulaciones. En la sección \ref{sec:resultados} se presentan los resultados preelminares del trabajo. Finalmente, en la Sección \ref{sec: futuro} se delinea el plan de trabajo futuro para concluir la tesis.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {Revisión literaria}\label{sec:revision}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+En la literatura hay diferentes vertientes para solucionar el problema de ofrecer permanentemente liquidez a un mercado, denominado \textit{market making}, así como para realizar \textit{trading} de alta frecuencia.
+
+\subsection{Programación dinámica}
+%Introducción
+
+%Ho and Stoll - Trabajo pionero en el tema.
+\cite{Ho1981} analizan el caso de un agente único que tiene una demanda estocástica de órdenes de compra y venta. Utilizan programación dinámica para obtener precios de compra y de venta óptimos maximizando una función de utilidad y riqueza terminal teniendo en cuenta el inventario.
+
+%%% Hito Avellaneda
+% Que hicieron? bid ask, limit order book, poisson, benchmark, pnl mejor que benchmark, varias estrategias, simulaciones perfil de pnl
+\cite{Avellaneda2008} analizan la microestructura de mercado al estudiar el problema de \textit{market making}. 
+% Explicitan como definir \textit{bid} y \textit{ask} óptimos cuando las ordenes de compra y venta de mercado siguen un proceso de arribos de Poisson. 
+Definen dos estrategias más sencillas (simétrica y mejor compra/mejor venta) como referencia mejorarando el perfil de retornos comparativamente frente a ellas en una serie de simulaciones.
+% probabilidad de ser agredidos en función de la distancia
+A su vez, modelizan la probabilidad de ser agredidos en un libro de órdenes límite en función de la distancia al precio medio en que definen las órdenes límite. Esto resulta útil desde el punto de vista teórico, pero plantea una limitación en la práctica para mercados con alta liquidez donde solamente serán agredidas las órdenes de compra/venta que estén en el tope. Para sobrepasar este problema se necesita de un modelo que decida de forma binaria si ofrecer una órden de compra y/o de venta en el tope a cada instante de tiempo.
+% Fortaleza riesgo de inventario, falta de riesgo asimetría de la info.
+Por otro lado, su modelo toma en consideración el riesgo de inventario mediante la definición de un precio de indiferencia que se acerca al precio medio a medida que se termina la sesión de mercado; y una función de utilidad que penaliza cargar el inventario a lo largo del tiempo, pero adolece de consideraciones respecto a la asimetría de la información que podrían ser consideradas en una función de utilidad más compleja. Tampoco considera la posibilidad de descargar el inventario mediante órdenes de mercado.
+% Proceso browniano de precios, no considera noticias ni traders informados.
+En cuanto a su modelo, definen un proceso de precios Browniano que replica el comportamiento teórico del activo subyacente pero que deja de lado el arribo de noticias novedosas, no contempla el comportamiento de agentes informados, ni tampoco consideara que los precios se mueven en una grilla discreta. Lo que podría ser solucionado con un proceso de saltos como proceso de precios y la inclusión de \textit{shocks} estocásticos simulando el arribo de noticias.
+%función de utilidad HJB programación dinámica
+Para optimizar la función de utilidad se valen de la ecuación de Hamilton Jacobi Bellman y su uso en programación dinámica.
+%modelado de precios en base al nasdaq
+Tanto el proceso de precios como las intensidades de Poisson son definidas en base a parámetros del NASDAQ, dejando abierto el interrogante de su aplicabilidad en mercados emergentes como el latinoamericano.
+
+%% Cartea Robustez
+\cite{Cartea2013} plantean un modelo robusto a las especificaciones incorrectas del modelo de precios, arribos de órdenes y probabilidad de la orden de ser ejecutada. De esta forma, plantean una medidad de probabilidad P con el modelo más probable y otra Q con un set de modelos alternativos para agregar robustez frente a la ambiguedad de modelos. Utilizan programación dinámica para encontrar una estrategia óptima.
+
+%%% Cartea Libro
+%Complejización de Avellaneda - intro
+En el capítulo 10 de su libro, \cite{Cartea2019a} complejizan lo realizado por Avellaneda con diversas variaciones. 
+% problema formal, penalidad de descargar inventario al final, cotas sobre q y risk aversion, resultados similares a avellaneda
+En primer lugar, plantean formalmente el problema de \textit{market making} y maximización de riqueza terminal planteando cotas sobre el inventario máximo y un parámetro de aversión al riesgo obteniendo resultados similares a los de Avellaneda.
+%sin restricciones inventario, maximizar ejecucion
+Luego, plantean el problema sin restricciones de inventario obteniendo una solución simple que busca maximizar la ejecución de las órdenes límite.
+% at the touch, mercados líquidos, cruzar order book, DPE
+En tercer lugar, definen el problema ``en el tope'' donde el agente debe decidir si colocar ordenes de compra, venta o ambas. Esta característica refiere a mercados líquidos donde las órdenes que no esten en el tope tienen una baja probabilidad de ser ejecutadas y es particularmente reelevante, ya que un \textit{market maker} usualmente buscará operar en mercados líquidos.
+%optimización de volumen
+También plantean una optimización del volumen de las órdenes que el agente envía al libro de órdnees límite.
+% como función de utilidad - RL
+Si bien Cartea plantea el problema como una maximización de riqueza terminal, también analiza su equivalencia como función de utilidad mostrando un paralelo con Avellaneda. Esto es de particular importancia si se analiza la aplicabilidad de estos algoritmos al campo de aprendizaje reforzado donde se busca maximizar una función de utilidad a lo largo del tiempo.
+%Selección adversa de dos formas - mid price, alfa signal
+Finalmente, ataca el problema de selección adversa, evitado por Avellaneda, de dos maneras: con el impacto en el precio medio causado por las órdenes de mercado combinando un proceso browninano que replica el flujo de las noticias y considerando la sumatoria de las órdenes de mercado en el precio; y con un alfa de corto plazo que se integra en el tiempo y es un proceso con reversión a la media.
+
+%%% Cartea Alfa Signal
+%Inclusión de Alpha Signal + impacto MO en midprice, todo en un jump process e inclusión de MO para descargar inventario. Muy explícito
+\cite{Cartea2019} proponen una señal alfa que modela los efectos de la selección adversa y buscan minimizar sus costos. Esta señal se ve afectada tanto por las órdenes de mercado\footnote{El modelo considera la posibilidad de descargar el inventario usando una orden de mercado, por lo que las órdenes de mercado emitidas por el \textit{market maker} también generarán un impacto.} como por \textit{shocks} de difusión que representan noticias novedosas. Este modelo es superador en el hecho de que compone los riesgos de selección adversa en proceso de salto, al igual que ocurriría en un mercado electrónico con intervalos discretos; a la vez que plantea que el agente envía sus órdenes ``en el tope'' al igual que ocurriría en un mercado de alta liquidez y contemplando el riesgo de inventario. También se plantea el uso de órdenes de mercado especulativas para descargar el inventario o tomar una posición en caso de que hubiera una señal alfa lo suficientemente beneficiosa. De esta forma, se atacan varias de las falencias previamente descriptas y se componen los comportamientos deseados. Surge el interrogante, dado que los parámetros fueron estimados en base a información del NASDAQ si estos modelos son susceptibles de ser utilizados en otros mercados y cual sería el desempeño si se los corriera contra los datos de mercado y no una estimación de parámetros.
+
+\subsection{Aprendizaje reforzado}
+%%ML
+Los algoritmos de programación dinámica y los de aprendizaje reforzado comparten muchas caracteristicas. Ambos deben maximizar una función de utilidad al finalizar el tiempo t. A su vez, ambos poseen un espacio de estados definido donde pueden actuar. En mucho casos ambos atacan el problema de \textit{market making}. Por esta razón, si bien el aprendizaje reforzado no es el foco principal de este trabajo, en esta sección se presentan diferentes autores que o bien describen esta técnica o atacan este problema con esa técnica particular.
+
+\cite{RichardS.Sutton2018} explica las bases del aprendizaje reforzado. Plantea que se trata del aprendizaje desde el error. Hay una serie de elementos comunes como el agente, el ambiente, una política, una señal de recompensa, una función de valor y un modelo. 
+
+%Spooner et al.
+\cite{Spooner2018} diseñan un simulador que recrea la microestructura del libro de órdenes en base a los datos históricos de mercado. Diseñan un agente con un espacio de aciones discreto escalado por un \textit{spread} y definen tres funciones de recompensa distintas, incluyendo dos funciones de recompensa moderadas que desincentivan el seguimiento de tendencias y fomentan capturar \textit{spread}. Definen un estado del sistema que incluye el inventario y la microestructura, entre otros.
+\begin{comment}
+, y utilizan \textit{tile codings}, una version \textit{Linear Combination of Tile Coding(LCTC)}. Utilizan \textit{Q-learning}, SARSA, \textit{R-learning}, \textit{On policy R-learning}, \textit{Double Q-learning}, \textit{Expected SARSA}, \textit{Double R-learning}. Utilizan una serie de agentes denominados simples como \textit{benchmark}(simétricos, \textit{random}, RL sin recompensa llamadas moderadas). Se utilizó un Algoritmo Genético para elegir parámetros. Definenen un \textit{normalized daily PnL(PnL/spread)} y una medida de exposición de inventario para evaluar los agentes. 
+Se hace un análisis de los algoritmos y encuentran que las versiones \textit{on-policy} de los algoritmos funcionan mejor. SARSA funcionó de manera muy consistente. Respecto a las funciones de recompensa, la función moderada simétrica no funcionó pero la asimétrico usando un factor alto mejoró el retorno ajustado por riesgo y la estabilidad de aprendizaje. Aparentemente el inventario es lo que genera inestabilidad en la función de recompensa. Respecto a los estados, el \textit{tile coding(LCTC)} responde mejor que el uso de \textit{full state}. Finalmente, desarrollan un agente consolidado usando la función de recompensa moderada asimétrica, LCTC y SARSA. Da un \textit{PNL} ligeramente menor pero con mucha mayor estabilidad fuera de muestra y un mejor retorno ajustado por el riesgo, poseyendo mucho menos inventario. Esto daría un agente con un mayor comportamiento de market making y menos especulativo.
+\end{comment}
+
+%Lim y Gorse
+\cite{Lim2018} definen un espacio discreto de estados de inventario, tiempo y precio. Envían ofertas a cada momento de $t$ con una compesación de {0,1,2} sobre la mejor oferta. Definen dos funciones de recompensa: una en $t$ para capturar las ganancias y riesgo tomados durante la duración de la sesión, y una en $T$ para representar la actitud sobre las ganancias intra-diarias y la aversión al riesgo al final de la sesión de mercado.
+\begin{comment}
+Realizan simulaciones para comparar la performance de un algoritmos discretos de \textit{Q-learning} contra un \textit{zero tick offset}, el modelo de Avellaneda y un modelo aleatorio. Miden el \textit{profit} y el inventario acumulados. El algoritmo de Aprendizaje Reforzado supera a los otros. Según el nivel de aversión al riesgo se modifica el nivel de inventario acumulado al finalizar la sesión.
+\end{comment}
+
+% Zihao Zhang
+% Key findings
+\cite{Zhang2019} utilizan algoritmos de aprendizaje reforzado profundo con contratos de futuros. En este caso, no atacan el problema de \textit{market making} sino más bien plantean estrategias de inversión activas. Escalan sus operaciones por volumen y volatilidad. Realizaron un \textit{backtesting} con 50 contratos. Obtuvienen resultados que mejoran la el rendimiento de estrategias tradicionales.
+
+\cite{Ganesh2019} formalizan el \textit{dealers market} como un sistema multi-agente con M agentes, N inversores y un precio de referencia proveniente de un proceso geométrico Browniano y crean un simulador. Los agentes ganan \textit{spread} vendiendo a clientes o con \textit{\Gls{pnl}} de Inventario y pueden reducir inventario sesgando sus ofertas o hacer \textit{hedge} a un costo. Definen un agente aleatorio y uno fijo como algoritmos simples. A su vez, formalizan un agente adaptativo que utiliza una tabla de respuesta empírica basada en una relación de compromiso de varianza-media entre riesgo y cuota de mercado con una tasa de olvido exponencial.
+\begin{comment}
+	Utilizan una implementación \textit{standard} de \textit{Proximal Policy Optimization} que se llama Rllib para entrenar un agente de Aprendizaje Reforzado utilizando como funciones de recompensa el \textit{PNL} total y una penalidad(3 propuestas diferentes) relacionada al riesgo de inventario para hacerlo averso al riesgo.  Finalmente, realizan una serie de experimentos analizando \textit{PNL} total, primero sin \textit{drift} de precio, luego con \textit{drift}. Su agente de Aprendizaje Reforzado le ganó a los algoritmos simples; ganó contra el agente adaptativo si este era averso al riesgo pero perdió/empató si no. El agente de Aprendizaje Reforzado logró aprender sobre la política de precios de sus competidores sin verlos, a hacer \textit{skew} para reducir inventario y a aumentarlo si hay un drift positivo.
+\end{comment}
+
+\begin{comment}
+	\cite{Briola2021} no hacen \textit{market making}. Utilizan un algoritmo de \textit{Proximal Policy Optimization} que pertence a la familia de los Métodos de \textit{Policy Gradient}. Toman datos del \textit{Limit Order Book} del Nasdaq de una plataforma llamada LOBSTER. Trabajan con INTC y toman 60 días de \textit{trading} para el \textit{training set} y 22 para el \textit{test set}. Utilizan 3 modelos para el \textit{training} y el \textit{testing}. Cada uno de ellos difiere en el espacio de estados que se le provee al algoritmo y agrega incrementalmente más información. El primero tiene los volúmenes(de varios niveles del \textit{order book}), últimos \textit{ticks}(se incorpora la microestructura de mercado) y posición actual(\textit{short}, \textit{long}, \textit{neutral}: solo es posible comprar una unidad del activo), al segundo se le suman \textit{MTM} de la posición actual y al tercero el \textit{bid-ask} \textit{spread} actual. El espacio de acciones está conformado por: \textit{sell}, \textit{stay}, \textit{buy} y \textit{daily\_stop\_loss}(cierre de posición y no más trading por el día para evitar pérdidas). Se crea un par (posición, acción) con todas las posibles combinaciones y sus significados. La función de \textit{reward} es una función del par acción-estado y es el acumulado del \textit{profit}, exceptuando el stop-loss. El inventario es solo de una unidad. Hay una serie de especificaciones sobre el entrenamiento y testeo de los modelos. Hay set de entrenamiento y de \textit{test}. Se realiza un análisis \textit{out-of-sample} de los resultados para los tres sets de estados obteniendose un mayor numero de trades para los modelos más complejos, especialmente a causa de que el modelo conozca el \textit{MTM}. No hay una comparación contra un \textit{benchmark}, sea \textit{buy only} o algún modelo tradicional de \textit{HFT}.
+\end{comment}
+
+
+
+%Selser intro
+\cite{Selser2021} utilizan técnicas de aprendizaje reforzado aprovechando la función de utilidad planteada por \cite{Avellaneda2008} mejorando el perfil de \textit{PnL} para algunos casos. Utilizan varios métodos de aprendizaje reforzado y comentan sobre la falta de robustez de los algoritmos.
+% TODO: faltaría crítica
+\begin{comment}
+\subsection{Aprendizaje Reforzado Multi-Objetivo}
+
+
+\cite{Si2017} utilizan \textit{Multi Objective Reinforcement Learning} para crear un algoritmo de \textit{trading}. En este caso se escalariza la función de utilidad (definiendo un valor alfa = 1 y beta = 0.01) convirtiendo el problema multiobjetivo en un problema de objetivo simple. Este sería el caso más sencillo ya que no se arriba a un set de soluciones sino que se trata en la práctica de un problema de optimización de una dimensión. 
+
+\cite{Hayes2022} realizan una extensa guía describiendo casos de uso, la definición del problema, \textit{policies} y sets de soluciones, entre otros.
+En la definición del problema se formaliza proceso de decisión de Marvok multi-objetivo, diferenciandose principalmente de su versión de objetivo simple en que tiene una función de recompensa Rd siendo d la cantidad de objetivos. Se tienen como en el proceso de Markov de un solo objetivo: espacio de estados(S), espacio de acciones(A), función de transición probabilistica(T), factor de descuento y distribución de probabilidad sobre los estados iniciales.
+Respecto a las policies y \textit{value functions} se tiene una \textit{policy} $\pi$ que pertenece a $\Pi$ (espacio de \textit{policies}). Pero, su función de valor es un vector $\forall \pi \in Rd$ que surge de calcular la esperanza condicional del vector de recompensas. Normalmente, para obtener la \textit{policy} óptima se busca la de mayor valor asociado descontado, pero en este caso puede darse que no haya dominancia. Esto se solucionaría usando una función de escalarización que vaya del espacio vectorial a los reales. Sin embargo, sin ella solamente se tiene un ordenamiento parcial y no es posible determinar la pólicy óptima. 
+En la sección de sets de soluciones se define el set no dominado que arma un frente de Pareto y diferentes estrategias y funciones de utilidad que permiten obtener un subset de soluciones. Incluye sumas escalares de soluciones, \textit{Convex Hull}, etc. Finalmente define el CH($\Pi$) (convex Hull) y el CCS($\Pi$) que son los subsets para las funciones de utilidad lineales.
+Se define un enfoque denominado \textit{Utility-based Approach} que en vez de utilizar todo el set de pareto utiliza un subset mucho más facil de calcular (más bien no imposible computacionalmente). Hay una serie de pasos para obtener el set de soluciones óptimas en base a la función de utilidad, si es conocida o no y si puede cambiar en el tiempo. 
+Hay varios factores que influencian el diseño del sistema multi-objetivo, tales como desconocer la función de utilidad, un escenario de decisión donde las preferencias son dificiles de estimar, otro donde sean conocidas, un escenario interactivo y más.
+Luego, se pueden definir si se van a utilizar policies multiples o únicas, funciones de utilidad lineales o monotonicas crecienctes, policies estocásticas o determinísticas y retornos esperados escalarizados o retornos escalarizados esperados.
+\end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {Descripción del problema} \label{sec:problema}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% que es market making
+El problema de \textit{market making} consiste en ofrecer permanentemente liquidez en un mercado dado. En su versión más simple se trata de un activo a intercambiar en el que permanentemente se debe decidir si ofrecer una orden límite de compra, de venta o ambas teniendo en cuenta el riesgo que genera el inventario adquirido en la sesión de \textit{trading}, el proceso de precios del modelo y la intensidad con la que llegan las órdenes de mercado. El problema se reduce a un problema de control óptimo y es por ello que son las técnicas de control las aplicadas para resolverlo.
+
+% explicar variaciones, at the top o no, optimizado por volumen, diferentes modelaciones de proceso de precios
+Dada esta definición existen diversas variaciones a este problema, comenzando por el espacio de estados que el agente puede tomar. En primer lugar, se tiene el caso en el que se define la distancia al precio medio para de esa forma controlar la cantidad de órdenes llenadas por órdenes de mercado. Luego, se tiene el caso ``en el tope'' en el que solamente se define si ofrecer o no las órdenes en el mejor valor posible del libro de órdenes límite. Luego, el modelo también dependerá de la modelización del proceso de precios subyacente que podría ser, por ejemplo, un proceso browniano o un proceso de saltos.
+
+% explicar formas de resolución: con programación dinámica, heurísticas, RL
+Se han utilizado diferentes ténicas para resolver el problema tales como programación dinámica, diferentes heurísticas y también aprendizaje reforzado. La solución a proponer dependerá en gran medida del modelo particular que se utilice para entender el problema así como de la técnica elegida.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {Modelo} \label{sec:modelo} % (Enfoque, modelo, proceso ....) % o modelos, podrían comentarse los otros modelos implementados.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Se considera el modelo de precios, el problema de optimización de \textit{market making} y las soluciones todos planteados por \cite{Cartea2019}. En esta sección se describe este modelo y sus respectivas soluciones sin variaciones.
+
+El modelo de precios $S_t$ está regido por
+
+\begin{equation}
+	dS_t = \sigma (dJ_t^+ - dJ_t^-),
+	\label{dJ}
+\end{equation}
+
+donde $S_t$ es un proceso de saltos compuesto por la diferencia entre los procesos $J_t^+$ y $J_t^-$ y cuyo $\sigma$ es el \textit{tick} mínimo del mercado. La Ecuación \ref{dJ} representa los desbalances de órdenes de mercado de compra y venta. Siendo $(+)$ las órdenes de compra que empujan el precio hacia arriba y $(-)$ las órdenes de venta que empujan el precio hacia abajo.
+
+Cada proceso de salto $J_t^+$($J_t^-$) tiene una media  $\mu_t^+$($\mu_t^-$) estocástica definida por
+
+\begin{equation}
+	\mu_t^+ = (\alpha_t)_+ + \theta\ \qquad \textit{y} \qquad
+	\mu_t^- = (\alpha_t)_- + \theta ,
+	\label{mu}
+\end{equation}
+
+donde $\theta$ es un parámetro de mercado que define una media fíja. Esta media se debe a la liquidez propia del mercado que tiene una cantidad de órdenes de compra y venta de base. A esto se suma la señal $(\alpha_t)$ que agrega la variabilidad de la media de los procesos $J$. El operador $(\alpha_t)_{+}$ devuelve $\alpha_t$ si $\alpha_t>0$ y si no cero, mientras que el operador $(\alpha_t)_{-}$ devuelve $-\alpha_t$ si $\alpha_t<0$ y si no cero. Esto hace que la señal $\alpha$ aumente la media del proceso que comparte su signo en determinado $t$.
+
+La señal $\alpha_t$ depende de la ecuación diferencial estocástica
+
+\begin{equation}
+	d\alpha_t = -k\alpha_t dt + \xi dW_t + \eta^+ (dM_t^{0+} + dM_t^+) - \eta^- (dM_t^{0-} + dM_t^-), \quad \alpha_0=0
+	\label{alpha_dif}
+\end{equation}
+
+ donde $k$ es un parámetro de mercado que regula la intensidad de reversión a la media del proceso, $\xi$ regula los \textit{shocks} estocásticos que representan la noticias novedosas modeladas como un proceso browniano $W_t$. $\eta_+$ es el impacto de las órdenes de compra de mercado y $\eta_-$ el de las de venta. Los procesos $M_t^{0-}$ y $M_t^{0+}$ representan las órdenes de mercado de compra y venta que emiten otros participanes del mercado y estan modelados como procesos de conteo que siguen procesos de Poisson con medias $\lambda_+$ y $\lambda_-$. Los procesos $M_t^{+}$ y $M_t^{-}$ son la sumatoria de la cantidad de ejecuciones de las órdenes de compra y venta ejecutadas por el \textit{market maker} para descargar inventario en tiempo $t$.
+
+El operador $\nu$ define el control del \textit{market maker} y se rige por
+
+\begin{equation}
+	\nu = (l^{\pm}, \tau^{\pm}),
+	\label{nu}
+\end{equation}
+
+donde $l^{\pm}$ expresa a los operadores $l^+$ y $l^-$ que indican si el \textit{market maker} ofrece una orden límite de compra y/o de venta; y $\tau_{\pm}$ representa las órdenes de mercado que el \textit{market maker} utiliza para en tiempos $\tau_+$ y $\tau_-$ para descargar inventario en los casos que sea conveniente.
+
+Se define el inventario controlado por el \textit{market maker} como $Q_t^\nu$. Este surge de tanto las órdenes límite que sean agredidas por otros agentes del mercado como por las órdenes de mercado que el \textit{market maker} ejecute para descargar inventario. A su vez tiene una cota superior $\overline{Q}$ e inferior $-\overline{Q}$.
+
+La riqueza del agente se define como $X_t^\nu$ y se obtiene en base a las operaciones realizadas en el mercado, ganando el \textit{spread} $\Delta$ en los casos de órdenes límite agredidas; y pagando $\Upsilon$ en los casos que utilice órdenes de mercado para descargar inventario. El costo $\Upsilon$ equivale al \textit{spread} $\Delta$ sumado a los costos de transacción $\epsilon$ de forma que $\Upsilon= \Delta + \epsilon$. 
+
+Finalmente, el problema de optimización está definido por
+
+\begin{equation}
+	H(t,x,S,\alpha,q) = 
+	\sup_{\nu \in \mathcal{A}} \mathbb{E}_{t,x,S,\alpha,q} [X_{T}^\nu + Q_T^\nu(S_T-sign(Q_T^\nu)\Upsilon-\psi Q_T^\nu) - \phi \int_{t}^{T}(Q_s^\nu)^2ds]
+	\label{optimizacion}
+\end{equation}
+
+donde la función $H$ depende del tiempo $t$, el proceso de riqueza $x$, y la señal $\alpha$, el proceso de precios $S$ y el inventario $q$. Se busca maximizar la esperanza dentro del espacio de estados $\mathcal{A}$ que puede tomar el control $\nu$. Para ello se necesita maximizar la riqueza terminal $X_T^\nu$ sumado al inventario terminal $Q_T^\nu$ multiplicado por el precio terminal $S_T$ más el costo $\Upsilon$ del \textit{spread} y los costos de transacción. El parámetro $\psi$ pondera el costo de saltar el libro de órdenes límite y está en el término $\psi Q_T^\nu$ que representa los costos de cruzar el libro de órdenes límite al finalizar la sesión. Se tiene $\phi$ que representa la aversión al riesgo y penaliza cargar el inventario a lo largo de la sesión en el término $- \phi \int_{t}^{T}(Q_s^\nu)^2ds$. La formulación es muy similar a la de \cite{Avellaneda2008}, pero incorpora las diferencias propias de esta definición del problema de \textit{market making}.
+
+
+\cite{Cartea2019} utilizan la siguiente solución de la inecualidad quasi-variacional Hamilton-Jacobi-Bellman 
+
+\begin{gather}
+	\text{max} \bigg\{
+	\partial_t H
+	+ (\alpha^+ + \theta) \big( H(t,x,S+\sigma,\alpha,q) - H \big) \nonumber \\
+	+ (\alpha^- + \theta) \big( H(t,x,S-\sigma,\alpha,q) - H \big) \nonumber \\
+	-k\alpha \partial_\alpha H + \frac{1}{2} \xi^2 \partial_{\alpha \alpha} H - \phi q^2 \nonumber \\
+	+ \lambda^ + \sup_{l_+\in {0,1}} \bigg[l_+ \big( H(t,x + (S+\Delta),S,\alpha+\eta_+,q-1) - H \big) \nonumber \\
+	(1-l_+) ( H(t,x,S,\alpha+\eta_+,q) - H )\bigg] \nonumber \\
+	+ \lambda^ - \sup_{l_-\in {0,1}} \bigg[l_- \big( H(t,x - (S-\Delta),S,\alpha-\eta_-,q+1) - H \big) \nonumber \\
+	(1-l_-) ( H(t,x,S,\alpha-\eta_-,q) - H )\bigg]; \nonumber \\
+	H(t,x+(S-\Upsilon),S,\alpha,q-1)-H; \nonumber \\
+	H(t,x-(S+\Upsilon),S,\alpha,q+1)-H		 	
+\bigg\}=0
+\label{HJB}	
+\end{gather}
+
+para encontrar un método numérico que permita obtener una función H. 
+
+
+Se define como condición terminal
+\begin{equation}
+H(T,x,S,\alpha,q) = x + q (S-\textit{signo}(q)\Upsilon - \psi q)
+\label{terminal}
+\end{equation}
+
+Los controles estocásticos 
+
+\begin{gather}
+	\nonumber l_+ = \mathds{1}_{\{H(t,x+(S+\Delta),S,\alpha+\eta^+,q-1)>H(t,x,S,\alpha+\eta^+,q)\}}\\
+	l_-=\mathds{1}_{\{H(t,x-(S-\Delta),S,\alpha-\eta^-,q+1)>H(t,x,S,\alpha-\eta^-,q)\}} 
+	\label{l}
+\end{gather}
+
+
+donde $l_+$ es el control de venta de orden límite y $l_-$ es el control de compra de orden límite.
+
+
+Se plantea este ansatz
+
+\begin{equation}
+	H(t,x,S,\alpha,q)=x+qS+\tilde{h}(t,\alpha,q)
+	\label{ansatz}
+\end{equation}
+
+Obteniéndose la ecuación
+
+\begin{gather}
+	\text{max} \bigg\{
+	\partial_t \tilde{h}+\alpha\sigma q-k\alpha \partial_\alpha \tilde{h} + \frac{1}{2} \xi^2 \partial_{\alpha \alpha} \tilde{h} - \phi q^2 \nonumber \\
+	+ \lambda^ + \sup_{l_+\in {0,1}} \bigg[l_+ \big(\Delta +  \tilde{h}(t,\alpha+\eta_+,q-1) - \tilde{h} \big) 
+	(1-l_+) ( \tilde{h}(t,\alpha+\eta_+,q) - \tilde{h} )\bigg] \nonumber \\
+	+ \lambda^ - \sup_{l_-\in {0,1}} \bigg[l_- \big(\Delta + \tilde{h}(t,\alpha-\eta_-,q+1) - \tilde{h} \big) 
+	(1-l_-) ( \tilde{h}(t,\alpha-\eta_-,q) - \tilde{h} )\bigg]; \nonumber \\
+	\tilde{h}(t,\alpha,q-1)-\tilde{h}; \nonumber \\
+	\tilde{h}(t,\alpha,q+1)-\tilde{h}		 	
+	\bigg\}=0
+	\label{HJB_simple}	
+\end{gather}
+
+
+La condición terminal ahora será
+
+\begin{equation}
+	\tilde{h}(T,\alpha, q) = q \thinspace \text{signo}(q)\Upsilon - \psi q )
+	\label{terminal_2}
+\end{equation}
+
+donde ahora $\tilde{h}$ solo depende de $t$, $\alpha$ y $q$.
+
+Los controles estocásticos finalmente son
+
+\begin{gather}
+	\nonumber l_+ = \mathds{1}_{\{\Delta+\tilde{h}(t,\alpha+\eta^+,q-1)>\tilde{h}(t,\alpha+\eta^+,q)\}}\\
+	l_-=\mathds{1}_{\{\Delta+\tilde{h}(t,\alpha-\eta^-,q+1)>\tilde{h}(t,\alpha-\eta^-,q)\}} 
+	\label{l_2}
+\end{gather}
+
+\subsection{Estimación de parámetros}
+\cite{Cartea2019} realizan una estimación de máxima verosimilitud para obtener los parámetros correspondientes a diferentes activos del NASDAQ en base a datos de alta frecuencia de una sesión de \textit{trading} de cinco horas y media. Se obtienen los parámetros $\tilde{k}$ de reversión a la media, $\tilde{\eta_+}$ y $\tilde{\eta_-}$ de impacto de las órdenes de mercado a $\alpha$, $\tilde{\theta}$ que es la base de la media que define los procesos $J$, y $\lambda_+$ y $\lambda_-$ que definen la tasa de arribo de los procesos de Poisson de las órdenes de mercado.
+
+Este mismo método puede ser utilizado para estimar los parámetros de otros mercados como, por ejemplo, el Bovespa.
+
+Tal y como resume \cite{MIURA2011}, el método de máxima verosimilitud consiste en estimar un parámetro $\theta$ que especifica una función de probabilidad $P(X=x|\theta)$ de una variable estocástica discreta $X$ basandose en las observaciones $x_1, x_2 \dots x_n$.
+
+El estimador de máxima verosimilitud es el valor $\tilde{\theta}$ que maximiza la función de verosimilitud que queda definida por
+
+\begin{equation}
+	L(\theta) = \prod_{i=1}^{n}P(X=x_i|\theta)
+	\label{verosimilitud}
+\end{equation}
+
+De esta forma, se elige el parámetro $\tilde{\theta}$ que sea el más verosimil de haber generado los datos.
+
+%\section{Pseudo-código}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section {Datos} % (descripcion, fuente, analisis, tratamiento)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {Metodología}\label{sec:metodo} % (procedimientos)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Se diseñó el siguiente algoritmo que es capaz de seguir el esquema numérico de \cite{Cartea2019}.
+%\begin{figure}
+
+\begin{algorithm}[H]
+	\caption{Algoritmo para calcular $\tilde{h}$}
+	\begin{algorithmic}[1]
+		\Procedure{Calcular $\tilde{h}$}{}
+		\For{ $t_i$ (empezando desde $T$ y hacia atrás)}
+			\For {$q_i$}
+				\State $\partial_\alpha$$\tilde{h}$ = calcular $\partial_\alpha$$\tilde{h}$ ($h(t_i+1,\forall \alpha,q_i)$)
+				\State $\partial_{\alpha \alpha}$$\tilde{h}$ = calcular $\partial_{\alpha \alpha}$$\tilde{h}$ ($h(t_{i+1},\forall \alpha,q_i)$)
+				\State ($l_+(t_{i + 1}, \forall \alpha, q_i)$, $l_-(t_{i + 1}, \forall \alpha, q_i)$) = encontrar posiciones optimas$(h, t_i, q_i)$
+				\State $h(t_{i},\forall \alpha,q_i)$ = $S_{dt d\alpha}(\tilde{h}, t_i, q_i, \partial_\alpha \tilde{h}, \partial_{\alpha \alpha}\tilde{h})$
+			\EndFor
+		\EndFor
+		\EndProcedure
+		\Procedure{$S_{dt d\alpha}$}{$\tilde{h}, t_i, q_i, \partial_\alpha \tilde{h}, \partial_{\alpha \alpha}\tilde{h}$}
+		\State $T_{dt d\alpha}$ = $T_{dt d\alpha}(\tilde{h}, t_i, q_i, \partial_\alpha \tilde{h}, \partial_{\alpha \alpha}\tilde{h})$
+		\State $M_{dt d\alpha}$ = $T_{dt d\alpha}(\tilde{h}, t_i, q_i)$
+		\State \Return max($T_{dt d\alpha}$, $M_{dt d\alpha}$)
+		\EndProcedure
+	\end{algorithmic}
+\label{algoritmoH}	
+\end{algorithm}
+
+%\end{figure}
+
+El Algoritmo \ref{algoritmoH} converge a una función $\tilde{h}$. Se utilizaron como referencia el código de \cite{JaimungalCodigo} que muestra la generación de ciertas figuras para el libro de \cite{Cartea2019a} y obtiene una función $\tilde{h}$ para otro diseño de problema, y el código de \cite{KHelertCode} que replica algunas otras figuras del mismo libro.
+
+\cite{Cartea2019} definen un esquema numérico de que se implementó en código y define una función $S_{dt d\alpha}$ que permite obtener la función óptima de forma incremental. $S_{dt d\alpha}$ devuelve el máximo entre otras dos funciones $T_{dt d\alpha}$ que busca el valor óptimo de $\tilde{h}$ optimizando el control que el \textit{market maker} realiza sobre las órdenes límite y $M_{dt d\alpha}$ que hará lo mismo sobre las órdenes de mercado que podrían ser utilizadas para descargar inventario.
+
+Finalmente, se definió un algoritmo de simulación que permite a cada instante del tiempo obtener los posicionamientos óptimos $l_+$, $l_-$, $\tau_+$ y $\tau_-$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {Resultados preliminares} \label{sec:resultados}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{Simulaciones}
+
+El objetivo principal de esta propuesta fue replicar los resultados obtenidos por \cite{Cartea2019} en su modelo con señal alfa en el tope del libro de órdenes. Estos resultados, y el modelo programado con el que se obtuvieron, son la base fundamental para aplicar este modelo a datos de mercados emergentes.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.95\linewidth]{figuras/h_final}
+	\caption{Función h.}
+	\label{fig:h}
+\end{figure}
+
+Se reprodujo la función $\tilde{h}$ en la Figura \ref{fig:h}. Se logró resolviendo la ecuación diferencial \ref{HJB_simple} de forma numérica siguiendo el método numérico planteado también por \cite{Cartea2019}. La función $\tilde{h}$ determina en qué momentos deben ofrecerse operaciones de compra, venta o ambas, mediante el uso de las funciones $l_+$ y $l_-$ descriptas en la Ecuación \ref{l_2}. A simple vista se puede ver cómo la función $\tilde{h}$ en el sector de $\alpha=-300$ crece en la dirección de $-q$ con máxima pendiente. Esto ocurre porque cuando $\alpha$ tiene un valor muy negativo indica que el desbalance entre oferta y demanda es fuerte en la dirección de baja de precio. De esta forma, el agente aumentará su utilidad en mayor medida cuanto más inventario negativo tenga, o cuanto más reduzca el inventario actual. Ocurre lo opuesto en el caso de $\alpha=300$, donde lo conveniente será aumentar el inventario. La función es suave en dirección a los casos intermedios.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figuras/positioning_vs_q_final}
+	\caption{Comportamientos del agente según $\tilde{h}$ en función de t para q=0.}
+	\label{fig:positioningvsq}
+	%Arriba: fucsia
+	%medio arriba: verde
+	%medio: amarillo
+	%medio abajo: rosa
+	%abajo: azul
+	%final: rojo
+\end{figure}
+
+Componiendo las ecuaciones $l_+$ y $l_-$ de la Ecuación \ref{l_2} con la función $\tilde{h}$ se obtiene el comportamiento esperado del agente para un caso dado. En la figura \ref{fig:positioningvsq}\footnote{A continuación los comportamientos del agente según el color. Fucsia: ofrecer orden límite y de mercado para comprar inventario. Gris: ofrecer órden límite para compra inventario. Amarillo: ofrecer orden límite para compar y para vender inventario. Rosa: ofrecer orden límite para vender inventario. Azul: ofrecer orden de mercado y límite para vender inventario. Rojo: no ofrecer ni órdenes de mercado ni límite.} se fijó $q=0$ de forma tal de entender este comportamiento. El agente toma diferentes posiciones dependiendo del momento en la sesión y la fuerza de la señal $\alpha$. En los casos en los que la señal es baja y falta mucho para terminar la sesión el agente opta por ofrecer ambas puntas de forma tal de maximizar el intercambio. Si la señal $\alpha$ sube o baja sobrepasando alrededor del valor 50 el agente comienza a sesgar sus compras en la dirección que indica la señal. En el caso en que la señal sea lo suficientemente fuerte, como por ejemplo en $t=50$ y $\alpha=\pm 200$ además el agente toma posiciones especulativas ofreciendo una oferta de mercado. Como es esperable, dado que la función de utilidad penaliza saltar el libro de órdenes límite al finalizar la sesión, cuando se acerca el final de la sesión el agente intenta no ejecutar órdenes si su inventario es cero o intenta descargar inventario en caso de tenerlo.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=1\linewidth]{figuras/limit_orders_minus_executions_final}
+		\caption{Órdenes de compra.}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.45\textwidth}
+	\includegraphics[width=1\linewidth]{figuras/limit_orders_plus_executions_final}
+	\caption{Órdenes de venta.}
+\end{subfigure}
+	\caption{Histograma de órdenes límite ejecutadas.}
+	\label{fig:limitordersminusplusexecutions}
+\end{figure}
+
+Uno de los parámetros considerados que \cite{Cartea2019} muestran en su trabajo es el perfil de órdenes límite y de mercado ejecutadas. En la Figura \ref{fig:limitordersminusplusexecutions} se realizó un histograma de la ejecución de órdenes de compra y venta de las órdenes límite en base a 10 simulaciones utilizando el código desarrollado. Los resultados son compatibles con aquellos que se buscaban replicar.
+\begin{figure}[H]
+	\centering
+\begin{subfigure}{0.45\textwidth}
+	\includegraphics[width=1\linewidth]{figuras/market_orders_minus_executions_final}
+	\caption{Órdenes de compra.}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.45\textwidth}
+	\includegraphics[width=1\linewidth]{figuras/market_orders_plus_executions_final}
+	\caption{Órdenes de venta.}
+\end{subfigure}
+	\caption{Histograma de órdenes de mercado ejecutadas.}
+	\label{fig:marketordersplusexecutions}
+\end{figure}
+
+Por otro lado, también se realizó un histograma de las órdenes de mercado realizadas en la Figura \ref{fig:marketordersplusexecutions}. El agente utiliza estas órdenes para descargar inventario en casos donde la señal $\alpha$ sea lo suficientemente alta como para pagar el costo de saltar el libro de órdenes o para tomar posiciones especultivas en los casos en que la señal sea muy alta y se quiera aprovechar para obtener una ganancia.
+
+\begin{figure}[H]
+\begin{subfigure}{0.8\textwidth}
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/orders_final}
+	\caption{Trayectoria del precio y las órdenes del agente.Linea negra: precio medio. Línea roja: ofrecimiento de órdenes de compra límite. Línea azul: ofrecimiento de órdenes de venta límite.  Cruz roja: ejecucuión de órdenes de compra límite. Cruz azul: ejecución de órdenes de venta límite. Cuadrados rojo y azul: ejecución de órdenes de compra y venta de mercado.}
+	\label{fig:orders}
+\end{subfigure}
+\begin{subfigure}{0.8\textwidth}
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/pnl_final}
+	\caption{\textit{PnL}.}
+	\label{fig:pnl}
+\end{subfigure}
+\begin{subfigure}{0.8\textwidth}
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/q_final}
+	\caption{q.}
+	\label{fig:q}
+\end{subfigure}
+\begin{subfigure}{0.8\textwidth}
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/alpha_final}
+	\caption{Alfa.}
+	\label{fig:alpha}
+\end{subfigure}
+\caption{Ejemplo de simulación.}
+\label{fig:orders_pnl_q_alfa}
+\end{figure}
+
+Finalmente, se graficó una simulación de ejemplo en la Figura \ref{fig:orders_pnl_q_alfa}. En la subfigura \ref{fig:orders} se graficaron el precio medio, las puntas que ofrece el agente y los eventos de ejecución de órdenes límite y de mercado. En la subfigura \ref{fig:pnl} se grafica el retorno del agente a lo largo de la sesión. En la subfigura \ref{fig:q} se observa el inventario. En la subfigura \ref{fig:alpha} se grafica la señal $\alpha$.
+
+A lo largo de la simulación se observa que desde el inicio el agente ofrece ambas puntas: compradora y vendedora. Alrededor de $t=25$ se observa que no se ofrece más punta vendedora por haber llegado al máximo de inventario negativo por un breve lapso de tiempo. Se observa el mismo comportamiento en $t=40$. En $t=45$, ocurre la misma situación en 3 ocasiones. Alrededor de $t=57$ el agente deja de ofrecer órdenes de compra dado que llega a su máximo inventario de compra. En lo que va de la sesión hasta ese momento el agente ha podido aprovechar las órdenes que llegan en ambos sentidos con excepción de estos breves lapsos de tiempo. Estando muy cerca de finalizar la sesión, el agente deja de ofertar órdenes de compra aunque tiene capacidad en su inventario para adquirir más del activo. Esto quiere decir que el agente se sesga hacia reducir el inventario por la proximidad a finalizar la sesión y las condiciones de la señal $\alpha$. Finalmente, realiza una órden de mercado para descargar el inventario remanente.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {Plan de trabajo futuro} \label{sec: futuro}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Los pasos a seguir para concluir el trabajo son los siguientes:
+\begin{itemize}
+	\item Se definirá una estrategia de referencia que no tome en consideración la señal alfa para evaluar en cuánto mejora el desempeño del modelo propuesto respecto a este modelo base.
+	\item Se buscará obtener los parámetros correspondientes a un mercado latinoamericano\footnote{Se utilizará el método de máxima verosimilitud para obtener los parámetros que maximicen el criterio.}, por ejemplo BOVESPA, para medir el desempeño del modelo en un mercado emergente. Por otro lado se compararán estos parámetros y sus resultados contra los resultados ya obtenidos en base a los parámetros del NASDAQ. 
+	\item Se realizará una simulación del modelo utilizando los datos reales. Es decir, se buscará ya no generar una simulación en base a los parámetros, sino testear el modelo contra datos de una sesión de \textit{trading}.
+\end{itemize}
+
+%\addcontentsline{toc}{section}{References}
+\bibliography{biblio}
+
+
+\begin{appendices}
+\section{Código} \label{sec:codigo}
+\subsection{Parámetros}
+\begin{lstlisting}[language=Python]
+from types import SimpleNamespace
+simulation_parameters = {
+	'q_max': 4,
+	'T': 60,
+	'A': 300,
+	'dalpha': 30,
+	'Delta': 0.005,
+	'epsilon': 0.005,
+	'psi': 0.01,
+	'phi_': 1e-6,
+	'eta': 60.0,
+	'sigma': 0.01,
+	'k': 200.0,
+	'xi': 1.0,
+	'lambda_plus': 1.0,
+	'lambda_minus': 1.0,
+	'theta': 0.1,
+	's0': 100,
+	'n': 10
+}
+p = SimpleNamespace(**simulation_parameters)
+p.dt = (p.k * p.A / p.dalpha + p.lambda_plus + p.lambda_minus)**(-1)
+\end{lstlisting}
+\subsection{Definiciones}
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+q_max, T, A, dalpha, Delta, epsilon, psi, phi_, eta, sigma, k,
+ xi, lambda_plus, lambda_minus = p.q_max, p.T, p.A, p.dalpha,
+p.Delta, p.epsilon,  p.psi, p.phi_, p.eta, p.sigma, p.k, p.xi,
+p.lambda_plus, p.lambda_minus
+
+Upsilon = Delta + epsilon
+
+dt = (k * A / dalpha + lambda_plus + lambda_minus)**(-1)
+
+q_a = np.arange(-q_max, q_max + 1, 1)
+alpha = np.arange(-A, A + 1, dalpha)
+
+alpha_smaller_0 = np.where(alpha < 0)[0]
+alpha_greater_0 = np.where(alpha > 0)[0]
+alpha_0 = np.where(alpha == 0)[0]   
+
+n_q = len(q_a)
+n_alpha = len(alpha)
+n_t = int(T / dt)
+
+h = np.full((n_t, n_alpha, n_q), np.nan)
+d_alpha_h = np.zeros(n_alpha)
+dd_alpha_h = np.zeros(n_alpha)
+
+l_plus = np.zeros((n_t, n_alpha, n_q))
+l_minus = np.zeros((n_t, n_alpha, n_q))
+
+h_eta_up = np.full((n_t, n_alpha, n_q), np.nan)
+h_eta_down = np.full((n_t, n_alpha, n_q), np.nan)
+
+def T_dt_dalpha(h, t_i, q_i, d_alpha_h, dd_alpha_h):
+    h_t_1_q = h[t_i + 1, :, q_i]
+    q_ = q_a[q_i]
+
+    l_plus_term = get_l_plus_term(t_i, q_i, h_t_1_q)
+
+    l_minus_term = get_l_minus_term(t_i, q_i, h_t_1_q)
+
+    h_t_q = h_t_1_q + dt * (
+        alpha * sigma * q_
+        - k * alpha * d_alpha_h
+        + ((xi**2) / 2) * dd_alpha_h
+        - phi_ * q_**2
+        + l_plus_term
+        + l_minus_term
+    )
+
+    h_t_q[0] = 2 * h_t_q[1] - h_t_q[2]
+    h_t_q[-1] = 2 * h_t_q[-2] - h_t_q[-3]
+    return h_t_q
+
+def get_l_minus_term(t_i, q_i, h_t_1_q):
+    if q_a[q_i] < q_max:
+        l_minus_term = lambda_minus * np.maximum(
+            (Delta + h_eta_down[t_i + 1, :, q_i + 1] - h_t_1_q),
+            (h_eta_down[t_i + 1, :, q_i] - h_t_1_q),
+        )
+    else:
+        l_minus_term = h_eta_down[t_i + 1, :, q_i] - h_t_1_q
+    return l_minus_term
+
+
+def get_l_plus_term(t_i, q_i, h_t_1_q):
+    if q_a[q_i] > -q_max:
+        l_plus_term = lambda_plus * np.maximum(
+            (Delta + h_eta_up[t_i + 1, :, q_i - 1] - h_t_1_q),
+            (h_eta_up[t_i + 1, :, q_i] - h_t_1_q),
+        )
+    else:
+        l_plus_term = h_eta_up[t_i + 1, :, q_i] - h_t_1_q
+    return l_plus_term
+
+
+def M_dt_dalpha(h, t_i, q_i):
+    if q_a[q_i] < q_max and q_a[q_i] > -q_max:
+        return np.maximum(
+            (h[t_i + 1, :, q_i - 1] - Upsilon), (h[t_i + 1, :, q_i + 1] - Upsilon)
+        )
+    elif q_a[q_i] > -q_max:
+        return h[t_i + 1, :, q_i - 1] - Upsilon
+    elif q_a[q_i] < q_max:
+        return h[t_i + 1, :, q_i + 1] - Upsilon
+    else:
+        raise ValueError(f"Imposible Case {q_a[q_i]}")
+
+
+def S_dt_dalpha(h, t_i, q_i, d_alpha_h, dd_alpha_h):
+    T_dt_dalpha_i = T_dt_dalpha(h, t_i, q_i, d_alpha_h, dd_alpha_h)
+    M_dt_dalpha_i = M_dt_dalpha(h, t_i, q_i)
+    return np.maximum(T_dt_dalpha_i, M_dt_dalpha_i)
+
+
+def calculate_d_alpha_h(h_q_t):
+    d_alpha_h[alpha_smaller_0] = (
+        h_q_t[alpha_smaller_0 + 1] - h_q_t[alpha_smaller_0]
+    ) / dalpha
+    d_alpha_h[alpha_greater_0] = (
+        h_q_t[alpha_greater_0] - h_q_t[alpha_greater_0 - 1]
+    ) / dalpha
+    d_alpha_h[alpha_0] = (
+        (h_q_t[alpha_0 + 1] - h_q_t[alpha_0]) +
+        (h_q_t[alpha_0] - h_q_t[alpha_0 - 1])
+    ) / (2 * dalpha)
+    return d_alpha_h
+
+
+def calculate_dd_alpha_h(h_q_t):
+    dd_alpha_h[1:-1] = (h_q_t[2:] - 2 * h_q_t[1:-1] - h_q_t[:-2]) / (dalpha**2)
+    return dd_alpha_h
+
+
+def extrapolate_up(phi, n, diff):
+    delta_phi = phi[-1] - phi[-2]
+    phi_extrapolated = (
+        np.ones(n) * phi[-1] + diff * delta_phi + np.arange(0, n) * delta_phi
+    )
+    return phi_extrapolated
+
+
+def interpolate(phi, up=True):
+    eta_dalpha = eta / dalpha
+    eta_dalpha_floor = np.floor(eta_dalpha)
+    eta_dalpha_diff = eta_dalpha - eta_dalpha_floor
+    eta_move = int(eta_dalpha_floor)
+
+    phi_eta = phi if up else np.flip(phi)
+
+    phi_eta = np.roll(phi_eta, -eta_move)
+    phi_eta[-eta_move:] = np.nan
+
+    phi_eta_1 = np.roll(phi_eta, -1)
+    phi_eta_1[-1:] = np.nan
+
+    phi_eta += (phi_eta_1 - phi_eta) * eta_dalpha_diff
+    phi_eta[-eta_move - 1:] = extrapolate_up(
+        phi if up else np.flip(phi), len(
+            phi_eta[-eta_move - 1:]), eta_dalpha_diff
+    )
+
+    phi_eta = phi_eta if up else np.flip(phi_eta)
+
+    return phi_eta
+
+
+def find_optimal_postings(h, t_i, q_i):
+    h_eta_up[t_i + 1, :, q_i] = interpolate(h[t_i + 1, :, q_i])
+    if q_a[q_i] > -q_max:
+        h_eta_up[t_i + 1, :, q_i - 1] = interpolate(h[t_i + 1, :, q_i - 1])
+        l_plus_i = np.where(
+            Delta + h_eta_up[t_i + 1, :, q_i -
+                             1] > h_eta_up[t_i + 1, :, q_i], 1, 0
+        )
+    else:
+        l_plus_i = np.zeros(n_alpha)
+
+    h_eta_down[t_i + 1, :, q_i] = interpolate(h[t_i + 1, :, q_i], up=False)
+    if q_a[q_i] < q_max:
+        h_eta_down[t_i + 1, :, q_i +
+                   1] = interpolate(h[t_i + 1, :, q_i + 1], up=False)
+        l_minus_i = np.where(
+            Delta + h_eta_down[t_i + 1, :, q_i +
+                               1] > h_eta_down[t_i + 1, :, q_i], 1, 0
+        )
+    else:
+        l_minus_i = np.zeros(n_alpha)
+    return l_plus_i, l_minus_i
+   
+\end{lstlisting}
+\subsection{Cálculo de h}
+\begin{lstlisting}[language=Python]
+h[-1, :, :] = (
+    np.ones((1, n_alpha)) *
+    np.array([(q_a * (-np.sign(q_a) * Upsilon - psi * q_a))]).T
+).T
+
+for t_i in range(n_t - 2, -1, -1):
+    for q_i in range(n_q):
+        h_q_t_1 = h[t_i + 1, :, q_i]
+        d_alpha_h = calculate_d_alpha_h(h_q_t_1)
+        dd_alpha_h = calculate_dd_alpha_h(h_q_t_1)
+        l_plus[t_i + 1, :, q_i], l_minus[t_i + 1, :, q_i] = 
+        	find_optimal_postings(
+            h, t_i, q_i
+        )
+        h[t_i, :, q_i] = S_dt_dalpha(h, t_i, q_i, d_alpha_h, dd_alpha_h)
+\end{lstlisting}
+\subsection{Obtención de órdenes de mercado óptimas}
+\begin{lstlisting}[language=Python]
+def find_optimal_MO(h, t_i, q_i):
+    if q_a[q_i] > -(q_max - 1):
+        mo_minus_i = np.where((
+        	h[t_i + 1, :, q_i - 1] - Upsilon) > h[t_i + 1, :, q_i], 1, 0)
+    else:
+        mo_minus_i = np.zeros(n_alpha)
+
+    if q_a[q_i] < (q_max - 1):
+        mo_plus_i = np.where(
+        (h[t_i + 1, :, q_i + 1] - Upsilon) > h[t_i + 1, :, q_i],1,0)
+    else:
+        mo_plus_i = np.zeros(n_alpha)
+
+
+    return mo_plus_i, mo_minus_i
+
+mo_plus = np.zeros((n_t, n_alpha, n_q))
+mo_minus = np.zeros((n_t, n_alpha, n_q))
+
+for t_i in range(n_t - 2, -1, -1):
+    for q_i in range(n_q):
+        mo_plus[t_i + 1, :, q_i], mo_minus[
+        	t_i + 1, :, q_i] = find_optimal_MO(
+            h, t_i, q_i
+        )
+\end{lstlisting}
+\subsection{Simulaciones}
+\begin{lstlisting}[language=Python]
+import numpy as np
+h = np.load("h.npy")
+q = np.load("q.npy")
+alpha = np.load("alpha.npy")
+l_plus = np.load("l_plus.npy")
+l_minus = np.load("l_minus.npy")
+mo_plus = np.load("mo_plus.npy")
+mo_minus = np.load("mo_minus.npy")
+
+from matplotlib import pyplot as plt
+
+np.random.seed(1)
+dMt_minus = 0
+dMt_plus = 0
+
+
+def generate_simulations(p, h, l_p, l_m, mo_p, mo_m, plot=False):
+    n, k, eta_plus, eta_minus, lambda_plus, lambda_minus,
+    T, xi, sigma, theta, s0, A, dalpha, q_max, Delta, epsilon = p.n, 
+    p.k, p.eta, p.eta, p.lambda_plus, p.lambda_minus, p.T, p.xi,
+    p.sigma, p.theta, p.s0, p.A, p.dalpha, p.q_max, p.Delta, p.epsilon
+
+    Upsilon = Delta + epsilon
+
+    dt = (k * A / dalpha + lambda_plus + lambda_minus)**(-1)
+    
+    m = int(T/dt)
+    
+    # Alpha setup
+    alpha = np.full((n, m), np.nan)
+    alpha[:, 0] = 0
+    alpha_range = np.arange(-A, A + 1, dalpha)
+
+    tau_plus_amounts = np.random.poisson(lambda_plus*T, n)
+    tau_minus_amounts = np.random.poisson(lambda_minus*T, n)
+    tau_plus = [np.sort(np.random.rand(
+    	tau_i) * T) for tau_i in tau_plus_amounts]
+    tau_minus = [np.sort(np.random.rand(
+    	tau_i) * T) for tau_i in tau_minus_amounts]
+
+    dMt0_plus = np.array(
+    	[np.histogram(tau_i,np.linspace(0,T,m+1))[0] for tau_i in tau_plus])
+    dMt0_minus = np.array(
+    	[np.histogram(tau_i,np.linspace(0,T,m+1))[0] for tau_i in tau_minus])
+
+    # S setup
+    s = np.full((n, m), np.nan)
+    s[:, 0] = s0
+
+    mu_plus = np.full((n, m), np.nan)
+    mu_plus[:, 0] = theta
+    mu_minus = np.full((n, m), np.nan)
+    mu_minus[:, 0] = theta
+
+    dJ_plus = np.full((n, m), np.nan)
+    dJ_plus[:, 0] = 0
+
+    dJ_minus = np.full((n, m), np.nan)
+    dJ_minus[:, 0] = 0
+
+    # Positions setup
+    l_p_position = np.full((n, m), np.nan)
+    l_m_position = np.full((n, m), np.nan)
+
+    p_postings = np.full((n, m), np.nan)
+    m_postings = np.full((n, m), np.nan)
+
+    p_executions = np.full((n, m), np.nan)
+    m_executions = np.full((n, m), np.nan)
+
+    p_executions_count = np.full((n, m), np.nan)
+    m_executions_count = np.full((n, m), np.nan)
+
+    mo_p_executions = np.full((n, m), np.nan)
+    mo_m_executions = np.full((n, m), np.nan)
+
+    dMt_plus = np.full((n, m), np.nan) # np.zeros((n, m))
+    dMt_minus = np.full((n, m), np.nan) # np.zeros((n, m))
+
+    pnl = np.full((n, m), np.nan)
+    pnl[:, 0] = 0
+
+    X = np.full((n, m), np.nan)
+    X[:, 0] = 0
+
+    def get_closest_index(val):
+        return int(np.round(min(max(
+        	-p.A,val),p.A) / p.dalpha, 0)) + int(p.A / p.dalpha)
+
+    def get_l_p(t_i, alpha_val, q):
+        alpha_i = get_closest_index(alpha_val)
+        q_i = int(q + q_max)
+        return l_p[t_i, alpha_i, q_i]
+    get_l_p_v = np.vectorize(get_l_p)
+
+    def get_l_m(t_i, alpha_val, q):
+        alpha_i = get_closest_index(alpha_val)
+        q_i = int(q + q_max)
+        return l_m[t_i, alpha_i, q_i]
+    get_l_m_v = np.vectorize(get_l_m)
+
+    def get_MM_MO_p(t_i, alpha_val, q):
+        alpha_i = get_closest_index(alpha_val)
+        q_i = int(q + q_max)
+        return mo_p[t_i, alpha_i, q_i]
+    get_MM_MO_p_v = np.vectorize(get_MM_MO_p)
+    
+    def get_MM_MO_m(t_i, alpha_val, q):
+        alpha_i = get_closest_index(alpha_val)
+        q_i = int(q + q_max)
+        return mo_m[t_i, alpha_i, q_i]
+    get_MM_MO_m_v = np.vectorize(get_MM_MO_m)
+
+    # Inventory setup
+    q = np.full((n, m), np.nan)
+    q[:, 0] = 0
+
+    # Simulations
+    for i in range(m-1):
+        #dMt_minus and dMt_plus depend on the MM
+        dMt_plus[:, i] = get_MM_MO_p_v(i, alpha[:, i], q[:, i])
+        dMt_minus[:, i] = get_MM_MO_m_v(i, alpha[:, i], q[:, i])
+
+        l_p_position[:, i] = get_l_p_v(i, alpha[:, i], q[:, i])
+        l_m_position[:, i] = get_l_m_v(i, alpha[:, i], q[:, i])
+
+        alpha[:, i+1] = alpha[:,i] * np.exp(-k * dt) + xi * np.sqrt(
+        	dt) * (np.random.randn(n)) + eta_plus *(
+        	dMt0_plus[:,i] + dMt_plus[:, i]) - eta_minus * (
+        	dMt0_minus[:,i] + dMt_minus[:, i])
+
+        mu_plus[:, i+1] = np.where(alpha[:, i+1]>0, alpha[:, i+1],0) + theta
+        mu_minus[:, i+1] = np.where(alpha[:, i+1]<0, -alpha[:, i+1],0) + theta
+
+        dJ_plus[:, i+1] = np.where(np.random.rand(n) < np.around(
+        	(1 - np.exp(-dt * (mu_plus[:,i+1]))), decimals=4),1,0)
+        dJ_minus[:, i+1] = np.where(np.random.rand(n) < np.around(
+        	(1 - np.exp(-dt * (mu_minus[:,i+1]))), decimals=4),1,0)
+        
+        s[:,i+1] = s[:,i] + sigma * (dJ_plus[:, i+1] - dJ_minus[:, i+1])
+
+        q[:, i+1] = q[:, i] 
+        	- np.where(l_p_position[:, i] * dMt0_plus[:, i] > 0,1,0) 
+        	+ np.where((l_m_position[:, i] * dMt0_minus[:, i]) > 0,1,0)
+        	- np.where(dMt_minus[:, i] > 0,1,0) 
+        	+ np.where(dMt_plus[:,i] > 0,1,0)
+
+        p_postings[:, i] = np.where(
+        	l_p_position[:,i]==0, np.nan, (s[:,i]+Delta)*l_p_position[:,i])
+        p_executions_count[:,i] = np.where(
+        	l_p_position[:,i]*dMt0_plus[:,i]==0, 0, 1)
+        p_executions[:, i] = np.where(l_p_position[:,i]*dMt0_plus[:,i]==0, np.nan, (s[:,i]+Delta)*l_p_position[:,i]*np.where(dMt0_plus[:,i]>0,1,0))
+        
+        m_postings[:,i] = np.where(
+        	l_m_position[:,i]==0, np.nan, (s[:,i]-Delta)*l_m_position[:,i])
+        m_executions_count[:,i] = np.where(
+        	l_m_position[:,i]*dMt0_minus[:,i]==0, 0, 1)
+        m_executions[:,i] = np.where(
+        	l_m_position[:,i]*dMt0_minus[:,i]==0, np.nan, (s[:,i]-Delta)*l_m_position[:,i]*np.where(dMt0_minus[:,i]>0,1,0))
+
+        mo_p_executions[:,i] = np.where(
+        	dMt_plus[:, i]==0, np.nan, (s[:,i]+Upsilon)*dMt_plus[:, i])
+        mo_m_executions[:,i] = np.where(
+        	dMt_minus[:, i]==0, np.nan, (s[:,i]-Upsilon)*dMt_minus[:, i])
+
+        X[:,i+1] = X[:,i] 
+        	+ np.where(p_executions[:,i+1] > 0, s[:, i+1] + Delta, 0) \
+        	- np.where(m_executions[:,i+1] > 0, s[:, i+1]-Delta, 0)\
+            - np.where(mo_p_executions[:,i+1] > 0, s[:, i+1] + Upsilon, 0) \
+            + np.where(mo_m_executions[:,i+1] > 0, s[:, i+1] - Upsilon, 0)
+
+        pnl[:,i+1] = pnl[:,i] 
+        	+ np.where(p_executions[:,i] > 0, Delta, 0) \
+        	+ np.where(m_executions[:,i] > 0, Delta, 0)\
+            + q[:, i] * (s[:, i+1] - s[:, i]) \
+            - np.where(mo_p_executions[:,i+1] > 0, Upsilon, 0) \
+            - np.where(mo_m_executions[:,i+1] > 0, Upsilon, 0)
+        
+    X[:,-1] = X[:,-1] - q[:, -1] * (s[:, -1]) - np.abs(q[:,-1])*Upsilon
+
+    if plot:
+        plt_i = 1
+        plt.figure(figsize=(25,7))
+        plt.title('Alpha')
+        plt.step(np.linspace(0,T,m),alpha[plt_i])
+
+        plt.figure(figsize=(25,7))
+        plt.title('S')
+        plt.step(np.linspace(0,T,m), s[plt_i], c='black')
+        
+        plt.step(np.linspace(0,T,m), p_postings[plt_i], c='b')
+        plt.scatter(np.linspace(0,T,m), p_executions[plt_i], marker='x', c='b')
+
+        plt.step(np.linspace(0,T,m), m_postings[plt_i], c='r')
+        plt.scatter(np.linspace(0,T,m), m_executions[plt_i], marker='x', c='r')
+
+        plt.scatter(np.linspace(0,T,m), mo_m_executions[plt_i], marker='s', c='b')
+        plt.scatter(np.linspace(0,T,m), mo_p_executions[plt_i], marker='s', c='r')
+        print(f"MO_p: {np.nansum(dMt_plus[plt_i])}")
+        print(f"MO_m: {np.nansum(dMt_minus[plt_i])}")
+        print(f"LO_p: {np.nansum(m_executions_count[plt_i])}")
+        print(f"LO_m: {np.nansum(p_executions_count[plt_i])}")
+        print(f"Mean of PNL:{np.average(pnl[:,-1])}")
+        print(f"Stde of PNL:{np.std(pnl[:,-1])}")
+        print(f"Mean of X:{np.average(X[:,-1])}")
+        print(f"Stde of X:{np.std(X[:,-1])}")
+
+        plt.figure()
+        plt.title('Limit Orders Minus Executions')
+        plt.hist(m_executions_count[:,:-1].sum(axis=1))
+        
+        plt.figure()
+        plt.title('Limit Orders Plus Executions')
+        plt.hist(p_executions_count[:,:-1].sum(axis=1))
+
+        plt.figure()
+        plt.title('Market Orders Minus Executions')
+        plt.hist(dMt_minus[:, :-1].sum(axis=1))
+        
+        plt.figure()
+        plt.title('Market Orders Plus Executions')
+        plt.hist(dMt_plus[:, :-1].sum(axis=1))
+
+        if False:
+            plt.figure()
+            plt.title('$\mu_+$')
+            plt.step(np.linspace(0,T,m),mu_plus[plt_i])
+
+            plt.figure()
+            plt.title('$\mu_-$')
+            plt.step(np.linspace(0,T,m),mu_minus[plt_i])
+        
+        plt.figure(figsize=(25,7))
+        plt.title('$q$')
+        plt.step(np.linspace(0,T,m),q[plt_i])
+
+        plt.figure(figsize=(25,7))
+        plt.title('$pnl$')
+        plt.step(np.linspace(0,T,m),pnl[plt_i])
+        
+        
+    return alpha, mu_plus, mu_minus, dJ_plus, dJ_minus, \
+    	s, l_p_position, l_m_position, q, dMt0_plus,\
+    	dMt0_minus, pnl, dMt_plus, dMt_minus, \
+    	p_executions_count, m_executions_count, pnl, X
+
+np.random.seed(2)
+
+alpha, mu_plus, mu_minus, dJ_plus, dJ_minus, s, 
+l_p_position, l_m_position, q, dMt0_plus, dMt0_minus,
+pnl, dMt_plus, dMt_minus, p_executions_count, m_executions_count, pnl, X = 
+generate_simulations(p, h, l_plus, l_minus, mo_plus, mo_minus, plot=True)
+\end{lstlisting}
+\end{appendices}
+
+
+\end{document}
+
