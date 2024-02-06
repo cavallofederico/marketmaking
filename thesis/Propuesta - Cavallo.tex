@@ -227,7 +227,7 @@ Realizan simulaciones para comparar la performance de un algoritmos discretos de
 % Key findings
 \cite{Zhang2019} utilizan algoritmos de aprendizaje reforzado profundo con contratos de futuros. En este caso, no atacan el problema de \textit{market making} sino más bien plantean estrategias de inversión activas. Escalan sus operaciones por volumen y volatilidad. Realizaron un \textit{backtesting} con 50 contratos. Obtuvienen resultados que mejoran la el rendimiento de estrategias tradicionales.
 
-\cite{Ganesh2019} formalizan el \textit{dealers market} como un sistema multi-agente con M agentes, N inversores y un precio de referencia proveniente de un proceso geométrico Browniano y crean un simulador. Los agentes ganan \textit{spread} vendiendo a clientes o con \textit{\Gls{pnl}} de Inventario y pueden reducir inventario sesgando sus ofertas o hacer \textit{hedge} a un costo. Definen un agente aleatorio y uno fijo como algoritmos simples. A su vez, formalizan un agente adaptativo que utiliza una tabla de respuesta empírica basada en una relación de compromiso de varianza-media entre riesgo y cuota de mercado con una tasa de olvido exponencial.
+\cite{Ganesh2019} formalizan el \textit{dealers market} como un sistema multi-agente con M agentes, N inversores y un precio de referencia proveniente de un proceso geométrico Browniano y crean un simulador. Los agentes ganan \textit{spread} vendiendo a clientes o con \textit{pnl} de Inventario y pueden reducir inventario sesgando sus ofertas o hacer \textit{hedge} a un costo. Definen un agente aleatorio y uno fijo como algoritmos simples. A su vez, formalizan un agente adaptativo que utiliza una tabla de respuesta empírica basada en una relación de compromiso de varianza-media entre riesgo y cuota de mercado con una tasa de olvido exponencial.
 \begin{comment}
 	Utilizan una implementación \textit{standard} de \textit{Proximal Policy Optimization} que se llama Rllib para entrenar un agente de Aprendizaje Reforzado utilizando como funciones de recompensa el \textit{PNL} total y una penalidad(3 propuestas diferentes) relacionada al riesgo de inventario para hacerlo averso al riesgo.  Finalmente, realizan una serie de experimentos analizando \textit{PNL} total, primero sin \textit{drift} de precio, luego con \textit{drift}. Su agente de Aprendizaje Reforzado le ganó a los algoritmos simples; ganó contra el agente adaptativo si este era averso al riesgo pero perdió/empató si no. El agente de Aprendizaje Reforzado logró aprender sobre la política de precios de sus competidores sin verlos, a hacer \textit{skew} para reducir inventario y a aumentarlo si hay un drift positivo.
 \end{comment}
@@ -422,6 +422,8 @@ El estimador de máxima verosimilitud es el valor $\tilde{\theta}$ que maximiza l
 
 De esta forma, se elige el parámetro $\tilde{\theta}$ que sea el más verosimil de haber generado los datos.
 
+
+
 %\section{Pseudo-código}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -464,6 +466,8 @@ El Algoritmo \ref{algoritmoH} converge a una función $\tilde{h}$. Se utilizaron 
 \cite{Cartea2019} definen un esquema numérico de que se implementó en código y define una función $S_{dt d\alpha}$ que permite obtener la función óptima de forma incremental. $S_{dt d\alpha}$ devuelve el máximo entre otras dos funciones $T_{dt d\alpha}$ que busca el valor óptimo de $\tilde{h}$ optimizando el control que el \textit{market maker} realiza sobre las órdenes límite y $M_{dt d\alpha}$ que hará lo mismo sobre las órdenes de mercado que podrían ser utilizadas para descargar inventario.
 
 Finalmente, se definió un algoritmo de simulación que permite a cada instante del tiempo obtener los posicionamientos óptimos $l_+$, $l_-$, $\tau_+$ y $\tau_-$.
+
+\subsection{Estimación de parámetros}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section {Resultados preliminares} \label{sec:resultados}
