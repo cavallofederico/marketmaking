@@ -1,3 +1,11 @@
 *.npy
 *.DS_Store
 *.pyc
+*.aux
+*.blg
+*.lof
+*.log
+*.pdf
+*.synctex.gz
+*.toc
+*.bbl
