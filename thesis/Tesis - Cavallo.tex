@@ -1,9 +1,9 @@
 %***********************************************************************************************************
 %*****************************************************************************PACKAGES*********************
-%Paquetes para español y matemática
+%Paquetes para espa?ol y matem?tica
 %Paquetes para incluir acentos
 %Paquetes para incluir graficos
-%para incluir códigos de matlab
+%para incluir c?digos de matlab
 %***********************************************************************************************************
 %\input{tcilatex}
 
@@ -13,7 +13,7 @@
 \usepackage[round]{natbib}
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{setspace}
-\usepackage[spanish]{babel}
+\usepackage[spanish,es-tabla]{babel}
 \usepackage[latin1]{inputenc}
 %\usepackage[sort&compress]{natbib}
 \usepackage[T1]{fontenc}
@@ -45,7 +45,9 @@
 \usepackage{verbatim}
 \usepackage[toc]{glossaries}
 \usepackage{tocbibind}
+\usepackage{booktabs} % For better-looking tables
 %EndMSIPreambleData
+\sloppy % to avoid words outside paragrah end line
 \newcommand{\tb}[1]{\textcolor{blue}{#1}}
 \definecolor{dkgreen}{rgb}{0,0.5,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -55,6 +57,7 @@
 \renewcommand{\appendixpagename}{Apéndices}
 \renewcommand{\appendixtocname}{Apéndices}
 \renewcommand{\appendixname}{Apéndices}
+
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{titlepage}
@@ -104,7 +107,7 @@ Gabriel Basaluzzo
 \vfill
 
 % Bottom of the page
-{\large Febrero de 2023}
+{\large Julio de 2024}
 
 \end{center}
 
@@ -114,6 +117,28 @@ Gabriel Basaluzzo
 \bibliographystyle{plainnat}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cleardoublepage
+\thispagestyle{empty}
+
+\vspace*{\fill}
+\begin{center}
+	\large
+	\textit{
+		Mi anterior tesis fue dedicada, entre otros, al remo, que me enseñó que nunca hay que darse por vencido.}
+
+	
+	\textit{
+		En esta ocasión quienes no me dejaron tirar la toalla fueron mi incondicional Meli, con sus incontables horas de apoyo;}
+	
+	\textit{
+		mi tutor Javier, quien me guió en este proceso y me motivó en los momentos más difíciles;}
+
+	\textit{
+		y mi profesora Elsa, que en paz descanse, quien me hiciera incursionar en este tema tan apasionante.}
+\end{center}
+\vspace*{\fill}
+\cleardoublepage
+
 
 \tableofcontents
 \thispagestyle{empty}
@@ -213,14 +238,14 @@ Los algoritmos de programación dinámica y los de aprendizaje reforzado comparten
 %Spooner et al.
 \cite{Spooner2018} diseñan un simulador que recrea la microestructura del libro de órdenes en base a los datos históricos de mercado. Diseñan un agente con un espacio de aciones discreto escalado por un \textit{spread} y definen tres funciones de recompensa distintas, incluyendo dos funciones de recompensa moderadas que desincentivan el seguimiento de tendencias y fomentan capturar \textit{spread}. Definen un estado del sistema que incluye el inventario y la microestructura, entre otros.
 \begin{comment}
-, y utilizan \textit{tile codings}, una version \textit{Linear Combination of Tile Coding(LCTC)}. Utilizan \textit{Q-learning}, SARSA, \textit{R-learning}, \textit{On policy R-learning}, \textit{Double Q-learning}, \textit{Expected SARSA}, \textit{Double R-learning}. Utilizan una serie de agentes denominados simples como \textit{benchmark}(simétricos, \textit{random}, RL sin recompensa llamadas moderadas). Se utilizó un Algoritmo Genético para elegir parámetros. Definenen un \textit{normalized daily PnL(PnL/spread)} y una medida de exposición de inventario para evaluar los agentes. 
-Se hace un análisis de los algoritmos y encuentran que las versiones \textit{on-policy} de los algoritmos funcionan mejor. SARSA funcionó de manera muy consistente. Respecto a las funciones de recompensa, la función moderada simétrica no funcionó pero la asimétrico usando un factor alto mejoró el retorno ajustado por riesgo y la estabilidad de aprendizaje. Aparentemente el inventario es lo que genera inestabilidad en la función de recompensa. Respecto a los estados, el \textit{tile coding(LCTC)} responde mejor que el uso de \textit{full state}. Finalmente, desarrollan un agente consolidado usando la función de recompensa moderada asimétrica, LCTC y SARSA. Da un \textit{PNL} ligeramente menor pero con mucha mayor estabilidad fuera de muestra y un mejor retorno ajustado por el riesgo, poseyendo mucho menos inventario. Esto daría un agente con un mayor comportamiento de market making y menos especulativo.
+	, y utilizan \textit{tile codings}, una version \textit{Linear Combination of Tile Coding(LCTC)}. Utilizan \textit{Q-learning}, SARSA, \textit{R-learning}, \textit{On policy R-learning}, \textit{Double Q-learning}, \textit{Expected SARSA}, \textit{Double R-learning}. Utilizan una serie de agentes denominados simples como \textit{benchmark}(simétricos, \textit{random}, RL sin recompensa llamadas moderadas). Se utilizó un Algoritmo Genético para elegir parámetros. Definenen un \textit{normalized daily PnL(PnL/spread)} y una medida de exposición de inventario para evaluar los agentes. 
+	Se hace un análisis de los algoritmos y encuentran que las versiones \textit{on-policy} de los algoritmos funcionan mejor. SARSA funcionó de manera muy consistente. Respecto a las funciones de recompensa, la función moderada simétrica no funcionó pero la asimétrico usando un factor alto mejoró el retorno ajustado por riesgo y la estabilidad de aprendizaje. Aparentemente el inventario es lo que genera inestabilidad en la función de recompensa. Respecto a los estados, el \textit{tile coding(LCTC)} responde mejor que el uso de \textit{full state}. Finalmente, desarrollan un agente consolidado usando la función de recompensa moderada asimétrica, LCTC y SARSA. Da un \textit{PNL} ligeramente menor pero con mucha mayor estabilidad fuera de muestra y un mejor retorno ajustado por el riesgo, poseyendo mucho menos inventario. Esto daría un agente con un mayor comportamiento de market making y menos especulativo.
 \end{comment}
 
 %Lim y Gorse
 \cite{Lim2018} definen un espacio discreto de estados de inventario, tiempo y precio. Envían ofertas a cada momento de $t$ con una compesación de {0,1,2} sobre la mejor oferta. Definen dos funciones de recompensa: una en $t$ para capturar las ganancias y riesgo tomados durante la duración de la sesión, y una en $T$ para representar la actitud sobre las ganancias intra-diarias y la aversión al riesgo al final de la sesión de mercado.
 \begin{comment}
-Realizan simulaciones para comparar la performance de un algoritmos discretos de \textit{Q-learning} contra un \textit{zero tick offset}, el modelo de Avellaneda y un modelo aleatorio. Miden el \textit{profit} y el inventario acumulados. El algoritmo de Aprendizaje Reforzado supera a los otros. Según el nivel de aversión al riesgo se modifica el nivel de inventario acumulado al finalizar la sesión.
+	Realizan simulaciones para comparar la performance de un algoritmos discretos de \textit{Q-learning} contra un \textit{zero tick offset}, el modelo de Avellaneda y un modelo aleatorio. Miden el \textit{profit} y el inventario acumulados. El algoritmo de Aprendizaje Reforzado supera a los otros. Según el nivel de aversión al riesgo se modifica el nivel de inventario acumulado al finalizar la sesión.
 \end{comment}
 
 % Zihao Zhang
@@ -242,18 +267,18 @@ Realizan simulaciones para comparar la performance de un algoritmos discretos de
 \cite{Selser2021} utilizan técnicas de aprendizaje reforzado aprovechando la función de utilidad planteada por \cite{Avellaneda2008} mejorando el perfil de \textit{PnL} para algunos casos. Utilizan varios métodos de aprendizaje reforzado y comentan sobre la falta de robustez de los algoritmos.
 % TODO: faltaría crítica
 \begin{comment}
-\subsection{Aprendizaje Reforzado Multi-Objetivo}
-
-
-\cite{Si2017} utilizan \textit{Multi Objective Reinforcement Learning} para crear un algoritmo de \textit{trading}. En este caso se escalariza la función de utilidad (definiendo un valor alfa = 1 y beta = 0.01) convirtiendo el problema multiobjetivo en un problema de objetivo simple. Este sería el caso más sencillo ya que no se arriba a un set de soluciones sino que se trata en la práctica de un problema de optimización de una dimensión. 
-
-\cite{Hayes2022} realizan una extensa guía describiendo casos de uso, la definición del problema, \textit{policies} y sets de soluciones, entre otros.
-En la definición del problema se formaliza proceso de decisión de Marvok multi-objetivo, diferenciandose principalmente de su versión de objetivo simple en que tiene una función de recompensa Rd siendo d la cantidad de objetivos. Se tienen como en el proceso de Markov de un solo objetivo: espacio de estados(S), espacio de acciones(A), función de transición probabilistica(T), factor de descuento y distribución de probabilidad sobre los estados iniciales.
-Respecto a las policies y \textit{value functions} se tiene una \textit{policy} $\pi$ que pertenece a $\Pi$ (espacio de \textit{policies}). Pero, su función de valor es un vector $\forall \pi \in Rd$ que surge de calcular la esperanza condicional del vector de recompensas. Normalmente, para obtener la \textit{policy} óptima se busca la de mayor valor asociado descontado, pero en este caso puede darse que no haya dominancia. Esto se solucionaría usando una función de escalarización que vaya del espacio vectorial a los reales. Sin embargo, sin ella solamente se tiene un ordenamiento parcial y no es posible determinar la pólicy óptima. 
-En la sección de sets de soluciones se define el set no dominado que arma un frente de Pareto y diferentes estrategias y funciones de utilidad que permiten obtener un subset de soluciones. Incluye sumas escalares de soluciones, \textit{Convex Hull}, etc. Finalmente define el CH($\Pi$) (convex Hull) y el CCS($\Pi$) que son los subsets para las funciones de utilidad lineales.
-Se define un enfoque denominado \textit{Utility-based Approach} que en vez de utilizar todo el set de pareto utiliza un subset mucho más facil de calcular (más bien no imposible computacionalmente). Hay una serie de pasos para obtener el set de soluciones óptimas en base a la función de utilidad, si es conocida o no y si puede cambiar en el tiempo. 
-Hay varios factores que influencian el diseño del sistema multi-objetivo, tales como desconocer la función de utilidad, un escenario de decisión donde las preferencias son dificiles de estimar, otro donde sean conocidas, un escenario interactivo y más.
-Luego, se pueden definir si se van a utilizar policies multiples o únicas, funciones de utilidad lineales o monotonicas crecienctes, policies estocásticas o determinísticas y retornos esperados escalarizados o retornos escalarizados esperados.
+	\subsection{Aprendizaje Reforzado Multi-Objetivo}
+	
+	
+	\cite{Si2017} utilizan \textit{Multi Objective Reinforcement Learning} para crear un algoritmo de \textit{trading}. En este caso se escalariza la función de utilidad (definiendo un valor alfa = 1 y beta = 0.01) convirtiendo el problema multiobjetivo en un problema de objetivo simple. Este sería el caso más sencillo ya que no se arriba a un set de soluciones sino que se trata en la práctica de un problema de optimización de una dimensión. 
+	
+	\cite{Hayes2022} realizan una extensa guía describiendo casos de uso, la definición del problema, \textit{policies} y sets de soluciones, entre otros.
+	En la definición del problema se formaliza proceso de decisión de Marvok multi-objetivo, diferenciandose principalmente de su versión de objetivo simple en que tiene una función de recompensa Rd siendo d la cantidad de objetivos. Se tienen como en el proceso de Markov de un solo objetivo: espacio de estados(S), espacio de acciones(A), función de transición probabilistica(T), factor de descuento y distribución de probabilidad sobre los estados iniciales.
+	Respecto a las policies y \textit{value functions} se tiene una \textit{policy} $\pi$ que pertenece a $\Pi$ (espacio de \textit{policies}). Pero, su función de valor es un vector $\forall \pi \in Rd$ que surge de calcular la esperanza condicional del vector de recompensas. Normalmente, para obtener la \textit{policy} óptima se busca la de mayor valor asociado descontado, pero en este caso puede darse que no haya dominancia. Esto se solucionaría usando una función de escalarización que vaya del espacio vectorial a los reales. Sin embargo, sin ella solamente se tiene un ordenamiento parcial y no es posible determinar la pólicy óptima. 
+	En la sección de sets de soluciones se define el set no dominado que arma un frente de Pareto y diferentes estrategias y funciones de utilidad que permiten obtener un subset de soluciones. Incluye sumas escalares de soluciones, \textit{Convex Hull}, etc. Finalmente define el CH($\Pi$) (convex Hull) y el CCS($\Pi$) que son los subsets para las funciones de utilidad lineales.
+	Se define un enfoque denominado \textit{Utility-based Approach} que en vez de utilizar todo el set de pareto utiliza un subset mucho más facil de calcular (más bien no imposible computacionalmente). Hay una serie de pasos para obtener el set de soluciones óptimas en base a la función de utilidad, si es conocida o no y si puede cambiar en el tiempo. 
+	Hay varios factores que influencian el diseño del sistema multi-objetivo, tales como desconocer la función de utilidad, un escenario de decisión donde las preferencias son dificiles de estimar, otro donde sean conocidas, un escenario interactivo y más.
+	Luego, se pueden definir si se van a utilizar policies multiples o únicas, funciones de utilidad lineales o monotonicas crecienctes, policies estocásticas o determinísticas y retornos esperados escalarizados o retornos escalarizados esperados.
 \end{comment}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -301,7 +326,7 @@ La señal $\alpha_t$ depende de la ecuación diferencial estocástica
 	\label{alpha_dif}
 \end{equation}
 
- donde $k$ es un parámetro de mercado que regula la intensidad de reversión a la media del proceso, $\xi$ regula los \textit{shocks} estocásticos que representan la noticias novedosas modeladas como un proceso browniano $W_t$. $\eta_+$ es el impacto de las órdenes de compra de mercado y $\eta_-$ el de las de venta. Los procesos $M_t^{0-}$ y $M_t^{0+}$ representan las órdenes de mercado de compra y venta que emiten otros participanes del mercado y estan modelados como procesos de conteo que siguen procesos de Poisson con medias $\lambda_+$ y $\lambda_-$. Los procesos $M_t^{+}$ y $M_t^{-}$ son la sumatoria de la cantidad de ejecuciones de las órdenes de compra y venta ejecutadas por el \textit{market maker} para descargar inventario en tiempo $t$.
+donde $k$ es un parámetro de mercado que regula la intensidad de reversión a la media del proceso, $\xi$ regula los \textit{shocks} estocásticos que representan la noticias novedosas modeladas como un proceso browniano $W_t$. $\eta_+$ es el impacto de las órdenes de compra de mercado y $\eta_-$ el de las de venta. Los procesos $M_t^{0-}$ y $M_t^{0+}$ representan las órdenes de mercado de compra y venta que emiten otros participanes del mercado y estan modelados como procesos de conteo que siguen procesos de Poisson con medias $\lambda_+$ y $\lambda_-$. Los procesos $M_t^{+}$ y $M_t^{-}$ son la sumatoria de la cantidad de ejecuciones de las órdenes de compra y venta ejecutadas por el \textit{market maker} para descargar inventario en tiempo $t$.
 
 El operador $\nu$ define el control del \textit{market maker} y se rige por
 
@@ -341,8 +366,8 @@ donde la función $H$ depende del tiempo $t$, el proceso de riqueza $x$, y la señ
 	(1-l_-) ( H(t,x,S,\alpha-\eta_-,q) - H )\bigg]; \nonumber \\
 	H(t,x+(S-\Upsilon),S,\alpha,q-1)-H; \nonumber \\
 	H(t,x-(S+\Upsilon),S,\alpha,q+1)-H		 	
-\bigg\}=0
-\label{HJB}	
+	\bigg\}=0
+	\label{HJB}	
 \end{gather}
 
 para encontrar un método numérico que permita obtener una función H. 
@@ -350,8 +375,8 @@ para encontrar un método numérico que permita obtener una función H.
 
 Se define como condición terminal
 \begin{equation}
-H(T,x,S,\alpha,q) = x + q (S-\textit{signo}(q)\Upsilon - \psi q)
-\label{terminal}
+	H(T,x,S,\alpha,q) = x + q (S-\textit{signo}(q)\Upsilon - \psi q)
+	\label{terminal}
 \end{equation}
 
 Los controles estocásticos 
@@ -406,50 +431,115 @@ Los controles estocásticos finalmente son
 	\label{l_2}
 \end{gather}
 
+
 \subsection{Estimación de parámetros}
-\cite{Cartea2019} realizan una estimación de máxima verosimilitud para obtener los parámetros correspondientes a diferentes activos del NASDAQ en base a datos de alta frecuencia de una sesión de \textit{trading} de cinco horas y media. Se obtienen los parámetros $\tilde{k}$ de reversión a la media, $\tilde{\eta_+}$ y $\tilde{\eta_-}$ de impacto de las órdenes de mercado a $\alpha$, $\tilde{\theta}$ que es la base de la media que define los procesos $J$, y $\lambda_+$ y $\lambda_-$ que definen la tasa de arribo de los procesos de Poisson de las órdenes de mercado.
+\label{sec:modelo_estimacion_parametros}
+\cite{Cartea2019} realizan una estimación de máxima verosimilitud para obtener los parámetros correspondientes a diferentes activos del NASDAQ en base a datos de alta frecuencia de una sesión de \textit{trading} de cinco horas y media. Obtienen los parámetros $\tilde{k}$ de reversión a la media, $\tilde{\eta_+}$ y $\tilde{\eta_-}$ de impacto de las órdenes de mercado a $\alpha$, $\tilde{\theta}$ que es la base de la media que define los procesos $J$, y $\lambda_+$ y $\lambda_-$ que definen la tasa de arribo de los procesos de Poisson de las órdenes de mercado.
 
-Este mismo método puede ser utilizado para estimar los parámetros de otros mercados como, por ejemplo, el Bovespa.
+En esta sección, se especifica la formulación matemática y las soluciones encontradas por \cite{Cartea2019}. Este mismo método puede ser utilizado para estimar los parámetros de otros mercados como, por ejemplo, el Bovespa.
 
-Tal y como resume \cite{MIURA2011}, el método de máxima verosimilitud consiste en estimar un parámetro $\theta$ que especifica una función de probabilidad $P(X=x|\theta)$ de una variable estocástica discreta $X$ basandose en las observaciones $x_1, x_2 \dots x_n$.
-
-El estimador de máxima verosimilitud es el valor $\tilde{\theta}$ que maximiza la función de verosimilitud que queda definida por
+Para el intervalo $[0, T]$, se tienen
 
 \begin{equation}
-	L(\theta) = \prod_{i=1}^{n}P(X=x_i|\theta)
-	\label{verosimilitud}
+	t^+ = \{ t_1^+, t_2^+ + ... + t^+_{m^+} \} \quad \text{y} \quad	t^- = \{ t_1^-, t_2^- + ... + t^+_{m^-} \}
 \end{equation}
 
-De esta forma, se elige el parámetro $\tilde{\theta}$ que sea el más verosimil de haber generado los datos.
+que son los saltos de precio medio. Las subidas y bajadas están definidas por + y - respectivamente.
 
-\subsubsection{Implementacion de estimación de parámetros}
-Se implementó la estimación de parámetros en base al trabajo de Cartea. Si bien no hay especificaciones implementativas se partió de la derivación de la estimación de máxima verosimilitud para este problema.
-% Agregar matemática detrás del algoritmo de máxima verosimilitud tal cual está en el paper de Cartea, probablemente explicando salvedades y decisiones implementativas. Se puede ahondar en el juego de parametros y como cada uno impacta a la hora de estimar
+Se tienen también
 
-%\section{Pseudo-código}
-% Añadir linea por linea de forma genera elodigo para 
+\begin{equation}
+	\tau^- = \{ \tau_1^{0+}, \tau_2^{0+} + ... + \tau^{0+}_{n^+} \} \quad \text{y} \quad \tau^- = \{ \tau_1^{0-}, \tau_2^{0-} + ... + \tau^{0-}_{n^-} \}
+\end{equation}
+
+que representan los arribos de órdenes de mercado siendo $0+$ y $0-$ las órdenes de compra y de venta respectivamente.
+
+Se define también $\tau_0$ al vector que combina $\tau_0^+$ y $\tau_0^-$ con $\{0,T\}$ de forma tal que sea una secuencia ordenada empezando por $\tau_0^0 = 0$ y terminando en $\tau_{n^+ + n^- +1}^T = T$. El vector $\tau^0$ es observable por lo que se define a $\alpha$ como:
+
+\begin{equation}
+	\alpha_{t^{-}}=\eta^{+} \sum_{i=1}^{n^{+}} e^{-\kappa\left(t-\tau_i^{0+}\right)} \mathds{1}_{\left\{t>\tau_i^{0+}\right\}}-\eta^{-} \sum_{i=1}^{n^{-}} e^{-\kappa\left(t-\tau_i^{0-}\right)} \mathds{1}_{\left\{t>\tau_i^{0-}\right\}}
+	\label{eq:alpha}
+\end{equation}
+El estimador de máxima verosimilitud de $t^\pm$ dado $\tau^\pm$ es:
+
+\begin{equation}
+	\begin{aligned}
+		& \mathcal{L}(\Theta) \\ & =\log \mathbb{P}\left(t^{ \pm} \mid \tau^{0 \pm}, \Theta\right) \\ & =\log \mathbb{P}\left(t^{+} \mid \tau^{0 \pm}, \Theta\right)+\log \mathbb{P}\left(t^{-} \mid \tau^{0 \pm}, \Theta\right) \\ & =\log \left[e^{-\int_0^T \mu_s^{+} \mathrm{d} s} \prod_{i=1}^{m^{+}} \mu_{t_i^{+-}}^{+}\right]+\log \left[e^{-\int_0^T \mu_s^{-} \mathrm{d} s} \prod_{i=1}^{m^{-}} \mu_{t_i^{-}}^{-}\right] \\ & =-\int_0^T \mu_s^{+} \mathrm{d} s+\sum_{i=1}^{m^{+}} \log \mu_{t_i^{+-}}^{+}-\int_0^T \mu_s^{-} \mathrm{d} s+\sum_{i=1}^{m^{-}} \log \mu_{t_i^{--}}^{-} \\ & =-2 \theta T-\int_0^T\left(\left(\alpha_s\right)_{+}-\left(\alpha_s\right)_{-}\right) \mathrm{d} s+\sum_{i=1}^{m^{+}} \log \left[\left(\alpha_{t_i^{+-}}\right)_{+}+\theta\right]+\sum_{i=1}^{m^{-}} \log \left[\left(\alpha_{t_i^{--}}\right)_{-}+\theta\right]\end{aligned}
+	\label{eq:optimization}
+\end{equation}
+
+Donde 
+\begin{equation}
+	\Theta = (\tilde{k}, \tilde{\eta_+}, \tilde{\eta_-}, \theta)
+\end{equation} 
+
+representa los parámetros a estimar.
+
+Se usa \ref{eq:alpha} para escribir cada término de la máxima verosimilitud. Empezando por $\alpha_{t^-}$
+
+\begin{equation}
+	\alpha_{t^{-}}=\eta^{+} \sum_{i=1}^{n^{+}} e^{-\kappa\left(t-\tau_i^{0+}\right)} \mathds{1}_{\left\{t>\tau_i^{0+}\right\}}-\eta^{-} \sum_{i=1}^{n^{-}} e^{-\kappa\left(t-\tau_i^{0-}\right)} \mathds{1}_{\left\{t>\tau_i^{0-}\right\}}
+\end{equation}
+
+Para escribir la integral se plantea que como el proceso $\alpha_t$ no cambia de signo en el intervalo $[\tau_i^0, \tau_{i+i}^0]$ para todo $i$, con la definición de $alpha_t$ se tiene
+
+\begin{equation}
+	\begin{aligned}
+		\int_0^T\left(\alpha_s\right)_{+} \mathrm{d} s=-\frac{1}{\kappa} \sum_{i=0}^{n^{+}+n^{-}} \mathds{1}_{\left\{\alpha_i^0 \geq 0\right\}} & {\left[\eta^{+} \sum_{j=1}^{n+}\left(e^{-\kappa\left(\tau_{i+1}^0 \vee \tau_j^{0+}-\tau_j^{0+}\right)}-e^{-\kappa\left(\tau_i^0 \vee \tau_j^{0+}-\tau_j^{0+}\right)}\right)\right.} \\
+		& \left.-\eta^{-} \sum_{j=1}^{n-}\left(e^{-\kappa\left(\tau_{i+1}^0 \vee \tau_j^{0-}-\tau_j^{0-}\right)}-e^{-\kappa\left(\tau_i^0 \vee \tau_j^{0-}-\tau_j^{0-}\right)}\right)\right],
+	\end{aligned}
+\end{equation}
+
+y
+
+\begin{equation}
+	\begin{aligned}
+		\int_0^T\left(\alpha_s\right)_{-} \mathrm{d} s=\frac{1}{\kappa} \sum_{i=0}^{n^{+}+n^{-}} \mathds{1}_{\left\{\alpha_{\tau_i^0} \leq 0\right\}}[ & \eta^{+} \sum_{j=1}^{n+}\left(e^{-\kappa\left(\tau_{i+1}^0 \vee \tau_j^{0+}-\tau_j^{0+}\right)}-e^{-\kappa\left(\tau_i^0 \vee \tau_j^{0+}-\tau_j^{0+}\right)}\right) \\
+		& \left.-\eta^{-} \sum_{j=1}^{n-}\left(e^{-\kappa\left(\tau_{i+1}^0 \vee \tau_j^{0-}-\tau_j^{0-}\right)}-e^{-\kappa\left(\tau_i^0 \vee \tau_j^{0-}-\tau_j^{0-}\right)}\right)\right]
+	\end{aligned}
+\end{equation}
+
+Finalmente, se maximiza la máxima verosimilitud logarítmica para obtener los parámetros estimados.
+
+\begin{equation}
+	\widehat{\Theta} = \operatorname{argmax}  \mathcal{L}(\Theta).
+\end{equation}
+
+%citar y traer la demostraci?n de Cartea para log likelihood%
+
+% \subsubsection{Implementacion de estimaci?n de par?metros}
+% Se implement? la estimaci?n de par?metros en base al trabajo de Cartea. Si bien no hay especificaciones implementativas se parti? de la derivaci?n de la estimaci?n de m?xima verosimilitud para este problema.
+
+
+%\section{Pseudo-c?digo}
+% A?adir linea por linea de forma genera elodigo para 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section {Datos} % (descripcion, fuente, analisis, tratamiento)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+I apologize for the confusion earlier. You're right, I should provide the entire corrected document at once. Here's the full text with encoding issues resolved:
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section {Metodología}\label{sec:metodo} % (procedimientos)
+\section{Metodologia}\label{sec:metodo} % (procedimientos)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Se diseñó el siguiente algoritmo que es capaz de seguir el esquema numérico de \cite{Cartea2019}.
+\subsection{Simulador}
+
+Se diseno el siguiente algoritmo que es capaz de seguir el esquema numerico de \cite{Cartea2019}.
 %\begin{figure}
 
 \begin{algorithm}[H]
 	\caption{Algoritmo para calcular $\tilde{h}$}
 	\begin{algorithmic}[1]
 		\Procedure{Calcular $\tilde{h}$}{}
-		\For{ $t_i$ (empezando desde $T$ y hacia atrás)}
-			\For {$q_i$}
-				\State $\partial_\alpha$$\tilde{h}$ = calcular $\partial_\alpha$$\tilde{h}$ ($h(t_i+1,\forall \alpha,q_i)$)
-				\State $\partial_{\alpha \alpha}$$\tilde{h}$ = calcular $\partial_{\alpha \alpha}$$\tilde{h}$ ($h(t_{i+1},\forall \alpha,q_i)$)
-				\State ($l_+(t_{i + 1}, \forall \alpha, q_i)$, $l_-(t_{i + 1}, \forall \alpha, q_i)$) = encontrar posiciones optimas$(h, t_i, q_i)$
-				\State $h(t_{i},\forall \alpha,q_i)$ = $S_{dt d\alpha}(\tilde{h}, t_i, q_i, \partial_\alpha \tilde{h}, \partial_{\alpha \alpha}\tilde{h})$
-			\EndFor
+		\For{ $t_i$ (empezando desde $T$ y hacia atras)}
+		\For {$q_i$}
+		\State $\partial_\alpha$$\tilde{h}$ = calcular $\partial_\alpha$$\tilde{h}$ ($h(t_i+1,\forall \alpha,q_i)$)
+		\State $\partial_{\alpha \alpha}$$\tilde{h}$ = calcular $\partial_{\alpha \alpha}$$\tilde{h}$ ($h(t_{i+1},\forall \alpha,q_i)$)
+		\State ($l_+(t_{i + 1}, \forall \alpha, q_i)$, $l_-(t_{i + 1}, \forall \alpha, q_i)$) = encontrar posiciones optimas$(h, t_i, q_i)$
+		\State $h(t_{i},\forall \alpha,q_i)$ = $S_{dt d\alpha}(\tilde{h}, t_i, q_i, \partial_\alpha \tilde{h}, \partial_{\alpha \alpha}\tilde{h})$
+		\EndFor
 		\EndFor
 		\EndProcedure
 		\Procedure{$S_{dt d\alpha}$}{$\tilde{h}, t_i, q_i, \partial_\alpha \tilde{h}, \partial_{\alpha \alpha}\tilde{h}$}
@@ -458,43 +548,99 @@ Se diseñó el siguiente algoritmo que es capaz de seguir el esquema numérico de \
 		\State \Return max($T_{dt d\alpha}$, $M_{dt d\alpha}$)
 		\EndProcedure
 	\end{algorithmic}
-\label{algoritmoH}	
+	\label{algoritmoH}	
 \end{algorithm}
 
 %\end{figure}
 
-El Algoritmo \ref{algoritmoH} converge a una función $\tilde{h}$. Se utilizaron como referencia el código de \cite{JaimungalCodigo} que muestra la generación de ciertas figuras para el libro de \cite{Cartea2019a} y obtiene una función $\tilde{h}$ para otro diseño de problema, y el código de \cite{KHelertCode} que replica algunas otras figuras del mismo libro.
+El Algoritmo \ref{algoritmoH} converge a una funcion $\tilde{h}$. Se utilizaron como referencia el codigo de \cite{JaimungalCodigo} que muestra la generacion de ciertas figuras para el libro de \cite{Cartea2019a} y obtiene una funcion $\tilde{h}$ para otro diseno de problema, y el codigo de \cite{KHelertCode} que replica algunas otras figuras del mismo libro.
 
-\cite{Cartea2019} definen un esquema numérico de que se implementó en código y define una función $S_{dt d\alpha}$ que permite obtener la función óptima de forma incremental. $S_{dt d\alpha}$ devuelve el máximo entre otras dos funciones $T_{dt d\alpha}$ que busca el valor óptimo de $\tilde{h}$ optimizando el control que el \textit{market maker} realiza sobre las órdenes límite y $M_{dt d\alpha}$ que hará lo mismo sobre las órdenes de mercado que podrían ser utilizadas para descargar inventario.
+\cite{Cartea2019} definen un esquema numerico de que se implemento en codigo y define una funcion $S_{dt d\alpha}$ que permite obtener la funcion optima de forma incremental. $S_{dt d\alpha}$ devuelve el maximo entre otras dos funciones $T_{dt d\alpha}$ que busca el valor optimo de $\tilde{h}$ optimizando el control que el \textit{market maker} realiza sobre las ordenes limite y $M_{dt d\alpha}$ que hara lo mismo sobre las ordenes de mercado que podrian ser utilizadas para descargar inventario.
 
-Finalmente, se definió un algoritmo de simulación que permite a cada instante del tiempo obtener los posicionamientos óptimos $l_+$, $l_-$, $\tau_+$ y $\tau_-$.
+Finalmente, se definio un algoritmo de simulacion que permite a cada instante del tiempo obtener los posicionamientos optimos $l_+$, $l_-$, $\tau_+$ y $\tau_-$.
 
+%TODO:  Are there any more details to add regarding the algorithm? This and the following sections might be too short for the amount of work spent.
 
+%TODO: Comentar diseno de codigo ?
 
-\subsection{Estimación de parámetros}
+\subsection{Estimacion de parametros}
+%Intro
+Se implemento un estimador de parametros siguiendo el modelo matematico planteado por \cite{Cartea2019} en la seccion \ref{sec:modelo_estimacion_parametros}. 
 
-% Acá se tiene que explicar la implementación mediante la cual se obtienen los parámetros. Lo que se tiene en el jupyter pero explicado correctamente, y se puede usar algún ejemplo.
+% Scipy minimize
+Se utilizo una implementacion del metodo de optimizacion Nelder-Mead de la libreria \texttt{scipy} que se invoca utilizando la funcion \texttt{minimize}. El ejemplo proveido por la libreria es el de la optimizacion de la funcion \texttt{rosen} esta en la figura \ref{code:scipyexample}. Es necesario transformar el problema de maxima verosimilitud en un problema de minimizacion que se logra con una inversion de signo y definir la funcion de verosimilitud de forma tal que el optimizador encuentre un minimo. 
+
+% TODO: FIX Scipy cite
+
+\begin{figure}[H]
+	\begin{lstlisting}[language=Python]
+		>>> from scipy.optimize import minimize, rosen
+		>>> x0 = [1.3, 0.7, 0.8, 1.9, 1.2]
+		>>> res = minimize(rosen, x0, method='Nelder-Mead', tol=1e-6)
+		>>> res.x
+		array([ 1.,  1.,  1.,  1.,  1.])
+	\end{lstlisting}
+	\caption{Codigo necesario para invocar \texttt{scipy} \texttt{minimize}}
+	\label{code:scipyexample}
+\end{figure}
+
+% Definicion del problema en metodos
+Asi como el ejemplo utiliza la funcion \texttt{rosen} es necesario definir la funcion \texttt{likelihood\_to\_minimize} para optimizarla. 
+
+El problema se puede dividir en los 4 terminos de la funcion a optimizar en la ecuacion \ref{eq:optimization}:
+\begin{enumerate}
+	\item $-2 \theta T$
+	\item $-\int_0^T\left(\left(\alpha_s\right)_{+}-\left(\alpha_s\right)_{-}\right) \mathrm{d} s$
+	\item $\sum_{i=1}^{m^{+}} \log \left[\left(\alpha_{t_i^{+-}}\right)_{+}+\theta\right]$ 
+	\item $\sum_{i=1}^{m^{-}} \log \left[\left(\alpha_{t_i^{--}}\right)_{-}+\theta\right] $
+\end{enumerate}
+
+para expresarlos en forma matricial, operarlo y finalmente realizar una sumatoria.
+
+% TODO: Terminar esta seccion de explicacion de la implementacion
+% \subsubsection{Calculo matricial para la optimizacion} 
+% TODO: Pasar las matrices que se tienen en el jupyter de forma de explicar como se implemento el algoritmo.
+
+% TODO: integral of $\alpha_s$
+
+%TODO: sum log alpha ti
+
+%  -Generation of data
+%\subsubsection{Implementacion del objeto a optimizar}
+% - Implementation of object to optimize
+%TODO: Explicar como se implementa el problema de cartea,probablemente explicando salvedades y decisiones implementativas. Se puede ahondar en el juego de parametros y como cada uno impacta a la hora de estimar
+
+%TODO: Aca se tiene que explicar la implementacion mediante la cual se obtienen los parametros. Lo que se tiene en el jupyter pero explicado correctamente, y se puede usar algun ejemplo.
+
+%TODO: Generar pseudo-codigo (si tiene sentido) de como se resolvio la optimizacion.
+
+%TODO: Hay unos graficos de superficies de cuando se optimiza los valores que tal vez se pueden mostrar. No se bien con que fin.
+
+%\subsubsection{Generacion de datos para validacion del modelo}
+%TODO: Como se paso de los datos crudos de la simulacion a los datos para obtener sus parametros.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section {Resultados preliminares} \label{sec:resultados}
+\section{Resultados} \label{sec:resultados}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\subsection{Simulaciones}
 
-El objetivo principal de esta propuesta fue replicar los resultados obtenidos por \cite{Cartea2019} en su modelo con señal alfa en el tope del libro de órdenes. Estos resultados, y el modelo programado con el que se obtuvieron, son la base fundamental para aplicar este modelo a datos de mercados emergentes.
+\subsection{Validacion del modelo}
+\label{subsec:validacion_del_modelo}
+El objetivo principal de esta propuesta fue replicar los resultados obtenidos por \cite{Cartea2019} en su modelo con senal alfa en el tope del libro de ordenes. Estos resultados, y el modelo programado con el que se obtuvieron, son la base fundamental para aplicar este modelo a datos de mercados emergentes.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.95\linewidth]{figuras/h_final}
-	\caption{Función h.}
+	\caption{Funcion h.}
 	\label{fig:h}
 \end{figure}
 
-Se reprodujo la función $\tilde{h}$ en la Figura \ref{fig:h}. Se logró resolviendo la ecuación diferencial \ref{HJB_simple} de forma numérica siguiendo el método numérico planteado también por \cite{Cartea2019}. La función $\tilde{h}$ determina en qué momentos deben ofrecerse operaciones de compra, venta o ambas, mediante el uso de las funciones $l_+$ y $l_-$ descriptas en la Ecuación \ref{l_2}. A simple vista se puede ver cómo la función $\tilde{h}$ en el sector de $\alpha=-300$ crece en la dirección de $-q$ con máxima pendiente. Esto ocurre porque cuando $\alpha$ tiene un valor muy negativo indica que el desbalance entre oferta y demanda es fuerte en la dirección de baja de precio. De esta forma, el agente aumentará su utilidad en mayor medida cuanto más inventario negativo tenga, o cuanto más reduzca el inventario actual. Ocurre lo opuesto en el caso de $\alpha=300$, donde lo conveniente será aumentar el inventario. La función es suave en dirección a los casos intermedios.
+Se reprodujo la funcion $\tilde{h}$ en la Figura \ref{fig:h}. Se logro resolviendo la ecuacion diferencial \ref{HJB_simple} de forma numerica siguiendo el metodo numerico planteado tambien por \cite{Cartea2019}. La funcion $\tilde{h}$ determina en que momentos deben ofrecerse operaciones de compra, venta o ambas, mediante el uso de las funciones $l_+$ y $l_-$ descriptas en la Ecuacion \ref{l_2}. A simple vista se puede ver como la funcion $\tilde{h}$ en el sector de $\alpha=-300$ crece en la direccion de $-q$ con maxima pendiente. Esto ocurre porque cuando $\alpha$ tiene un valor muy negativo indica que el desbalance entre oferta y demanda es fuerte en la direccion de baja de precio. De esta forma, el agente aumentara su utilidad en mayor medida cuanto mas inventario negativo tenga, o cuanto mas reduzca el inventario actual. Ocurre lo opuesto en el caso de $\alpha=300$, donde lo conveniente sera aumentar el inventario. La funcion es suave en direccion a los casos intermedios.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\linewidth]{figuras/positioning_vs_q_final}
-	\caption{Comportamientos del agente según $\tilde{h}$ en función de t para q=0.}
+	\caption{Comportamientos del agente segun $\tilde{h}$ en funcion de t para q=0.}
 	\label{fig:positioningvsq}
 	%Arriba: fucsia
 	%medio arriba: verde
@@ -504,46 +650,46 @@ Se reprodujo la función $\tilde{h}$ en la Figura \ref{fig:h}. Se logró resolvien
 	%final: rojo
 \end{figure}
 
-Componiendo las ecuaciones $l_+$ y $l_-$ de la Ecuación \ref{l_2} con la función $\tilde{h}$ se obtiene el comportamiento esperado del agente para un caso dado. En la figura \ref{fig:positioningvsq}\footnote{A continuación los comportamientos del agente según el color. Fucsia: ofrecer orden límite y de mercado para comprar inventario. Gris: ofrecer órden límite para compra inventario. Amarillo: ofrecer orden límite para compar y para vender inventario. Rosa: ofrecer orden límite para vender inventario. Azul: ofrecer orden de mercado y límite para vender inventario. Rojo: no ofrecer ni órdenes de mercado ni límite.} se fijó $q=0$ de forma tal de entender este comportamiento. El agente toma diferentes posiciones dependiendo del momento en la sesión y la fuerza de la señal $\alpha$. En los casos en los que la señal es baja y falta mucho para terminar la sesión el agente opta por ofrecer ambas puntas de forma tal de maximizar el intercambio. Si la señal $\alpha$ sube o baja sobrepasando alrededor del valor 50 el agente comienza a sesgar sus compras en la dirección que indica la señal. En el caso en que la señal sea lo suficientemente fuerte, como por ejemplo en $t=50$ y $\alpha=\pm 200$ además el agente toma posiciones especulativas ofreciendo una oferta de mercado. Como es esperable, dado que la función de utilidad penaliza saltar el libro de órdenes límite al finalizar la sesión, cuando se acerca el final de la sesión el agente intenta no ejecutar órdenes si su inventario es cero o intenta descargar inventario en caso de tenerlo.
+Componiendo las ecuaciones $l_+$ y $l_-$ de la Ecuacion \ref{l_2} con la funcion $\tilde{h}$ se obtiene el comportamiento esperado del agente para un caso dado. En la figura \ref{fig:positioningvsq}\footnote{A continuacion los comportamientos del agente segun el color. Fucsia: ofrecer orden limite y de mercado para comprar inventario. Gris: ofrecer orden limite para compra inventario. Amarillo: ofrecer orden limite para compar y para vender inventario. Rosa: ofrecer orden limite para vender inventario. Azul: ofrecer orden de mercado y limite para vender inventario. Rojo: no ofrecer ni ordenes de mercado ni limite.} se fijo $q=0$ de forma tal de entender este comportamiento. El agente toma diferentes posiciones dependiendo del momento en la sesion y la fuerza de la senal $\alpha$. En los casos en los que la senal es baja y falta mucho para terminar la sesion el agente opta por ofrecer ambas puntas de forma tal de maximizar el intercambio. Si la senal $\alpha$ sube o baja sobrepasando alrededor del valor 50 el agente comienza a sesgar sus compras en la direccion que indica la senal. En el caso en que la senal sea lo suficientemente fuerte, como por ejemplo en $t=50$ y $\alpha=\pm 200$ ademas el agente toma posiciones especulativas ofreciendo una oferta de mercado. Como es esperable, dado que la funcion de utilidad penaliza saltar el libro de ordenes limite al finalizar la sesion, cuando se acerca el final de la sesion el agente intenta no ejecutar ordenes si su inventario es cero o intenta descargar inventario en caso de tenerlo.
 
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=1\linewidth]{figuras/limit_orders_minus_executions_final}
-		\caption{Órdenes de compra.}
+		\caption{Ordenes de compra.}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.45\textwidth}
-	\includegraphics[width=1\linewidth]{figuras/limit_orders_plus_executions_final}
-	\caption{Órdenes de venta.}
-\end{subfigure}
-	\caption{Histograma de órdenes límite ejecutadas.}
+		\includegraphics[width=1\linewidth]{figuras/limit_orders_plus_executions_final}
+		\caption{Ordenes de venta.}
+	\end{subfigure}
+	\caption{Histograma de ordenes limite ejecutadas.}
 	\label{fig:limitordersminusplusexecutions}
 \end{figure}
 
-Uno de los parámetros considerados que \cite{Cartea2019} muestran en su trabajo es el perfil de órdenes límite y de mercado ejecutadas. En la Figura \ref{fig:limitordersminusplusexecutions} se realizó un histograma de la ejecución de órdenes de compra y venta de las órdenes límite en base a 10 simulaciones utilizando el código desarrollado. Los resultados son compatibles con aquellos que se buscaban replicar.
+Uno de los parametros considerados que \cite{Cartea2019} muestran en su trabajo es el perfil de ordenes limite y de mercado ejecutadas. En la Figura \ref{fig:limitordersminusplusexecutions} se realizo un histograma de la ejecucion de ordenes de compra y venta de las ordenes limite en base a 10 simulaciones utilizando el codigo desarrollado. Los resultados son compatibles con aquellos que se buscaban replicar.
 \begin{figure}[H]
 	\centering
-\begin{subfigure}{0.45\textwidth}
-	\includegraphics[width=1\linewidth]{figuras/market_orders_minus_executions_final}
-	\caption{Órdenes de compra.}
-\end{subfigure}
-\hfill
-\begin{subfigure}{0.45\textwidth}
-	\includegraphics[width=1\linewidth]{figuras/market_orders_plus_executions_final}
-	\caption{Órdenes de venta.}
-\end{subfigure}
-	\caption{Histograma de órdenes de mercado ejecutadas.}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=1\linewidth]{figuras/market_orders_minus_executions_final}
+		\caption{Ordenes de compra.}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=1\linewidth]{figuras/market_orders_plus_executions_final}
+		\caption{Ordenes de venta.}
+	\end{subfigure}
+	\caption{Histograma de ordenes de mercado ejecutadas.}
 	\label{fig:marketordersplusexecutions}
 \end{figure}
 
-Por otro lado, también se realizó un histograma de las órdenes de mercado realizadas en la Figura \ref{fig:marketordersplusexecutions}. El agente utiliza estas órdenes para descargar inventario en casos donde la señal $\alpha$ sea lo suficientemente alta como para pagar el costo de saltar el libro de órdenes o para tomar posiciones especultivas en los casos en que la señal sea muy alta y se quiera aprovechar para obtener una ganancia.
+Por otro lado, tambien se realizo un histograma de las ordenes de mercado realizadas en la Figura \ref{fig:marketordersplusexecutions}. El agente utiliza estas ordenes para descargar inventario en casos donde la senal $\alpha$ sea lo suficientemente alta como para pagar el costo de saltar el libro de ordenes o para tomar posiciones especultivas en los casos en que la senal sea muy alta y se quiera aprovechar para obtener una ganancia.
 
 \begin{figure}[H]
 \begin{subfigure}{0.8\textwidth}
 	\centering
 	\includegraphics[width=1\linewidth]{figuras/orders_final}
-	\caption{Trayectoria del precio y las órdenes del agente.Linea negra: precio medio. Línea roja: ofrecimiento de órdenes de compra límite. Línea azul: ofrecimiento de órdenes de venta límite.  Cruz roja: ejecucuión de órdenes de compra límite. Cruz azul: ejecución de órdenes de venta límite. Cuadrados rojo y azul: ejecución de órdenes de compra y venta de mercado.}
+	\caption{Trayectoria del precio y las ï¿½rdenes del agente.Linea negra: precio medio. Lï¿½nea roja: ofrecimiento de ï¿½rdenes de compra lï¿½mite. Lï¿½nea azul: ofrecimiento de ï¿½rdenes de venta lï¿½mite.  Cruz roja: ejecucuiï¿½n de ï¿½rdenes de compra lï¿½mite. Cruz azul: ejecuciï¿½n de ï¿½rdenes de venta lï¿½mite. Cuadrados rojo y azul: ejecuciï¿½n de ï¿½rdenes de compra y venta de mercado.}
 	\label{fig:orders}
 \end{subfigure}
 \begin{subfigure}{0.8\textwidth}
@@ -564,31 +710,787 @@ Por otro lado, también se realizó un histograma de las órdenes de mercado realiz
 	\caption{Alfa.}
 	\label{fig:alpha}
 \end{subfigure}
-\caption{Ejemplo de simulación.}
+\caption{Ejemplo de simulaci?n.}
 \label{fig:orders_pnl_q_alfa}
 \end{figure}
 
-Finalmente, se graficó una simulación de ejemplo en la Figura \ref{fig:orders_pnl_q_alfa}. En la subfigura \ref{fig:orders} se graficaron el precio medio, las puntas que ofrece el agente y los eventos de ejecución de órdenes límite y de mercado. En la subfigura \ref{fig:pnl} se grafica el retorno del agente a lo largo de la sesión. En la subfigura \ref{fig:q} se observa el inventario. En la subfigura \ref{fig:alpha} se grafica la señal $\alpha$.
+Finalmente, se grafic? una simulaci?n de ejemplo en la Figura \ref{fig:orders_pnl_q_alfa}. En la subfigura \ref{fig:orders} se graficaron el precio medio, las puntas que ofrece el agente y los eventos de ejecuci?n de ?rdenes l?mite y de mercado. En la subfigura \ref{fig:pnl} se grafica el retorno del agente a lo largo de la sesi?n. En la subfigura \ref{fig:q} se observa el inventario. En la subfigura \ref{fig:alpha} se grafica la se?al $\alpha$.
 
-A lo largo de la simulación se observa que desde el inicio el agente ofrece ambas puntas: compradora y vendedora. Alrededor de $t=25$ se observa que no se ofrece más punta vendedora por haber llegado al máximo de inventario negativo por un breve lapso de tiempo. Se observa el mismo comportamiento en $t=40$. En $t=45$, ocurre la misma situación en 3 ocasiones. Alrededor de $t=57$ el agente deja de ofrecer órdenes de compra dado que llega a su máximo inventario de compra. En lo que va de la sesión hasta ese momento el agente ha podido aprovechar las órdenes que llegan en ambos sentidos con excepción de estos breves lapsos de tiempo. Estando muy cerca de finalizar la sesión, el agente deja de ofertar órdenes de compra aunque tiene capacidad en su inventario para adquirir más del activo. Esto quiere decir que el agente se sesga hacia reducir el inventario por la proximidad a finalizar la sesión y las condiciones de la señal $\alpha$. Finalmente, realiza una órden de mercado para descargar el inventario remanente.
+A lo largo de la simulaci?n se observa que desde el inicio el agente ofrece ambas puntas: compradora y vendedora. Alrededor de $t=25$ se observa que no se ofrece m?s punta vendedora por haber llegado al m?ximo de inventario negativo por un breve lapso de tiempo. Se observa el mismo comportamiento en $t=40$. En $t=45$, ocurre la misma situaci?n en 3 ocasiones. Alrededor de $t=57$ el agente deja de ofrecer ?rdenes de compra dado que llega a su m?ximo inventario de compra. En lo que va de la sesi?n hasta ese momento el agente ha podido aprovechar las ?rdenes que llegan en ambos sentidos con excepci?n de estos breves lapsos de tiempo. Estando muy cerca de finalizar la sesi?n, el agente deja de ofertar ?rdenes de compra aunque tiene capacidad en su inventario para adquirir m?s del activo. Esto quiere decir que el agente se sesga hacia reducir el inventario por la proximidad a finalizar la sesi?n y las condiciones de la se?al $\alpha$. Finalmente, realiza una ?rden de mercado para descargar el inventario remanente.
+
+
+\subsubsection{Estrategia base vs. considerando alpha}
+\label{subsubsec:estrategia_base_vs_alpha}
+Se compar? la estrategia descripta por el modelo y una id?ntica con la excepci?n de no contar con la fuente de se?al alfa, es decir, la se?al es enviada a cero de forma de no poder utilizarla para adelantarse a los movimientos del mercado. 
+La motivaci?n detr?s de esto es tener un \textit{benchmark} para determinar la utilidad de la se?al alfa en el algoritmo de \textit{trading}. De entregar una ventaja, el algoritmo con acceso a la se?al alfa deber?a tener un mejor beneficio que aquel que no la tuviera.
+
+Para poder comparar riesgo y retorno de las estrategia se analiza \textit{PNL} y su desv?o est?ndar para ambas estrategias. Tambi?n se utilizan diferentes $\phi$: $1\times 10^{-3}$ y $1\times 10^{-6}$, para determinar si hay mayor o menor impacto para los casos de mayor y menor aversi?n al riesgo. Se realizaron 200 simulaciones y se obtuvieron el promedio del \textit{PNL} y su desv?o.
+
+ \begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figuras/alpha_vs_non_alpha}
+	\caption{\textit{PNL} vs. desv?o est?ndar de la estrategia base contra una estrategia de \textit{benchmark} que no utiliza la se?al alfa.}
+	\label{fig:alpha_vs_non_alpha}
+\end{figure}
+
+En la Figura \ref{fig:alpha_vs_non_alpha} y en la Tabla \ref{table:pnlstdevalpha}  se muestran los resultados de \textit{PNL} y su desv?o est?ndar para todos los casos.
+
+Se observa que para el caso con menor aversi?n al riesgo( $\phi=1\times 10^{-6}$) la diferencia de \textit{PNL} en beneficio de la estrategia con alfa es de $0.000900$ con un desv?o est?ndar $0.0019938$ menor en el caso con alfa.
+
+En el caso donde hay mayor aversi?n al riesgo($\phi=1\times 10^{-3}$ ) la diferencia de \textit{PNL} en beneficio de la estrategia con alfa es de $10^{-6}$ con un desv?o est?ndar $0.0003699$ menor en el caso con alfa. 
+
+En ambos casos la estrategia que considera alfa obtuvo resultados con mayor beneficio y menor volatilidad del mismo siendo superior en todo sentido respecto a su versi?n sin alfa. Como era de esperarse, para el caso de menor aversi?n al riesgo las diferencias son m?s apreciables ya que el retorno y la volatilidad son tambi?n superiores.
+
+ \begin{table}[htbp]
+ 	\centering
+ 	\caption{\textit{PNL} y desv?o est?ndar de la estrategia base y la estrategia que no considera a la se?al alfa.}
+ 	\label{table:pnlstdevalpha}
+ 	\begin{tabular}{lcc}
+ 		\toprule
+ 		Caso        & \textit{PNL}       & Desv?o Est?ndar     \\
+ 		\midrule
+ 		$\phi=1\times 10^{-6}$  - con alfa    & 0.234975  & 0.18579929 \\
+ 		$\phi=1\times 10^{-3}$ - con alfa    & 0.1726    & 0.07043    \\
+ 		$\phi=1\times 10^{-6}$ - sin alfa & 0.234075  & 0.18779316 \\
+ 		$\phi=1\times 10^{-3}$ - sin alfa & 0.172599  & 0.07080    \\
+ 		\bottomrule
+ 	\end{tabular}
+ \end{table}
+ 
+
+\subsubsection{Variaci?n de par?metros}
+\label{subsubsec:variacion_parametros}
+Siguiendo con el an?lisis de nuestra implementaci?n del algoritmo de Cartea, se realizaron una serie de simulaciones para ver el comportamiento del algoritmo variando los par?metros utilizados para la simulaci?n. Hasta este punto se hab?an utilizado par?metros definidos arbitrariamente para el desarrollo y para la simulaci?n.
+
+\begin{table}[H]
+	
+\begin{center}
+	
+	\begin{tabular}{|c|c|c|c|c|c|c|}
+		\hline
+		TICKER & $k$ & $\eta_{+}$ & $\eta_{-}$ & $\theta$ & $\lambda_{+}$ & $\lambda_{-}$ \\
+		\hline
+		DEFAULT & 200,000 & 60,000 & 60,000 & 0,100 & 1,000 & 1,000 \\
+		\hline
+		COST & 85,669 & 92,024 & 78,548 & 0,446 & 0,074 & 0,086 \\
+		\hline
+		CSCO & 310,790 & 75,263 & 52,646 & 0,055 & 0,086 & 0,108 \\
+		\hline
+		EBAY & 67,880 & 30,221 & 54,676 & 0,046 & 0,129 & 0,054 \\
+		\hline
+		EXPE & 62,425 & 54,592 & 49,350 & 0,342 & 0,084 & 0,099 \\
+		\hline
+		GILD & 269,255 & 118,323 & 105,776 & 0,383 & 0,101 & 0,105 \\
+		\hline
+		MSFT & 225,456 & 97,085 & 84,773 & 0,575 & 0,287 & 0,268 \\
+		\hline
+		ORCL & 355,617 & 105,237 & 77,118 & 0,091 & 0,072 & 0,061 \\
+		\hline
+		PYPL & 236,140 & 134,227 & 106,058 & 0,519 & 0,148 & 0,156 \\
+		\hline
+		QCOM & 459,756 & 104,341 & 93,905 & 0,146 & 0,122 & 0,125 \\
+		\hline
+		VRTX & 87,390 & 99,563 & 45,152 & 0,177 & 0,055 & 0,051 \\
+		\hline
+	\end{tabular}
+\end{center}
+	\caption{Par?metros de \cite{Cartea2019} usados para comprobar el funcionamiento del algoritmo.}
+	\label{table:parametros}
+\end{table}
+
+Para ello, se utilizaron los par?metros listados en \cite{Cartea2019} expuesto en la Tabla \ref{table:parametros} correspondientes al NASDAQ para probar el funcionamiento del algoritmo. Ellos utilizaron datos de alta frecuencia del mercado para obtener par?metros que los expresen en funci?n del algoritmo definido. 
+
+Se usan estos par?metros para validar comportamiento en diferentes escenarios que se acerquen m?s a la realidad del mercado donde se pierde la simetr?a entre las versiones positivas y negativas de los par?metros y hay variadas tasas $k$ de reversi?n a la media.
+
+\begin{table}[H]
+	\begin{tabular}{|c|c|}
+	\hline
+	T & 300 \\
+	\hline
+	A & 300 \\
+	\hline
+	$\partial_{\alpha}$ & 30 \\
+	\hline
+	$s_0$ & 100 \\
+	\hline
+	n & 1000 \\
+	\hline
+	$q$ & 4 \\
+	\hline
+	$\psi$ & 0,01 \\
+	\hline
+	$\xi$ & 1 \\
+	\hline
+	$\sigma$ & 0,01 \\
+	\hline
+	$\Delta$ & 0,005 \\
+	\hline
+	$\epsilon$ & 0,005 \\
+	\hline
+\end{tabular}
+	\caption{Par?metros constantes utilizados en las simulaciones de validaci?n.}
+	\label{table:constant_parameters}
+\end{table}
+
+Hay una serie de par?metros que son constantes a trav?s de todas las simulaciones y son los expuestos en la Tabla \ref{table:constant_parameters}. Se incluyen el tiempo $T$, la amplitud $A$ que puede tomar $\alpha$, el precio inicial $s_0$, la cantidad de simulaciones $n$, el inventario m?ximo $q$,  el costo de saltar el libro de ?rdenes $\psi$, el tama?o de shocks novedosos $\xi$, el tick m?nimo $\sigma$, medio spread $\Delta$ y el costo de transacci?n $\epsilon$.
+
+\paragraph{Costo computacional}
+El costo computacional de correr simulaciones de este tipo es elevado, ya que los intervalos m?nimos de tiempo en \textit{trading} de alta frecuencia son peque?os. Al tratarse de una sesi?n de 300 segundos esto aumenta en gran medida el costo en memoria, procesamiento y tiempo utilizado. Para la simulaci?n se utilz? un diferencial alfa de tan solo 30 para evitar que ese costo supere la capacidad del hardware disponible. A su vez, para cada set de par?metros es necesario calcular la funci?n h cuyas dimensiones son $T$, $q$ y $\partial_\alpha$.
+\begin{table}[H]
+	\centering
+	\caption{Resultados de simulaciones usando datos del NASDAQ combinados por Ticker y $\phi$}
+	\label{table:validation_results}
+	\footnotesize
+	\begin{tabular}{cccccc}
+		\toprule
+		TICKER & $\phi$ & \textit{PnL c/Drift} & \textit{PnL s/Drift} & Desv?o c/Drift & Desv?o s/Drift \\
+		\midrule
+		CSCO & 0.000001 & 0.146435 & 0.14648 & 0.08527289 & 0.085360176 \\
+		CSCO & 0.0001 & 0.114905 & 0.11491 & 0.042652854 & 0.042695924 \\
+		DEFAULT & 0.000001 & 1.133955 & 1.133815 & 0.465850548 & 0.467553121 \\
+		DEFAULT & 0.0001 & 1.094945 & 1.09555 & 0.359317787 & 0.360609897 \\
+		EBAY & 0.000001 & 0.200385 & 0.10429 & 0.310275244 & 0.276179282 \\
+		EBAY & 0.0001 & 0.03941 & 0.03772 & 0.100779472 & 0.097546151 \\
+		EXPE & 0.000001 & 0.59317 & 0 & 0.558176048 & 0 \\
+		EXPE & 0.0001 & 0.122865 & 0 & 0.499462978 & 0 \\
+		GILD & 0.000001 & 0.05759 & 0.05633 & 0.280508274 & 0.281170022 \\
+		GILD & 0.0001 & 0.035805 & 0.035635 & 0.111797706 & 0.111838373 \\
+		MSFT & 0.000001 & 0.257295 & 0.25627 & 0.545199787 & 0.545952825 \\
+		MSFT & 0.0001 & 0.194385 & 0.193725 & 0.279517257 & 0.279673022 \\
+		ORCL & 0.000001 & 0.10559 & 0.105575 & 0.074079025 & 0.07413059 \\
+		ORCL & 0.0001 & 0.060645 & N/A & 0.02937361 & N/A \\
+		PYPL & 0.000001 & 0.126055 & N/A & 0.541743354 & N/A \\
+		PYPL & 0.0001 & 0.04273 & N/A & 0.183751047 & N/A \\
+		QCOM & 0.000001 & 0.184215 & N/A & 0.104172255 & N/A \\
+		QCOM & 0.0001 & 0.14036 & N/A & 0.052256774 & N/A \\
+		VRTX & 0.000001 & 0.418415 & N/A & 0.404865734 & N/A \\
+		VRTX & 0.0001 & 0.490035 & N/A & 0.379197803 & N/A \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+En la Tabla \ref{table:validation_results} se observan los resultados obtenidos al simular con los par?metros de Cartea para el NASDAQ. Se a?ade tambi?n nombrado como \textit{DEFAULT} a los par?metros definidos arbitrariamente y que han sido utilizados desde el comienzo del trabajo.
+
+Las columnas de resultados contienen en primer lugar el \textit{TICKER} del activo a simular, luego el par?metro $\phi$ de aversi?n al riesgo, una columna llamada drift que determina si en la simulaci?n se hizo uso de la se?al alfa para intentar obtener informaci?n sobre el comportamiento futuro del activo y finalmente dos columnas con el \textit{PnL} y el desv?o est?ndar.
+
+\paragraph{DEFAULT} 
+%$10^{-4}$ superior
+%$\phi=10^{-6}$ mixto
+Para el caso DEFAULT, es decir, los par?metros utilizados desde un principio para el an?lisis de los algoritmos, se obtuvieron resultados mixtos. En el caso $\phi=10^{-4}$ el resultado es superior: dado un mismo set de simulaciones, si se considera la se?al alfa, el \textit{PnL} es mayor y el desv?o estandar es menor al caso donde no se tiene disponible la se?al. En cambio, para el caso $\phi=10^{-6}$ el resultado fue mixto: si bien el \textit{PnL} fue superior, tambi?n lo fue el desv?o est?ndar. Esto no implica que la soluci?n sin usar la se?al alfa sea superior sino que no es superior en todo parametr?, por ende no resulta ser una soluci?n de mayor optimalidad.
+
+\paragraph{GILD} 
+GILD obtuvo resultados superiores utilizando la se?al alfa para ambos escenarios de aversi?n al riesgo: $\phi=10^{-4}$ y $\phi=10^{-6}$. Esto quiere decir que tanto el \textit{PnL} es mayor como el desv?o est?ndar es menor que su versi?n sin utilizar la se?al alfa. Esto implica que la soluci?n es m?s ?ptima en ambos par?metros que la otra.
+%$\phi=10^{-4}$ superior
+%$\phi=10^{-6}$ superior
+
+% TODO: por que?
+
+\paragraph{MSFT} 
+Al igual que GILD, MSFT otorga resultados superiores tanto para $\phi=10^{-4}$ como para $\phi=10^{-6}$.
+$\phi=10^{-4}$ superior
+$\phi=10^{-6}$ superior
+
+%TODO: por que?
+
+\paragraph{CSCO} 
+El ticker de CSCO otorgo resultados mixtos para ambos casos, tanto para $\phi=10^{-4}$ como para $\phi=10^{-6}$.
+%$\phi=10^{-4}$ mixto
+%$\phi=10^{-6}$ mixto
+
+\paragraph{EBAY} 
+EBAY tambi?n otorgo resultados mixtos para ambos casos de aversi?n al riesgo $\phi=10^{-4}$ y $\phi=10^{-6}$.
+%$\phi=10^{-4}$ mixto
+%$\phi=10^{-6}$ mixto
+
+\paragraph{EXPE}  
+En el caso de EXPE los resultados no son concluyentes dado que en los casos sin se?al alfa no se logr? que el algortimo genere ?rdenes.
+
+\paragraph{ORCL} 
+En el caso de ORCL, se obtuvo una soluci?n superior para $\phi=10^{-6}$ y no se termin? de correr las simulaciones para el caso $\phi=10^{-4}$, pero se mantuvo el \textit{data-point} para poder realizar comparaciones entre tickers.
+%$\phi=10^{-6}$ superior
+%$\phi=10^{-4}$ unfinished
+
+\paragraph{PYPL, QCOM VRTX}: Para PYPL, QCOM y VRTX no se concluy? de realizar las simulaciones de forma de poder comparar el caso con alfa contra el caso sin alfa pero se mantuvieron los \textit{data-points} de forma de poder realizar otras comparaciones, como por ejemplo, entre tickers.
+
+% + PnL + Std
+En muchos casos se obtuvieron soluciones mixtas, pero en todos ellos ocurri? que se obtuvo mayor \textit{PnL} y tambi?n mayor desv?o estandar, lo cual es razonable desde el punto de vista de riesgo/retorno.
+% Solucion superior es la que entrega en superioridad en PnL y Std
+Sin embargo, una soluci?n superior es la que entrega en superioridad en \textit{PnL} y desv?o est?ndar, por ello, estas soluciones mixtas no invalidan el uso de la se?al alfa ya que en ese caso se estar?a entregando un diferente perfil de riesgo/retorno.
+% En ningun caso se obtuvo pnl mayor en caso sin drift pero con menor std, eso solo ocurri? en los casos con drift 
+Resulta importante notar que en ning?n caso se obtuvo un \textit{PnL} mayor en caso sin se?al alfa con un desv?o estandar inferior. Es decir, los resultados en ning?n caso mostraron que no utilizar la se?al alfa otorgue una soluci?n superior que tomando la se?al alfa en consideraci?n. 
+
+% TODO: pasar TODOs de tasks para aca, los pendings de la revision pasada
+
+\subsection{Estimaci?n de par?metros}
+La estimaci?n de par?metros es fundamental para la realizaci?n de este trabajo. Se pueden tomar los datos de mercado para poder estimar los par?metros asociados a un activo financiero. Esto permite poder extrapolar el trabajo de Cartea a otros activos y mercados y poder simular el algoritmo de \textit{Market Making} en escenarios novedosos, as? como tener elementos descriptivos de los mismos activos o mercados que permitan compararlos entre s?.
+
+\subsubsection{Validaci?n del funcionamiento del estimador}
+\label{subsubsect:validaci?n_del_estimador}
+Previo a poder utilizar un estimador, el mismo deber?a poder auto-validarse con una simulaci?n. Resulta necesario que para una serie de datos de mercado generados de forma sint?tica puedan obtenerse los par?metros generadores sin tener esa informaci?n. Esta suerte de caja negra permite que se valide el funcionamiento del estimador fehacientemente.
+
+Se generaron 10 simulaciones utilizando los par?metros DEFAULT que son $k=200$, $\eta_+=60$, $\eta_-=60$ y $\theta=0.1$. En base a los datos obtenidos en la simulaci?n se busc? optimizar la sumatoria de las simulaciones obteni?ndose los valores $k=198.6$, $\eta_+=58.2$, $\eta_-=57.76$ y $\theta=0.1104$. Esto representa una diferencia de alrededor del 10\%, siendo los n?meros obtenidos muy cercanos al valor elegido originalmente y para la escasa cantidad de simulaciones realizadas. El m?todo utilizado para la optimizaci?n fue "Nelder-Mead" con una configuraci?n de 1000 iteraciones m?ximas.
+
+
+%TODO: Se podr?a generar un grafico que maneje un rango de par?metros y se muestre como al cambiar los par?metros la estimaci?n se acerca bastante, aunque no hay tiempo para este tipo de cosas.
+
+%TODO: Se podr?an realizar m?s simulaciones de este tipo para mostrar la calidad de la estimaci?n.
+
+
+\subsubsection{Descripci?n de los datos a utilizar}
+\label{subsubsec:descripcion_datos}
+Se eligi? un activo de gran liquidez y volumen de transacciones del mercado latinoamericano: el futuro del ?ndice IBOVESPA MINI, cuyo s?mbolo de cotizaci?n es el WINQ23; WIN corresponde al mercado, Q al mes de agosto y 23 al a?o 2023. El conjunto de archivos que describen los datos intradiarios para una fecha dada pesan 700MB y sus ticks rondan tiempos de milisegundos.
+
+ \begin{figure}[H]
+	\centering
+	\includegraphics[width=0.98\linewidth]{figuras/raw_data}
+	\caption{Datos crudos de la sesi?n de trading.}
+	\label{fig:raw_data}
+\end{figure}
+
+En la Figura \ref{fig:raw_data} se observa el formato con el que vienen entregados los datos a utilizar. La sesi?n dura 32485.526 segundos y corresponde al 31 de Julio de 2023. %En algunos casos, para reducir el tama?o de los datos se utiliz? el primer 1\% de la simulaci?n, es decir, 324.35 segundos.
+ 
+ \begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figuras/dataframe_trades}
+	\caption{Datos procesados incluyendo precio medio, ?rdenes de mercado y cambios de precio}
+	\label{fig:dataframe_trades}
+\end{figure}
+
+En base a los datos crudos, se calcula el precio medio tomando las ?rdenes en el tope del libro de ?rdenes. Se obtienen los vectores $t_{+}$ y  $t_{-}$ correspondientes a los tiempos donde se observa un salto hacia arriba o hacia abajo en el precio, as? como los vectores  $\tau_{0+}$ y  $\tau_{0-}$ compuestos por los tiempos cuando se reciben ?rdenes de mercado de compra y venta respectivamente. En la figura \ref{fig:dataframe_trades} se observa la tabla reducida conteniendo cada instante de tiempo individual y la presencia o no de ?rdenes de mercado y cambios de precio. Se pas? de una tabla de alrededor de 18 millones de filas a tan solo 914467, que es la cantidad de instantes de tiempo individuales donde ocurrieron operaciones o cambios de precio.
+
+% TODO: Mejorar im?genes agregando t?tulo, unidades, etc.
+
+ \begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figuras/priceaction_bovespa}
+	\caption{Precio a lo largo de toda la sesi?n de trading.}
+	\label{fig:priceaction_bovespa}
+\end{figure}
+
+En la Figura \ref{fig:priceaction_bovespa} se puede observar la acci?n del precio a lo largo de toda la sesi?n de trading. %En un principio hay una acci?n hac?a arriba del precio para luego lateralizar por el resto de la sesi?n.
+
+\begin{figure}[H]
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+\includegraphics[width=1\linewidth]{figuras/tau0_plus_histogram}
+\caption{Histograma de $\tau_{0+}$ para la sesi?n.}
+\label{fig:tau0_plus_histogram}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+\includegraphics[width=1\linewidth]{figuras/t_plus_hist}
+\caption{Histograma de $t_{+}$ para la sesi?n.}
+\label{fig:tau_plus_hist}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+\includegraphics[width=1\linewidth]{figuras/tau0_minus_histogram}
+\caption{Histograma de $\tau_{0-}$ para la sesi?n.}
+\label{fig:tau0_minus_histogram}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+\includegraphics[width=1\linewidth]{figuras/t_minus_histogram}
+\caption{Histograma de $t_{-}$ para la sesi?n.}
+\label{fig:tau_minus_hist}
+	\end{subfigure}
+	\caption{Histogramas de la sesi?n de trading.}
+	\label{fig:histograms}
+\end{figure}
+
+En la Figura \ref{fig:histograms} se muestran diversos histogramas obtenidos en funci?n las apariciones de los eventos de cambio de precio $t$ (en las Figuras \ref{fig:tau0_minus_histogram} y \ref{fig:tau_minus_hist}) y de llegada de ?rdenes de mercado $\tau$ (en las Figuras \ref{fig:tau0_plus_histogram} y \ref{fig:tau_plus_hist}). Al inicio de la sesi?n se observa una mayor concentraci?n de ?rdenes as? como de cambios de precio, as? como las concentraciones correspondientes a los intervalos de los histogramas en diferentes momentos del tiempo tambi?n se ven similares.
+
+\begin{figure}[H]
+	\begin{subfigure}{0.7\textwidth}
+		\centering
+\includegraphics[width=1\linewidth]{figuras/t_plus_minus_histogram}
+\caption{Histograma de la diferencia entre $t_{-}$ y $t_{+}$ .}
+\label{fig:t_plus_minus_histogram}
+	\end{subfigure}
+	\begin{subfigure}{0.7\textwidth}
+	\centering
+\includegraphics[width=1\linewidth]{figuras/tauplusminus_bovespa}
+\caption{Histograma de la diferencia entre $\tau_{0-}$ y $\tau_{0+}$.}
+\label{fig:tau_plus_minus_histogram}
+	\end{subfigure}
+
+	\caption{Histogramas de diferencias para la cantidad de ?rdenes de mercado y de cambios de precio.}
+	\label{fig:diff_histograms}
+\end{figure}
+
+En la Figura \ref{fig:diff_histograms} se volvi? a generar un histograma de 30 intervalos pero en este caso teniendo la diferencia entre cambios en el precio(\ref{fig:t_plus_minus_histogram}) y ?rdenes de mercado(\ref{fig:tau_plus_minus_histogram}) para un intervalo dado. Se ven intervalos contiguos en los que la tendencia positiva o negativa se mantiene, sin embargo, hay casos como el del final de las sesi?n donde la diferencia de ?rdenes de mercado es positiva y la diferencia en el cambio de precio es negativa.
+
+\subsubsection{Estimaci?n de par?metros de Bovespa}
+\label{subsubsec:estimacion_bovespa}
+
+% - Futuros bovespa mini
+% https://www.b3.com.br/en_us/products-and-services/trading/equities/mini-ibovespa-futures.htm
+
+% WINQ23 
+% En Brazil 
+% Ticker + mes + a?o Q=agosto
+% 4580
+Utilizando el mismo procedimiento expresado anteriormente se pueden obtener los par?metros correspondiente al WINQ23. No es posible utilizar toda la sesi?n completa para obtener los par?metros dado que eso redundar?a en generar una matriz demasiado grande para computar en memoria, por la forma en la que se estiman los par?metros. Por esta raz?n se divide la sesi?n en varios pedazos y se plantean diferentes estrategias para realizar una optimizaci?n sobre ellos.
+
+%TODO: agregar al glosario)
+% 	Vieja intro sobre promedio sobre 2000 microsesiones
+
+%A su vez, se tom? el 30\% central de la sesi?n para reducir el tiempo de c?mputo y se limit? la negatividad de los valores dado que no tendr?a sentido tener par?metros negativos en este contexto.
+
+% De realizar esta optimizaci?n Los par?metros obtenidos para esta configuraci?n son %$k= 45 $, $\eta_+ = 20.28$, $\eta_- = 2.633$ y $\theta =  2.163$.
+% $k= 42.66 $, $\eta_+ = 7.743$, $\eta_- = 0$ y $\theta =  3.081$.
+
+%Todos los par?metros encontrados son razonables, pero se ve una muy baja reacci?n de precio a las ?rdenes de mercado negativos.
+
+% Se realiz? con otra metodolog?a el c?lculo y se obtuvo que en realidad los par?metros que mejor optimizan son 
+% [ 4.266e+01  7.743e+00  1.664e-13  3.081e+00]
+
+\paragraph{Dimensionalidad, variabilidad de las optimizaciones y divergencia}
+La sesi?n fue dividida en 2000 microsesiones de forma tal de reducir la cardinalidad de las matrices dise?adas para obtener los par?metros de la simulaci?n.
+
+
+\begin{figure}[H]
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figuras/cantidad_tau_+_sobre_2000}
+		\caption{Histograma de $\tau_{0+}$.}
+		\label{fig:cantidad_tau_+_sobre_2000}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figuras/cantidad_tau_-_sobre_2000}
+		\caption{Histograma de $\tau_{0-}$.}
+		\label{fig:cantidad_tau_-_sobre_2000}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figuras/cantidad_t_+_sobre_2000}
+		\caption{Histograma de $t_{+}$. }
+		\label{fig:cantidad_t_+_sobre_2000}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figuras/cantidad_t_-_sobre_2000}
+		\caption{Histograma de $t_{-}$.}
+		\label{fig:cantidad_t_-_sobre_2000}
+	\end{subfigure}
+	\caption{Histogramas de tramos de sesi?n dividida en 2000.}
+	\label{fig:histograms_2000}
+\end{figure}
+
+En la Figura \ref{fig:histograms_2000} se ve como est? distribuida la cantidad de arribos tanto de $\tau$ como de $t$.
+
+	\begin{table}[htbp]
+		\centering
+		\caption{Estad?sticos de las microsesiones}
+		\label{table:microsesionsparams}
+		\begin{tabular}{lcccc}
+			\toprule
+			Par?metro        & Media    & Mediana & M?nimo & M?ximo     \\
+			\midrule
+			$\tau_{0+}$  	& 169.05 & 108.5 & 15 & 1728 \\
+			$\tau_{0-}$		& 170.02 & 114.0 & 17 & 2182 \\
+			$t_{+}$ 		& 65.875 & 47.5 & 10 & 706 \\
+			$t_{-}$ 		& 64.69 & 48.0 & 9 & 651 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+
+Los estad?sticos de las 2000 microsesiones est?n en la Tabla \ref{table:microsesionsparams}. La distribuci?n no es homog?nea como se pudo ver en los histogramas de las figuras \ref{fig:histograms} y \ref{fig:histograms_2000}.
+
+\begin{table}[H]
+	\centering
+	\caption{Ejemplo de valores para \( k \), \( \eta_+ \), \( \eta_- \), y \( \theta \)}
+	\label{table:examplevaluesestimationparams}
+	\begin{tabular}{ccccc}
+		\toprule
+		\# & \( k \) & \( \eta_+ \) & \( \eta_- \) & \( \theta \) \\
+		\midrule
+		1  & 395.697686 & 26.4372260 & 6.04697591e-12 & 9.03926592 \\
+		2  & 454.704686 & 27.0654732 & 1.83547239e-12 & 4.52729049 \\
+		3  & 354.211655 & 30.6993112 & 4.67597920e-12 & 7.32852758 \\
+		4  & 149.427567 & 1.70420596e-12 & 31.2855792 & 6.21927589 \\
+		5  & 88.4217724 & 1.20782906e-12 & 46.8835648 & 3.21724584 \\
+		6  & 565.422808 & 2.24765131e-10 & 12.4750037 & 2.20037057 \\
+		7  & 359.131201 & 4.80778655e-12 & 42.4639453 & 3.88096131 \\
+		8  & 158.884049 & 2.31012598e-11 & 53.0274372 & 3.78077941 \\
+		9  & 17.3217121 & 3.04506061 & 2.26328806e-09 & 2.90193434 \\
+		10 & 275.30569891 & 22.10708892 & 4.00973041 & 3.68528357 \\
+		11 & 171.865581 & 16.5592190 & 2.98267972e-13 & 4.51918615 \\
+		12 & 208.409252 & 4.71952202e-13 & 46.8702818 & 6.73918548 \\
+		13 & 73.6282818 & 28.8876849 & 9.51974712e-13 & 9.30055435 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+La no homogeneidad de los arribos de ?rdenes y cambios de precio genera escenarios de divergencia en la optimizaci?n para los par?metros de $\eta$, tal como puede verse en la Tabla \ref{table:examplevaluesestimationparams}. En algunas sesiones $\eta_+$ es cero para el caso de m?xima verosimilitud, para otras sesiones $\eta_-$ es cero y finalmente hay algunos casos como el de la sesi?n 10 donde no hay divergencia.
+
+Con los resultados de optimizaci?n obtenidos se puede inferir por donde rondan los par?metros de este activo.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figuras/histogram_k}
+	\caption{Distribuci?n de los par?metros $k$ estimados.}
+	\label{fig:histogram_k}
+\end{figure}
+
+En la Figura \ref{fig:histogram_k} se tiene el histograma de valores de k para las 2000 optimizaciones realizadas de forma independiente, es decir, cada secci?n de la sesi?n se utiliza de forma ?nica para obtener sus par?metros.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figuras/histogram_eta}
+	\caption{Distribuci?n de los par?metros $\eta$ estimados.}
+	\label{fig:histogram_eta}
+\end{figure}
+
+En la Figura \ref{fig:histogram_eta} se tienen los histograma de los valores de $\eta_-$ y $\eta_+$.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figuras/histogram_theta}
+	\caption{Distribuci?n de los par?metros $\theta$ estimados.}
+	\label{fig:histogram_theta}
+\end{figure}
+
+En la Figura \ref{fig:histogram_theta} se tiene el histograma del valor de $\theta$.
+
+\begin{table}[htbp]
+	\centering
+	\caption{Estad?sticos de los par?metros \( k \), \( \eta_+ \), \( \eta_- \) y \( \theta \)}
+	\label{table:paramsstats}
+	\begin{tabular}{lcccc}
+		\toprule
+		Par?metro        & Media     & Mediana  \\
+		\midrule
+		\( k \)          & 272.2661  & 231.1939 \\
+		\( \eta_+ \)     & 21.4226   & 17.1327  \\
+		\( \eta_- \)     & 17.0106   & 12.5981  \\
+		\( \theta \)     & 4.4790    & 3.5253   \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Finalmente, en la Tabla \ref{table:paramsstats} se tienen los estadísticos principales de los par?metros obtenidos.
+
+\paragraph{Secciones no divergentes}
+De las 2000 estimaciones de par?metros hubieron 32 no divergentes.
+\begin{table}[H]
+	\centering
+	\caption{Todos los valores sin divergencia para \( k \), \( \eta_+ \), \( \eta_- \), y \( \theta \)}
+	\label{table:examplevaluesestimationparamsnondivergent}
+	\begin{tabular}{ccccc}
+		\toprule
+		\# & \( k \) & \( \eta_+ \) & \( \eta_- \) & \( \theta \) \\
+		\midrule
+		1  & 275.30569891 & 22.10708892 & 4.00973041 & 3.68528357 \\
+		2  & 263.68677011 & 27.344691   & 1.32255246 & 3.39080657 \\
+		3  & 62.41806775  & 5.07176871  & 0.75829817 & 2.94771526 \\
+		4  & 76.57461944  & 10.54013045 & 0.4717556  & 4.56481165 \\
+		5  & 189.04166656 & 27.19830342 & 0.21945925 & 19.74257046 \\
+		6  & 425.1685524  & 42.09897748 & 32.91454384 & 4.35526246 \\
+		7  & 314.04468321 & 8.30388257  & 3.40001451 & 3.06534127 \\
+		8  & 104.39523654 & 3.42324722  & 18.68565123 & 2.55595696 \\
+		9  & 196.02321694 & 13.75246514 & 7.12791902 & 2.06299183 \\
+		10 & 367.87141935 & 4.54053986  & 23.72123051 & 2.49867377 \\
+		11 & 127.04997212 & 9.94528273  & 3.32336075 & 1.59435936 \\
+		12 & 203.30929553 & 11.3103824  & 16.45689874 & 2.88159123 \\
+		13 & 39.48519201  & 0.23733263  & 14.27219059 & 3.16979494 \\
+		14 & 157.95175885 & 36.84862118 & 3.11666339 & 1.87496425 \\
+		15 & 271.87957382 & 32.31783148 & 2.84322848 & 1.55753884 \\
+		16 & 40.57422732  & 0.18032188  & 2.33166285 & 2.35981855 \\
+		17 & 253.28942304 & 13.14357182 & 3.15027297 & 2.10638914 \\
+		18 & 320.23614045 & 7.21549413  & 22.52051063 & 3.22158924 \\
+		19 & 539.04703895 & 18.64741919 & 4.94832149 & 0.8709206  \\
+		20 & 175.88660791 & 25.97855649 & 1.23011216 & 1.44004351 \\
+		21 & 311.22185756 & 3.46039975  & 14.67428251 & 1.24626919 \\
+		22 & 54.06545264  & 7.28572459  & 0.5853338  & 1.75214905 \\
+		23 & 126.72242632 & 22.82292765 & 4.39918952 & 2.68066442 \\
+		24 & 154.22621433 & 32.79612323 & 4.41855559 & 4.09230157 \\
+		25 & 143.04699207 & 16.78586505 & 1.72103976 & 3.50461514 \\
+		26 & 122.65841521 & 0.14129365  & 15.14380747 & 5.04066033 \\
+		27 & 106.32600538 & 9.89445598  & 2.91436115 & 2.82679417 \\
+		28 & 151.66664088 & 13.4092524  & 2.42418289 & 2.89309892 \\
+		29 & 242.58510883 & 14.52581143 & 9.8585741  & 4.10937873 \\
+		30 & 59.4164498   & 17.04048056 & 0.06898367 & 3.9971545  \\
+		31 & 275.32977893 & 27.85439649 & 2.40297679 & 3.14309962 \\
+		32 & 165.94066048 & 13.13848925 & 16.29560514 & 4.13894996 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Sus resultados est?n en la Tabla \ref{table:examplevaluesestimationparamsnondivergent}. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figuras/histogram_k_nz}
+	\caption{Distribuci?n de los par?metros $k$ estimados para casos no divergentes.}
+	\label{fig:histogram_k_nz}
+\end{figure}
+
+En la Figura \ref{fig:histogram_k_nz} se tiene el histograma de valores de $k$ para las 32 optimizaciones no divergentes.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figuras/histogram_eta_nz}
+	\caption{Distribuci?n de los par?metros $\eta$ estimados para casos no divergentes.}
+	\label{fig:histogram_eta_nz}
+\end{figure}
+
+En la Figura \ref{fig:histogram_eta_nz} se tienen los histograma de los valores de $\eta_-$ y $\eta_+$ para casos no divergentes.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figuras/histogram_theta_nz}
+	\caption{Distribuci?n de los par?metros $\theta$ estimados para casos no divergentes.}
+	\label{fig:histogram_theta_nz}
+\end{figure}
+
+En la Figura \ref{fig:histogram_theta} se tiene el histograma del valor de $\theta$ para casos no divergentes.
+
+\begin{table}[htbp]
+	\centering
+	\caption{Estad?sticos de los par?metros \( k \), \( \eta_+ \), \( \eta_- \) y \( \theta \) para casos no divergentes}
+	\label{table:paramsstats_nz}
+	\begin{tabular}{lcc}
+		\toprule
+		Par?metro        & Media     & Mediana  \\
+		\midrule
+		\( k \)          & 197.3889  & 170.9136 \\
+		\( \eta_+ \)     & 15.6050   & 13.2764  \\
+		\( \eta_- \)     & 7.7956    & 3.4000   \\
+		\( \theta \)     & 3.4179    & 2.9204   \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+Finalmente, en la Tabla \ref{table:paramsstats_nz} se tienen los estad?sticos principales de los par?metros obtenidos para los casos no divergentes.
+
+\paragraph{Optimizaci?n sobre el promedio}
+Tomando, por ejemplo, un 30\% central de la simulaci?n, colocando l?mites a la negatividad de los par?metros, dado que no tendr?an sentido en este contexto y optimizando para el promedio de todas estas sesiones, se obtienen los par?metros $k= 42.66 $, $\eta_+ = 7.743$, $\eta_- = 0$ y $\theta =  3.081$. Par?metros similares a los obtenidos al calcular para cada muestra pero tambi?n divergentes.
+
+\paragraph{Submuestreo aleatorio}
+Otra forma de homogeneizar los datos consiste en tomar un muestreo aleatorio de los eventos ocurridos, tanto sean ?rdenes de mercado como cambios de precio de forma tal de otorgar mayor balances y regularidad a la sesi?n. 
+
+en la Tabla \ref{table:microsesionsparams} se muestran los estad?sticos de los arribos de eventos para cada secci?n de las 2000 elegidas. Tras varios intentos se termin? utilizando un muestreo de 60 para los eventos de $\tau$ y de 30 para los eventos de $t$.
+
+Los par?metros obtenidos fueron convergentes: $k = 77.33$, $\eta_+ = 2.386$, $\eta_- = 3.316$ y $\theta = 1.711$.
+
+\paragraph{Resumen}
+Todas estas estrategias son v?lidas para obtener par?metros en base a los datos crudos. 
+
+\begin{table}[H]
+	\centering
+	\caption{Valores de \( k \), \( \eta_+ \), \( \eta_- \), y \( \theta \) para diferentes m?todos}
+	\label{table:valuesestimationparams}
+	\begin{tabular}{lccccc}
+		\toprule
+		\# & M?todo & \( k \) & \( \eta_+ \) & \( \eta_- \) & \( \theta \) \\
+		\midrule
+		1 & Dist. General (Media) & 272.2661 & 21.4226 & 17.0106 & 4.4790 \\
+		2 & Dist. General (Mediana) & 231.1939 & 17.1327 & 12.5981 & 3.5253 \\
+		3 & No Divergentes (Media) & 197.3889 & 15.6050 & 7.7956 & 3.4179 \\
+		4 & No Divergentes (Mediana) & 170.9136 & 13.2764 & 3.4000 & 2.9204 \\
+		5 & Opt. sobre Promedio & 42.66 & 7.743 & 0 & 3.081 \\
+		6 & Submuestreo Aleatorio & 77.33 & 2.386 & 3.316 & 1.711 \\
+		7 & \#6 No Divergentes  & 425.1685  & 42.0989 & 32.9145 & 4.3552 \\
+		8 & \#29 No Divergentes & 242.5851 & 14.5258 & 9.8585  & 4.1093 \\
+		9 & \#32 No Divergentes  & 165.9406 & 13.1384 & 16.2956 & 4.1389 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+En la Tabla \ref{table:valuesestimationparams} se condensan todos los par?metros obtenidos, incluyendo tambi?n 3 casos seleccionados de las microsesiones no divergentes de la Tabla \ref{table:examplevaluesestimationparamsnondivergent}. 
+
+\subsection{Simulaciones con datos del Bovespa}
+\label{subsec:simulaciones_bovespa}
+Una vez obtenidos los par?metros de la Tabla \ref{table:valuesestimationparams}, se realizan simulaciones para verificar si la estrategia puede generar retornos en ese entorno y para analizar los beneficios de la se?al alfa.
+\begin{table}[H]
+	\centering
+	\caption{Resultados de simulaciones usando par?metros estimados}
+	\label{table:estimated_params_results}
+	\scriptsize
+	\begin{tabular}{lccccc}
+		\toprule
+		M?todo & $\phi$ & \textit{PnL c/Drift} & \textit{PnL s/Drift} & Desv?o c/Drift & Desv?o s/Drift \\
+		\midrule
+		General (Mediana) & 1e-6 & 0 & 0 & 0 & 0 \\
+		General (Mediana) & 1e-3 & 0 & 0 & 0 & 0 \\
+		No Divergentes (Media) & 1e-6 & 0 & 0 & 0 & 0 \\
+		No Divergentes (Media) & 1e-3 & 0 & 0 & 0 & 0 \\
+		No Divergentes (Mediana) & 1e-6 & 0 & 0 & 0 & 0 \\
+		No Divergentes (Mediana) & 1e-3 & 0 & 0 & 0 & 0 \\
+		Promedio & 1e-6 & 0 & 0 & 0 & 0 \\
+		Promedio & 1e-3 & 0 & 0 & 0 & 0 \\
+		Submuestreo & 1e-6 & 0 & 0 & 0 & 0 \\
+		Submuestreo & 1e-3 & 0 & 0 & 0 & 0 \\
+		\#29 No Divergentes & 1e-6 & 0 & N/A & 0 & N/A \\
+		\#29 No Divergentes & 1e-3 & 0 & N/A & 0 & N/A \\
+		\#6 No Divergentes & 1e-6 & 2.2016 & 2.2018 & 1.3763 & 1.3746 \\
+		\#6 No Divergentes & 1e-3 & 1.6547 & 1.6547 & 0.4203 & 0.4203 \\
+		\#32 No Divergentes & 1e-6 & 0 & 0 & 0 & 0 \\
+		\#32 No Divergentes & 1e-3 & 0 & 0 & 0 & 0 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Se realizaron 500 simulaciones para cada caso, usando los par?metros estimados y considerando un $\lambda$ positivo y negativo de 1, obteni?ndose los resultados de la Tabla \ref{table:estimated_params_results}. En la mayor?a de los casos utilizando los par?metros obtenidos no se obtuvieron transacciones. En el caso "\#6 No Divergentes" se obtuvieron resultados distintos de cero donde el \textit{PnL} obtenido en el caso con drift es inferior al del caso sin drift y su desv?o es mayor.
+
+\section{An?lisis de los resultados} 
+Los resultados de esta tesis podr?an ser analizados en tres subgrupos: validaci?n de los modelos y el estimador, estimaci?n de los par?metros de WINQ23 y simulaci?n con los parametros obtenidos extendiendo el trabajo de \cite{Cartea2019}; todos ellos atravesadas por un constante desaf?o implementativo.
+
+\subsection{Validaci?n} La validaci?n consisti? en corroborar que los modelos de Cartea implementados en esta tesis repliquen fielmente el trabajo original, cuyos resultados fueron presentados en las secciones \ref{subsec:validacion_del_modelo} y \ref{subsubsect:validaci?n_del_estimador}. 
+
+Esta fue la piedra fundacional de este trabajo conjuntamente con la implementaci?n de los algoritmos (mayormente implementados en Python) y del an?lisis y estudio detallado de las ecuaciones presentadas por Cartea, cuyo desarrollo se expresa en la Secci?n \ref{sec:modelo}, correspondiente al modelo utilizado. 
+
+%Validaci?n del modelo
+\paragraph{Validaci?n inicial} El primer resultado obtenido es el de la funci?n h ilustrada en la Figura \ref{fig:h}, cuyos valores fueron concordantes con los esperados analizando el trabajo original de Cartea. Esto fue reforzado por el an?lisis del comportamiento del agente en la parte final de la sesi?n de \textit{trading} en la Figura \ref{fig:positioningvsq}, siendo progresivamente m?s averso al riesgo al acercarse el final de la sesi?n e intentando descargar su inventario. Los histogramas presentados en las figuras 	\ref{fig:limitordersminusplusexecutions} y	\ref{fig:marketordersplusexecutions} brindaron resultados plenamente compatibles con los buscados habiendo una abundante cantidad de ?rdenes l?mite ejecutadas y algunas ?rdenes de mercado aprovechando momentos donde la se?al alfa fuera lo suficientemente intensa. Esto combinados con la ilustraci?n de la Figura \ref{fig:orders_pnl_q_alfa} de una sesi?n que muestra la trayectoria de precio, el funcionamiento del modelo de principio a fin y los momentos donde se ejecutan las ?rdenes l?mite y de mercado terminan de generar una visi?n hol?stica del correcto funcionamiento del sistema.
+
+
+\paragraph{Estrategia base vs. alpha} Luego, en la Secci?n \ref{subsubsec:estrategia_base_vs_alpha} se analiza otra caracter?stica fundamental del modelo que es la utilizaci?n de la se?al alfa como instrumento para mejorar el perfil de \textit{PnL} tanto en su magnitud como en su desv?o. Los resultados, mostrados gr?ficamente en la Figura \ref{fig:alpha_vs_non_alpha} y num?ricamente en la Tabla \ref{table:pnlstdevalpha} son concluyentes. Muestran que el uso de la se?al alfa aumentan el retorno y disminuyen su varianza. Por cuestiones de tiempo, no fue posible replicar en su totalidad los resultados de Cartea pero el modelo muestra el comportamiento esperado respecto a estar caracter?stica. Estos resultados se refuerzan con la variaci?n de par?metros de la Secci?n \ref{subsubsec:variacion_parametros}, donde los resultados de simulaciones considerando la se?al alfa fueron iguales o mejores a los que no la consideraron en todos los casos.
+
+\paragraph{Varaci?n de par?metros}
+En la Secci?n \ref{subsubsec:variacion_parametros} se intent? replicar los resultados de Cartea utilizando los par?metros de diferentes activos del \textit{NASDAQ} infructuosamente. Los resultados permitieron confirmar que la estrategia con alfa entregaba resultados iguales o superiores a la estrategia de base pero no se logr? obtener exactamente los mismo resultados que el art?culo. Por cuestiones de tiempo computacional no se pudo realizar todas las simulaciones deseadas. No se termina de comprender el porqu? detr?s de la diferencia con los resultados de Cartea. Se intent? revisar en diversas ocasiones el c?digo en busca de errores pero no se encontr? una soluci?n que replique a la perfecci?n los datos.
+
+\paragraph{Validacion del funcionamineto del estimador}
+En la Secci?n \ref{subsubsect:validaci?n_del_estimador} se valid? que el estimador de par?metros funcionara correctamente. Esto se logr? generando datos sint?ticos en base a par?metros conocidos para luego insertarlos al estimados y obtener nuevamente los par?metros insertados. Esta validaci?n fue concluyente y fundamental para que los par?metros que se estimen para el mercado brasilero tengan validez. 
+
+\subsection{Estimaci?n} Habiendo ya validado los modelos y el estimador a utilizar, se estimaron los par?metros de los futuros del ?ndice WINQ23 correspondiente al mercado brasilero Bovespa en la Secci?n \ref{subsubsec:estimacion_bovespa}. 
+
+\paragraph{Descripci?n de los datos a utilizar}
+En la Secci?n \ref{subsubsec:descripcion_datos} se describen los datos crudos que fueron utilizados para estimar los par?metros del ?ndice WINQ23, pero m?s importante a?n se toma dimensi?n del tama?o de los datos a utilizar y la complejidad que esto agrega al problema. Previo a este momento del trabajo siempre se usaron datos sint?ticos y por ende mucho m?s facilmente manejables y predecibles. Si bien la funci?n h rondaba el tama?o de los \textit{GigaBytes} se trataba simplemente de una matriz de \texttt{numpy}, mucho m?s homog?nea. Los datos utilizados para la estimaci?n en cambio son heterog?neos, habiendo tal vez miles de ?rdenes de mercados en cortos lapsos de tiempo y tan solo unas pocas en otros intervalos. Esto trajo consigo problemas de divergencia a la hora de estimar.
+
+\paragraph{Estimaci?n de los parametros de Bovespa}
+En la Secci?n \ref{subsubsec:estimacion_bovespa} y utilizando el estimador previamente validado, se desarrollaron varios esquemas para obtener los par?metros correspondientes al activo elegido. Se intent? dividir la sesi?n en 2000 microsesiones y optimizar sobre el promedio de ellas, pero el resultado de la optimizaci?n result? ser divergente. Se analiz? la distribuci?n de los par?metros divergentes para cada una de esas sesiones en las figuras 	\ref{fig:histogram_k}, \ref{fig:histogram_eta} y \ref{fig:histogram_theta}. Con esta distribuciones se logr? obtener una idea de que par?metros maximizan aunque fuera para m?nimos locales a la funci?n de m?xima verosimilitud. Finalmente, se opt? tambi?n por otra estrategia muy utilizada para datos distribuidos de forma tan irregular que es el submuestreo aleatorio. Con este m?todo y seleccionando algunos casos no divergentes se obtuvieron par?metros compatibles con los datos de Brazil, los cuales fueron sumarizados en la Tabla \ref{table:valuesestimationparams}. La heterogeneidad de los datos hizo necesario el uso de estas soluciones sub?ptimas para entrever qu? par?metros se adaptan bien a los datos. Ser?a necesaria una extensi?n del presente trabajo si se quisiera obtener mayor optimalidad en la obtenci?n de par?metros.
+
+\subsection{Simulaci?n} Finalmente, se realizaron simulaciones con los par?metros estimados en la Secci?n \ref{subsec:simulaciones_bovespa} y mostrando los resultados de la Tabla \ref{table:estimated_params_results}. Las dificultades encontradas a la hora de obtener los par?metros y las pocas ?rdenes de mercado ejecutadas en las simulaciones realizadas hacen pensar que es necesaria una continuaci?n de la investigaci?n para comprender el porqu? de la inconclusividad de los resultados. A su vez, si bien en el caso donde hubo ?rdenes de mercado el retorno obtenido fue positivo, resulta contraintuitivo que el \textit{PnL} sea inferior en el caso que considera la se?al alfa y el desv?o peor. Esto puede deberse a la baja cantidad de simulaciones que pudo realizarse.
+
+%\subsection{An?lisis Final}
+
+
+%TODO: Ser m?s cr?tico, relacionar con las pregutnas e hip?tesis, comparar con la literatura?, significancia de los resultados? Implicancias??
+%TODO (?): Hilado entre diferentes secciones de analisis? se valido lo del paper parcialmente, se utilizo para estimar parametros y luego se 
+% TODO: Comparar los resultados con los dle NASDAQ?
+
+%Results and Discussion are closely related sections in a thesis, but they serve different purposes:
+%Results:
+
+%Presents the findings of your research objectively
+%Focuses on raw data and observations
+%Uses tables, graphs, and figures to display data
+%Typically does not include interpretation
+
+%Discussion: ES MAS CRITICA
+
+%Interprets the results and explains their significance SIGNIFICANCE
+%Relates findings back to your research questions or hypotheses COMO SE RELACIONA CON LAS PREGUNTAS E HIPOTESIS
+%Compares results to existing literature COMPARAR RESULTADOS CON LA LITERATURA
+%Discusses implications and limitations of the study IMPLICANCIAS Y LIMITACIONES??
+
+%The relationship between these sections is that the Discussion builds upon and explains the Results. Here's how they connect:
+
+%Reference: The Discussion frequently refers back to specific results.
+%Interpretation: Results are explained and given meaning in the Discussion.
+%Context: The Discussion places the Results within the broader scientific context.
+%Implications: The Discussion explores what the Results mean for the field of study.
+%Limitations: Any shortcomings or constraints of the Results are addressed in the Discussion.
+
+% TODO: NO OLVIDAR CAMBIAR EL outline donde dice que hay en cada secci?n
+% TODO: tampoco olvidar cambiar el glosario y lo que se pidi? en la presentaci?n de la propuesta.
+\section{Conclusiones}
+
+%TODO: Deber?an ser alrededor de los findings de los resultados, pero el proceso fue m?s interesante.
+
+% TODO: Sobre el modelo? / descripci?n de lo que se hizo
+
+% Que se hizo en el trabajo?
+En este trabajo se implement? el modelo de \textit{Market Making} con se?ales alfa de \cite{Cartea2019} en Python. El Modelo utiliza una se?al generada por desbalances en las ?rdenes de mercado. La implementaci?n consisti? de un Simulador que permite evaluar el comportamiento de la estrategia para un set de par?metros dado y un estimador que en base a un set de eventos de cambio de precio y arribo de ?rdenes de mercado puede obtener los par?metros correspondientes. 
+
+%- TODO: Sobre el desarrollo? - replicaci?n
+%func h
+Una gran porci?n del trabajo consisti? en replicar y validar el trabajo previo de los autores del modelo. La implementaci?n de los algoritmos permiti? validar la correctitud de las ecuaciones y la convergencia de la soluci?n obtenida en la funci?n h. Se logr? validar que el comportamiento del algoritmo en el final de la sesi?n se vuelve m?s averso al riesgo mientras que es casi puramente dependiente del inventario $q$ en el resto de la sesi?n. Se pudo variar los par?metros de riesgo para que el agente realice m?s o menos operaciones y evite acumular inventario.
+
+% Sobre la se?al alfa?
+En una primera instancia, se logr? validar que la se?al alfa otorga resultados superiores para cuando se utiliz? con los par?metros por default y los correspondientes al NASDAQ, pero se encontr? un resultado contrario al utilizar los par?metros estimados para el activo brasilero WINQ23. Estos resultados mixtos despiertan varios interrogantes sobre la estimaci?n de los par?metros, la naturaleza de los activos latinoamericanos y la replicabilidad de los resultados para nuevos activos. 
+
+%falla en validar numeros para activos del nasdaq - TODO: Sobre la validaci?n?
+No se logr? replicar los resultados para los activos del NASDAQ. Si bien se pudo obtener una mejora de perfil de riesgo retorno para el caso de utilizar la se?al alfa compara contra el caso de no usarla, no fue posible obtener los mismos valores esperados inicialmente. Se desconoce la causa de la diferencia en el \textit{PnL} de los resultados. Se vi? un retorno inferior al mostrado en la bibliograf?a.
+
+
+%- TODO: Sobre la estimaci?n? - TODO: Se puede estimar los parametros de mercado de un activo cualquiera para simularlo con el framework propuesto
+Se replic? exitosamente el estimador dise?ado por \cite{Cartea2019}. Para ello se generaron datos sint?ticos para los cuales se pudo reestimar sus par?metros. Esto muestra que es posible recuperar los par?metros de la simulaci?n en base a los eventos de cambios de precio y de llegada de ?rdenes de mercado. 
+
+% Soble la estimaci?n de Brasil
+Se pudieron realizar diversas estimaciones de par?metros para los futuros sobre el ?ndice Bovespa Mini, cuyo \textit{ticker} es WINQ23. Hubieron diversas dificultades para obtenerlos a causa del tama?o y la heterogeneidad de los datos.
+
+% Sobre las simulaciones finales?
+Utilizando los par?metros estimados y el algorimo de \textit{Market Making} con se?ales alfa se intent? simular una serie de sesiones de \textit{trading} obteniendo mayoritariamente resultados nulos. Comparando con los parametros de la literatura referentes al NASDAQ, $\eta_{+}$ y $\eta_{-}$ dieron valores m?s peque?os para la estimaci?n de WINQ23. El hecho de que se obtengan resultados de retorno nulo implica de que el agente decidi? no ejecutar ?rdenes. Solamente en un caso se consigui? que el agente opere y en ese caso se consigui? un retorno positivo. 
+% . Mercados emergentes? Problemas para estimar par?metros?
+
+%Sobre las formas de estimar los par?metros y elegir lambda = 1?
+
+En la propuesta de tesis se plante? la idea de desarrollar un simulador que funcione sobre datos de la realidad para testear el modelo en una sesi?n de \textit{trading} real. Eso no fue implementado.
+
+En el trabajo se pudo validar el algortimo de \textit{Market Making} con se?al alfa de \cite{Cartea2019}, su simulador y estimador as? como la utilidad de la se?al alfa para mejorar el perfil de retornos. Se logr? tambi?n extenderlo exitosamente a un activo latinoamericano: el futuro del ?ndice Bovespa Mini (WINQ23) obteniendo un set de par?metros compatibles con el activo. Se intent? con escaso ?xito simular con los par?metros obtenidos, aunque en los casos donde se logr? el retorno fue positivo. Todo esto indica la validez del modelo, la posibilidad de su extensi?n y la utilidad de usar un desbalance en las ?rdenes de mercado para predecir el futuro movimiento del precio. Sin embargo, hace falta m?s trabajo para comprender la compatibilidad del modelo con otros activos como el futuro del ?ndice brasilero.
+
+%- TODO: la se?al alfa entrega (en algunos casos) una solucion mejor en todo sentido que la estrategia que no tiene la senal alfa, pero en ning?n caso una soluci?n peor. 
+
+%- TODO: Conclusion sobre activo de brazil, se puede usar una se?al alfa o no? es superior la soluci?n? 
+
+%- TODO: Caracteristicas del mercado brasilero (?)
+
+% Conclusions are closely related to both Results and Discussion sections, serving as the final component that ties everything together. Here's how Conclusions relate to Results and Discussion:
+%
+% 1. Synthesis:
+%    - Conclusions summarize the key findings from the Results.
+%    - They integrate the interpretations and implications discussed in the Discussion.
+%
+% 2. Answer research questions:
+%    - While Results present data and Discussion interprets it, Conclusions directly answer the research questions or hypotheses posed in the Introduction.
+%
+% 3. Broader context:
+%    - Conclusions extend beyond the specific results to address the larger significance of the study, which was explored in the Discussion.
+%
+% 4. Future directions:
+%    - Based on the limitations and unanswered questions identified in the Discussion, Conclusions often suggest areas for future research.
+%
+% 5. Take-home message:
+%    - Conclusions distill the most important points from both Results and Discussion into a clear, concise take-home message.
+%
+% 6. No new information:
+%    - Unlike Results and Discussion, Conclusions typically don't introduce new data or interpretations, but rather synthesize what has already been presented.
+%
+% 7. Reflection on methodology:
+%    - Conclusions might briefly reflect on the effectiveness of the methods used, based on the results obtained and their discussion.
+%
+% 8. Practical implications:
+%    - While Discussion may explore potential applications, Conclusions often state more definitively what the practical implications of the findings are.
+%
+% The relationship between these three sections can be seen as a funnel: Results present the raw findings, Discussion interprets and contextualizes these findings, and Conclusions synthesize everything into the most important points and their broader significance.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section {Plan de trabajo futuro} \label{sec: futuro}
+\section {Perspectivas Futuras} \label{sec: futuro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Los pasos a seguir para concluir el trabajo son los siguientes:
+Aqu? se describen algunas posibles extensiones a la presente tesis:
 \begin{itemize}
-	\item Se definirá una estrategia de referencia que no tome en consideración la señal alfa para evaluar en cuánto mejora el desempeño del modelo propuesto respecto a este modelo base.
-	\item Se buscará obtener los parámetros correspondientes a un mercado latinoamericano\footnote{Se utilizará el método de máxima verosimilitud para obtener los parámetros que maximicen el criterio.}, por ejemplo BOVESPA, para medir el desempeño del modelo en un mercado emergente. Por otro lado se compararán estos parámetros y sus resultados contra los resultados ya obtenidos en base a los parámetros del NASDAQ. 
-	\item Se realizará una simulación del modelo utilizando los datos reales. Es decir, se buscará ya no generar una simulación en base a los parámetros, sino testear el modelo contra datos de una sesión de \textit{trading}.
+	\item Una mayor profundidad en el estudio de la estimaci?n realizada para obtener par?metros a?n m?s certeros y concluyentes, dada la complejidad e irregularidad de los datos. Es un trabajo a realizar en el ?rea de \textit{Big Data} o \textit{Data Science}
+	\item Realizar una mayor cantidad de simulaciones para mejorar la granularidad de los datos. El excesivo requerimiento computacional para este tipo de modelos es un limitante a la hora de simular y por ende obtener informaci?n para su an?lisis.
 \end{itemize}
+
+
+%Los pasos a seguir para concluir el trabajo son los siguientes:
+%\begin{itemize}
+%	\item Se definir? una estrategia de referencia que no tome en consideraci?n la se?al alfa para evaluar en cu?nto mejora el desempe?o del modelo propuesto respecto a este modelo base.
+%	\item Se buscar? obtener los par?metros correspondientes a un mercado latinoamericano\footnote{Se utilizar? el m?todo de m?xima verosimilitud para obtener los par?metros que maximicen el criterio.}, por ejemplo BOVESPA, para medir el desempe?o del modelo en un mercado emergente. Por otro lado se comparar?n estos par?metros y sus resultados contra los resultados ya obtenidos en base a los par?metros del NASDAQ. 
+%	\item Se realizar? una simulaci?n del modelo utilizando los datos reales. Es decir, se buscar? ya no generar una simulaci?n en base a los par?metros, sino testear el modelo contra datos de una sesi?n de \textit{trading}.
+%\end{itemize}
 
 %\addcontentsline{toc}{section}{References}
 \bibliography{biblio}
 
 
 \begin{appendices}
-\section{Código} \label{sec:codigo}
-\subsection{Parámetros}
+\section{C?digo} \label{sec:codigo}
+\subsection{Par?metros}
 \begin{lstlisting}[language=Python]
 from types import SimpleNamespace
 simulation_parameters = {
@@ -785,7 +1687,7 @@ def find_optimal_postings(h, t_i, q_i):
     return l_plus_i, l_minus_i
    
 \end{lstlisting}
-\subsection{Cálculo de h}
+\subsection{C?lculo de h}
 \begin{lstlisting}[language=Python]
 h[-1, :, :] = (
     np.ones((1, n_alpha)) *
@@ -803,7 +1705,7 @@ for t_i in range(n_t - 2, -1, -1):
         )
         h[t_i, :, q_i] = S_dt_dalpha(h, t_i, q_i, d_alpha_h, dd_alpha_h)
 \end{lstlisting}
-\subsection{Obtención de órdenes de mercado óptimas}
+\subsection{Obtenci?n de ?rdenes de mercado ?ptimas}
 \begin{lstlisting}[language=Python]
 def find_optimal_MO(h, t_i, q_i):
     if q_a[q_i] > -(q_max - 1):
@@ -1086,8 +1988,11 @@ l_p_position, l_m_position, q, dMt0_plus, dMt0_minus,
 pnl, dMt_plus, dMt_minus, p_executions_count, m_executions_count, pnl, X = 
 generate_simulations(p, h, l_plus, l_minus, mo_plus, mo_minus, plot=True)
 \end{lstlisting}
+\subsection{Estimador de par?metros}
+\begin{lstlisting}[language=Python]
+
+\end{lstlisting}
 \end{appendices}
 
 
 \end{document}
-
