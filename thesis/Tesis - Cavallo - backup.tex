@@ -141,9 +141,6 @@ Gabriel Basaluzzo
 
 \pagenumbering{arabic}
 
-\noindent {\bf Resumen}
-Se analiza el problema de un agente de \textit{market making} para el caso de un mercado electrónico de alta frecuencia en el tope del libro de órdenes. Se replican los resultados obtenidos para un modelo óptimo de programación dinámica aplicado a \textit{market making} logrando resultados de retorno positivos frente a una estrategia base en un entorno de simulación con datos creados artificialmente. Se estiman los parámetros de un activo de alta liquidez del mercado brasilero y se realizan simulaciones con los mismos.
-
 
 \tableofcontents
 \thispagestyle{empty}
@@ -156,8 +153,12 @@ Se analiza el problema de un agente de \textit{market making} para el caso de un
 
 %\listoftables
 
-\hfill \break
-\cleardoublepage
+
+\newpage
+%%\hfill \break
+
+\noindent {\bf Resumen}
+Se analiza el problema de un agente de \textit{market making} para el caso de un mercado electrónico de alta frecuencia en el tope del libro de órdenes. Se replican los resultados obtenidos para un modelo óptimo de programación dinámica aplicado a \textit{market making} logrando resultados de retorno positivos frente a una estrategia base en un entorno de simulación con datos creados artificialmente. Se estiman los parámetros de un activo de alta liquidez del mercado brasilero y se realizan simulaciones con los mismos.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introducción}
@@ -171,7 +172,7 @@ En este contexto existen diferentes tipos de estrategias que pueden tomar estos 
 
 En el presente trabajo se replican, en primer lugar, los resultados obtenidos por \cite{Cartea2019}, implementando su algoritmo en base a los datos publicados y realizando una serie de simulaciones. Luego, se toman los datos de un activo de alta liquidez del mercado brasilero BOVESPA\footnote{Bolsa de Valores del Estado de San Pablo}: el futuro del índice BOVESPA Mini (WINQ23), se estiman sus parámetros y se intenta responder la pregunta de si este modelo otorga retornos positivos contra un algoritmo de referencia en un mercado emergente como el brasilero. 
 
-En la Sección \ref{sec:revision} se hace una revisión de la bibliografía reelevante particularmente de programación dinámica y en menor medida de aprendizaje reforzado. En la Sección \ref{sec:problema} se define el problema de \textit{market making}. En la sección \ref{sec:modelo} se hace una descripción pormenorizada del modelo utilizado para la obtención de los resultados y se presenta cómo se pueden obtener parámetros de mercado. En la sección \ref{sec:metodo} se describe la metodología empleada para realizar las simulaciones. En la sección \ref{sec:resultados} se presentan los resultados del trabajo. En la sección \ref{sec:analisis} se realiza un análisis de los resultados obtenidos. En la sección \ref{conclusiones} se expresan las conclusiones de la tesis. Finalmente, en la Sección \ref{sec: futuro} se delinean futuras líneas de investigación.
+En la Sección \ref{sec:revision} se hace una revisión de la bibliografía relevante particularmente de programación dinámica y en menor medida de aprendizaje reforzado. En la Sección \ref{sec:problema} se define el problema de \textit{market making}. En la Sección \ref{sec:modelo} se hace una descripción pormenorizada del modelo utilizado para la obtención de los resultados y se presenta cómo se pueden obtener parámetros de mercado. En la Sección \ref{sec:metodo} se describe la metodología empleada para realizar las simulaciones. En la Sección \ref{sec:resultados} se presentan los resultados del trabajo. En la Sección \ref{sec:analisis} se realiza un análisis de los resultados obtenidos. En la Sección \ref{sec:conclusiones} se expresan las conclusiones de la tesis. Finalmente, en la Sección \ref{sec: futuro} se delinean futuras líneas de investigación.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section {Revisión literaria}\label{sec:revision}
@@ -950,7 +951,7 @@ Se generaron 10 simulaciones utilizando los parámetros DEFAULT que son $k=200$, 
 
 \subsubsection{Descripción de los datos a utilizar}
 \label{subsubsec:descripcion_datos}
-Se eligió un activo de gran liquidez y volumen de transacciones del mercado latinoamericano: el futuro del índice IBOVESPA MINI, cuyo símbolo de cotización es el WINQ23; WIN corresponde al mercado, Q al mes de agosto y 23 al a?o 2023. El conjunto de archivos que describen los datos intradiarios para una fecha dada pesan 700MB y sus ticks rondan tiempos de milisegundos.
+Se eligió un activo de gran liquidez y volumen de transacciones del mercado latinoamericano: el futuro del índice IBOVESPA MINI, cuyo símbolo de cotización es el WINQ23; WIN corresponde al mercado, Q al mes de agosto y 23 al año 2023. El conjunto de archivos que describen los datos intradiarios para una fecha dada pesan 700MB y sus ticks rondan tiempos de milisegundos.
 
  \begin{figure}[H]
 	\centering
@@ -1345,7 +1346,7 @@ Una vez obtenidos los parámetros de la Tabla \ref{table:valuesestimationparams},
 
 Se realizaron 500 simulaciones para cada caso, usando los parámetros estimados y considerando un $\lambda$ positivo y negativo de 1, obteniéndose los resultados de la Tabla \ref{table:estimated_params_results}. En la mayoría de los casos utilizando los parámetros obtenidos no se obtuvieron transacciones. En el caso "\#6 No Divergentes" se obtuvieron resultados distintos de cero donde el \textit{PnL} obtenido en el caso con \textit{drift} es inferior al del caso sin \textit{drift} y su desvío es mayor.
 
-\section{Análisis de los resultados} \label{analisis}
+\section{Análisis de los resultados} \label{sec:analisis}
 Los resultados de esta tesis podrían ser analizados en tres subgrupos: validación de los modelos y el estimador, estimación de los parámetros de WINQ23 y simulación con los parametros obtenidos extendiendo el trabajo de \cite{Cartea2019}; todos ellos atravesadas por un constante desafío implementativo.
 
 \subsection{Validación} La validación consistió en corroborar que los modelos de Cartea implementados en esta tesis repliquen fielmente el trabajo original, cuyos resultados fueron presentados en las secciones \ref{subsec:validacion_del_modelo} y \ref{subsubsect:validación_del_estimador}. 
@@ -1406,7 +1407,7 @@ En la Sección \ref{subsubsec:estimacion_bovespa} y utilizando el estimador previ
 
 % TODO: NO OLVIDAR CAMBIAR EL outline donde dice que hay en cada secci?n
 % TODO: tampoco olvidar cambiar el glosario y lo que se pidi? en la presentaci?n de la propuesta.
-\section{Conclusiones}\label{conclusiones}
+\section{Conclusiones}\label{sec:conclusiones}
 
 %TODO: Deberían ser alrededor de los findings de los resultados, pero el proceso fue más interesante.
 
