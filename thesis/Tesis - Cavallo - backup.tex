@@ -22,7 +22,7 @@
 \usepackage{cases}
 \usepackage{graphicx,subcaption}
 \usepackage{listings}
-\usepackage{color}%
+\usepackage{xcolor}%
 \usepackage{amsmath}%
 %\usepackage{bbm}
 \setcounter{MaxMatrixCols}{30}%
@@ -57,6 +57,26 @@
 \renewcommand{\appendixpagename}{Apéndices}
 \renewcommand{\appendixtocname}{Apéndices}
 \renewcommand{\appendixname}{Apéndices}
+\renewcommand{\algorithmname}{Algoritmo}
+
+\lstdefinestyle{mypython}{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=10pt,
+    tabsize=4,
+    showspaces=false,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    frame=single,
+    backgroundcolor=\color{lightgray},
+}
 
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -577,10 +597,48 @@ Finalmente, se definió un algoritmo de simulación que permite a cada instante de
 
 \subsection{Estimación de parámetros}
 %Intro
-Se implementó un estimador de parámetros siguiendo el modelo matemático planteado por \cite{Cartea2019} en la sección \ref{sec:modelo_estimacion_parametros}. 
+Se implementó un estimador de parámetros siguiendo el modelo matemático planteado por \cite{Cartea2019} en la sección \ref{sec:modelo_estimacion_parametros}.  Para ello el problema se puede dividir en los 4 términos de la función a optimizar en la ecuación \ref{eq:optimization}:
+\begin{enumerate}
+	\item $-2 \theta T$
+	\item $-\int_0^T\left(\left(\alpha_s\right)_{+}-\left(\alpha_s\right)_{-}\right) \mathrm{d} s$
+	\item $\sum_{i=1}^{m^{+}} \log \left[\left(\alpha_{t_i^{+-}}\right)_{+}+\theta\right]$ 
+	\item $\sum_{i=1}^{m^{-}} \log \left[\left(\alpha_{t_i^{--}}\right)_{-}+\theta\right] $
+\end{enumerate}
+
+Luego el algoritmo simplemente itera utilizando un minimizador sobre la superficie generada a partir de la función a optimizar.
+
+\begin{algorithm}[H]
+	\caption{Algoritmo para estimar los parámetros $k, \eta_{+}, \eta_{-}, \theta$}
+	\begin{algorithmic}[1]
+		\Procedure{Minimizar - función de máxima verosimilitud}{}
+		\State resultado =Mínimo( - Máxima Verosimilitud, $x_0$)
+		\EndProcedure
+		\Procedure{Máxima Verosimilitud}{$k, \eta_{+}, \eta_{-}, \theta$}
+
+		\State \Return - $2 \times \theta \times T$
+
+            - $\int_{\alpha_s}$($k$, $\eta_{-}$, $\eta_{+}$)
+
+			+ $\sum_{log(\alpha_{+})}$ ($k$, $\eta_{-}$, $\eta_{+}$, $\theta$)
+
+			+ $\sum_{log(\alpha_{-})}$ ($k$, $\eta_{-}$, $\eta_{+}$, $\theta$)
+		\EndProcedure
+		\Procedure {$\int_{\alpha_s}$}{$k$, $\eta_{-}$, $\eta_{+}$}
+		\EndProcedure
+		\Procedure  {$\sum_{log(\alpha_{+})}$} {$k$, $\eta_{-}$, $\eta_{+}$, $\theta$}
+		\EndProcedure
+		\Procedure  {$\sum_{log(\alpha_{-})}$} {$k$, $\eta_{-}$, $\eta_{+}$, $\theta$}
+		\EndProcedure
+	\end{algorithmic}
+\label{algoritmoEstimador}	
+\end{algorithm}
+
+TODO: Agregar explicación matricial en pseudocódigo
+
+\subsubsection{Consideraciones técnicas}
 
 % Scipy minimize
-Se utilizó una implementación del método de optimización Nelder-Mead de la librería \texttt{scipy} que se invoca utilizando la función \texttt{minimize}. El ejemplo proveído por la librería es el de la optimización de la función \texttt{rosen} está en la figura \ref{code:scipyexample}. Es necesario transformar el problema de máxima verosimilitud en un problema de minimización que se logra con una inversión de signo y definir la función de verosimilitud de forma tal que el optimizador encuentre un mínimo. 
+Se utilizó una implementación del método de optimización Nelder-Mead de la librería \texttt{scipy} que se invoca utilizando la función \texttt{minimize}. El ejemplo proveído por la librería es el de la optimización de la función \texttt{rosen} está en la Figura \ref{code:scipyexample}. 
 
 % TODO: FIX Scipy cite
 
@@ -596,20 +654,85 @@ array([ 1.,  1.,  1.,  1.,  1.])
 	\label{code:scipyexample}
 \end{figure}
 
-% Definici?n del problema en métodoos
-Así como el ejemplo utiliza la función \texttt{rosen} es necesario definir la función \texttt{likelihood\_to\_minimize} para optimizarla. 
+Es necesario transformar el problema de máxima verosimilitud en un problema de minimización. Esto se logra con una inversión de signo en  la función de máxima verosimilitud de forma tal que el optimizador encuentre un mínimo.  Así como el ejemplo utiliza la función \texttt{rosen} es necesario definir la función \texttt{likelihood\_to\_minimize} para optimizarla, como en la Figura \ref{code:funcionaminimizar}
 
-El problema se puede dividir en los 4 términos de la función a optimizar en la ecuación \ref{eq:optimization}:
-\begin{enumerate}
-	\item $-2 \theta T$
-	\item $-\int_0^T\left(\left(\alpha_s\right)_{+}-\left(\alpha_s\right)_{-}\right) \mathrm{d} s$
-	\item $\sum_{i=1}^{m^{+}} \log \left[\left(\alpha_{t_i^{+-}}\right)_{+}+\theta\right]$ 
-	\item $\sum_{i=1}^{m^{-}} \log \left[\left(\alpha_{t_i^{--}}\right)_{-}+\theta\right] $
-\end{enumerate}
+\begin{figure}[H]
+\begin{lstlisting}[style=mypython]
+    def likelihood_to_minimize(self, x):
+        return -self.likelihood(x)
+\end{lstlisting}
+\caption{Función a minimizar.}
+	\label{code:funcionaminimizar}
+\end{figure}
 
-para expresarlos en forma matricial, operarlo y finalmente realizar una sumatoria.
 
-El primer término es trivial. Luego, se intenta calcular la sumatoria sobre alfa del término 2. Para ello se plantean una serie de matrices.
+Para resolver esto se debe expresar los datos en forma matricial, operarlos y finalmente realizar una sumatoria. En primer lugar se define la parte central de código en la Figura \ref{code:funcionaamaximizar}
+\begin{figure}[H]
+\begin{lstlisting}[style=mypython]
+    def likelihood(self, x):
+        k = x[0]
+        eta_plus = x[1]
+        eta_minus = x[2]
+        theta = x[3]
+        likelihood = (
+            - 2 * theta * self._T
+            - self.integral_alpha_s(k, eta_minus, eta_plus)
+            + self.sum_log_alpha_plus(
+					k, eta_minus, eta_plus, theta)
+            + self.sum_log_alpha_minus(
+					k, eta_minus, eta_plus, theta)
+        )
+        return likelihood
+\end{lstlisting}
+\caption{Función a maximizar.}
+	\label{code:funcionaamaximizar}
+\end{figure}
+El primer término es trivial, en el segundo término se intenta calcular la sumatoria sobre alfa. Para ello se plantean una serie de vectores y matrices.
+
+Definimos
+\begin{equation}
+\tau_0 = [0, \boldsymbol{\tau_0^-}, \boldsymbol{\tau_0^+}, T] 
+\end{equation}
+
+los vectores $\boldsymbol{\eta}$
+
+\begin{align*}
+\boldsymbol{\eta^{-}} &= -\eta^- \cdot \mathbf{1} \\
+\boldsymbol{\eta^+} &= \eta^+ \cdot \mathbf{1} \\
+\boldsymbol{\eta} &= [0, \boldsymbol{\eta^-}, \boldsymbol{\eta^+}, 0]^T \\
+\end{align*}
+
+
+
+\begin{align*}
+\boldsymbol{\tau\eta} &= \begin{pmatrix}
+\boldsymbol{\tau_0} \\
+\boldsymbol{\eta}
+\end{pmatrix}\\
+\end{align*}
+
+Luego se ordena \(\boldsymbol{\tau\eta}\) en base a los valores de \(\boldsymbol{\tau_0}\).
+
+Para hacerlo más amigable, se puede plantear un ejemplo donde se tienen los vectores de tiempos:
+
+\begin{lstlisting}[style=mypython]
+T=10
+tau_0_plus = np.array([[0.1, 0.3, 0.5,0.7,0.9]]) * T
+tau_0_minus = np.array([[0.2, 0.4, 0.6]])*T
+\end{lstlisting}
+
+los cuales se concatenan para forma un solo vector
+
+\begin{lstlisting}[style=mypython]
+tau_0 = np.concatenate(
+    [np.zeros([1,1]), tau_0_minus, tau_0_plus, np.ones([1,1]) * T], axis=1
+)
+\end{lstlisting}
+
+% \text{result} &= \eta_\text{vector} \cdot \mathbf{1}_{1\times|\tau_0|} \\
+% \boldsymbol{\tau_\eta} &= \text{sort columns of }\tau_\eta\text{ based on first row} \\
+% \tau_0 &= \text{first row of sorted }\tau_\eta \\
+% \eta_0 &= \text{second row of sorted }\tau_\eta
 
 % TODO: Terminar esta sección de explicaci?n de la implementación
 % \subsubsection{Calculo matricial para la optimizaci?n} 
