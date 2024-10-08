@@ -1,0 +1,12 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {table}{\numberline {1}{\ignorespaces Resultados de \textit {PnL} y desv\IeC {\'\i }o est\'andar simulados. Estrategia base y considerando la se\~nal $\alpha $. $\phi $ con 2 niveles de aversi\'on al riesgo, un numero menor es m\'as averso al riesgo. }}{29}{}%
+\contentsline {table}{\numberline {2}{\ignorespaces Par\'ametros de \cite {Cartea2019} usados para comprobar el funcionamiento del algoritmo.}}{30}{}%
+\contentsline {table}{\numberline {3}{\ignorespaces Par\'ametros constantes utilizados en las simulaciones de validaci\'on.}}{31}{}%
+\contentsline {table}{\numberline {4}{\ignorespaces Resultados de simulaciones usando datos del NASDAQ combinados por \textit {ticker} y $\phi $}}{32}{}%
+\contentsline {table}{\numberline {5}{\ignorespaces Estad\IeC {\'\i }sticos de las microsesiones}}{40}{}%
+\contentsline {table}{\numberline {6}{\ignorespaces Ejemplo de valores para \( k \), \( \eta _+ \), \( \eta _- \), y \( \theta \)}}{40}{}%
+\contentsline {table}{\numberline {7}{\ignorespaces Estad\IeC {\'\i }sticos de los par\'ametros \( k \), \( \eta _+ \), \( \eta _- \) y \( \theta \)}}{42}{}%
+\contentsline {table}{\numberline {8}{\ignorespaces Todos los valores sin divergencia para \( k \), \( \eta _+ \), \( \eta _- \), y \( \theta \)}}{43}{}%
+\contentsline {table}{\numberline {9}{\ignorespaces Estad\IeC {\'\i }sticos de los par\'ametros \( k \), \( \eta _+ \), \( \eta _- \) y \( \theta \) para casos no divergentes}}{45}{}%
+\contentsline {table}{\numberline {10}{\ignorespaces Valores de \( k \), \( \eta _+ \), \( \eta _- \), y \( \theta \) para diferentes m\'etodos}}{46}{}%
+\contentsline {table}{\numberline {11}{\ignorespaces Resultados de simulaciones usando par\'ametros estimados}}{47}{}%
