@@ -1,3 +1,4 @@
+
 %***********************************************************************************************************
 %*****************************************************************************PACKAGES*********************
 %Paquetes para espa?ol y matemática
@@ -64,7 +65,7 @@
     basicstyle=\ttfamily\footnotesize,
     keywordstyle=\color{blue},
     stringstyle=\color{red},
-    commentstyle=\color{green},
+    commentstyle=\color{dkgreen},
     numbers=left,
     numberstyle=\tiny\color{gray},
     stepnumber=1,
@@ -75,7 +76,7 @@
     breaklines=true,
     breakatwhitespace=true,
     frame=single,
-    backgroundcolor=\color{lightgray},
+    backgroundcolor=\color{white},
 }
 
 \begin{document}
@@ -171,7 +172,7 @@ Gabriel Basaluzzo
 
 \listoffigures
 
-%\listoftables
+\listoftables
 
 
 \newpage
@@ -514,7 +515,7 @@ Se usa \ref{eq:alpha} para escribir cada término de la máxima verosimilitud. Emp
 	\alpha_{t^{-}}=\eta^{+} \sum_{i=1}^{n^{+}} e^{-\kappa\left(t-\tau_i^{0+}\right)} \mathds{1}_{\left\{t>\tau_i^{0+}\right\}}-\eta^{-} \sum_{i=1}^{n^{-}} e^{-\kappa\left(t-\tau_i^{0-}\right)} \mathds{1}_{\left\{t>\tau_i^{0-}\right\}}
 \end{equation}
 
-Para escribir la integral se plantea que como el proceso $\alpha_t$ no cambia de signo en el intervalo $[\tau_i^0, \tau_{i+i}^0]$ para todo $i$, con la definición de $alpha_t$ se tiene
+Para escribir la integral se plantea que como el proceso $\alpha_t$ no cambia de signo en el intervalo $[\tau_i^0, \tau_{i+i}^0]$ para todo $i$, con la definición de $\alpha_t$ se tiene
 
 \begin{equation}
 \begin{aligned}
@@ -610,7 +611,7 @@ Luego el algoritmo simplemente itera utilizando un minimizador sobre la superfic
 \begin{algorithm}[H]
 	\caption{Algoritmo para estimar los parámetros $k, \eta_{+}, \eta_{-}, \theta$}
 	\begin{algorithmic}[1]
-		\Procedure{Minimizar - función de máxima verosimilitud}{}
+		\Procedure{Minimizar (- función de máxima verosimilitud)}{}
 		\State resultado =Mínimo( - Máxima Verosimilitud, $x_0$)
 		\EndProcedure
 		\Procedure{Máxima Verosimilitud}{$k, \eta_{+}, \eta_{-}, \theta$}
@@ -624,6 +625,7 @@ Luego el algoritmo simplemente itera utilizando un minimizador sobre la superfic
 			+ $\sum_{log(\alpha_{-})}$ ($k$, $\eta_{-}$, $\eta_{+}$, $\theta$)
 		\EndProcedure
 		\Procedure {$\int_{\alpha_s}$}{$k$, $\eta_{-}$, $\eta_{+}$}
+		%\State 	$\tau_0 = [0, \boldsymbol{\tau_0^-}, \boldsymbol{\tau_0^+}, T]$ 
 		\EndProcedure
 		\Procedure  {$\sum_{log(\alpha_{+})}$} {$k$, $\eta_{-}$, $\eta_{+}$, $\theta$}
 		\EndProcedure
@@ -633,40 +635,212 @@ Luego el algoritmo simplemente itera utilizando un minimizador sobre la superfic
 \label{algoritmoEstimador}	
 \end{algorithm}
 
-TODO: Agregar explicación matricial en pseudocódigo
+Es necesario transformar el problema de máxima verosimilitud en un problema de minimización. Esto se logra con una inversión de signo en  la función de máxima verosimilitud de forma tal que el optimizador encuentre un mínimo. 
+
+Se tiene la función a maximizar y sus respectivos términos.
+
+\subsubsection{ $-2 \theta T$}
+El primer término es trivial.
+
+\subsubsection{ $-\int_0^T\left(\left(\alpha_s\right)_{+}-\left(\alpha_s\right)_{-}\right) \mathrm{d} s$}
+En el segundo término se intenta calcular la sumatoria sobre alfa. Para ello se plantean una serie de vectores y matrices.
+
+Definimos
+\begin{equation}
+\vec{\tau_0} = [0, \vec{\tau_0^-}, \vec{\tau_0^+}, T] 
+\end{equation}
+
+los vectores $\vec{\eta}$
+
+\begin{align*}
+\vec{\eta^{-}} &= -\eta^- \cdot \vec{1} \\
+\vec{\eta^+} &= \eta^+ \cdot \vec{1} \\
+\vec{\eta} &= [0, \vec{\eta^-}, \vec{\eta^+}, 0]^T \\
+\end{align*}
+
+y finalmente la matriz $\boldsymbol{\tau\eta}$.
+
+\begin{align*}
+\boldsymbol{\tau\eta} &= \begin{pmatrix}
+\vec{\tau_0} \\
+\vec{\eta}
+\end{pmatrix}\\
+\end{align*}
+
+% tau_0 = tau_eta[:, tau_eta[0, :].argsort()][0:1, :]
+% eta_0 = tau_eta[:, tau_eta[0, :].argsort()][1:2, :]
+
+Luego se ordena \(\boldsymbol{\tau\eta}\) en base a los valores de \(\vec{\tau_0}\) de forma tal de tener los valores ordenados cronológicamente. Finalmente, reobtenemos los vectores $ \vec{\eta}$ y $ \vec{\tau}$ ahora ordenados. Al haber concatenado los vectores de $ \vec{\tau_0}$ y los de $ \vec{\eta}$ de la misma forma tenemos dos nuevos vectores $ \vec{\eta}$ y $ \vec{\tau_0}$ ambos ordenados y con sus valores asociados a nivel posicional.
+
+Luego, se generan las matrices $\boldsymbol{\tau}$ y $\boldsymbol{\eta}$ realizando una multiplicación matricial.
+
+%tau_matrix = tau_0 * np.ones([1, tau_0.shape[1]]).T
+%eta_matrix = eta_0 * np.ones([1, eta_0.shape[1]]).T
+
+%tau_matrix_1 = np.roll(tau_matrix,-1) # numero de fila es j, numero de columna es i
+
+\[
+\boldsymbol{\tau} = \vec{\tau_0} \times \vec{1}^T
+\]
+
+\[
+\boldsymbol{\eta} = \vec{\eta} \times \vec{1}^T
+\]
+
+Hace falta genarar un corrimiento de la matriz $\boldsymbol{\tau_{1}}$ para poder calcular las diferencias en una unidad temporal. 
+
+\[
+\boldsymbol{\tau_{1}} = \text{roll}(\boldsymbol{\tau}, -1)
+\]
+
+% tau_matrix_diff = tau_matrix - tau_matrix.T
+%tau_matrix_diff = np.where(tau_matrix_diff>0, tau_matrix_diff, 0)
+
+Se obtiene $\boldsymbol{\tau_{\text{diff}}}$  como la diferencia entre la matriz y su traspuesta, así como $\boldsymbol{\tau_{\text{diff}_{1}}}$ con $\boldsymbol{\tau}$ con una diferencia temporal y su traspuesta. De esta forma se tienen todas las diferencias temporales para $\tau$.
+
+\[
+\boldsymbol{\tau_\text{diff}} = \boldsymbol{\tau} - \boldsymbol{\tau}^T
+\]
+
+%tau_matrix_diff_1 = tau_matrix_1 - tau_matrix.T
+%tau_matrix_diff_1 = np.where(tau_matrix_diff_1>0, tau_matrix_diff_1, 0)
+
+\[
+\boldsymbol{\tau_{\text{diff}_{1}}} = \boldsymbol{\tau_1} - \boldsymbol{\tau}^T
+\]
+
+Es necesario quedarse con la parte positiva de $\boldsymbol{\tau_\text{diff}} $ y $\boldsymbol{\tau_{\text{diff}_{1}}}$. Se calcula la diferencia de las exponenciales con un corrimiento temporal.
+
+%alpha_tau_matrix = eta_matrix * (np.exp(
+%    -k * tau_matrix_diff_1
+%) - np.exp(-k * tau_matrix_diff))
+
+\[
+\boldsymbol{\alpha_\tau} = \boldsymbol{\eta} \cdot \left( e^{-k \cdot \boldsymbol{\tau_{\text{diff}_{1}}}} - e^{-k \cdot \boldsymbol{\tau_\text{diff}} } \right)
+\]
+
+%alpha_tau = np.sum(alpha_tau_matrix, axis=0)
+
+
+Teniendo la diferencia de las exponenciales calculadas sobre $n-$ y $n+$ se suma sobre eje.
+
+\begin{equation}
+\vec{\alpha_\tau} = \sum_j \alpha_{\tau_{\text{matrix}}} 
+\end{equation}
+
+% alpha_s_plus = np.sum(-np.where(alpha_tau>=0,alpha_tau, 0)/k)
+
+%alpha_s_minus = np.sum(np.where(alpha_tau<=0,alpha_tau, 0)/k)
+
+Teniendo $\alpha_{\tau}$, daremos en llamar $\alpha_{\tau^{+}}$ y $\alpha_{\tau^{-}}$ a sus partes positivas y negativas respectivamente, es decir, los vectores que tengan como su valor en el caso en que sea positivo y cero en caso contrario y viceversa. 
+
+\begin{equation}
+\alpha_{s^{+}} = \sum_i -\frac{\alpha_{\tau^{+}}}{k}
+\end{equation}
+
+\begin{equation}
+\alpha_{s^{-}} = \sum_i \frac{\alpha_{\tau^{-}}}{k}
+\end{equation}
+Finalmente, la integral de $ \alpha_s $ se obtiene como la diferencia de su parte positiva y negativa.
+
+\begin{equation}
+\int_0^T\left(\left(\alpha_s\right)_{+}-\left(\alpha_s\right)_{-}\right) \mathrm{d} s = \alpha_{s^{+}} - \alpha_{s^{-}}
+\end{equation}
+
+Para una resolución ejemplificada y basada en el código utilizado ver el Apéndice \ref{apendix:ejemplo_alpha}.
+\subsubsection{$\sum_{i=1}^{m^{+}} \log \left[\left(\alpha_{t_i^{+-}}\right)_{+}+\theta\right]$ } 
+\label{sum_log_alpha}
+Definimos los vectores $ \vec{\tau_0}$ y $ \vec{\eta}$ como la concatenación de sus respectivas partes positivas y negativas:
+
+\[
+\vec{\tau_0} = [\vec{\tau_0^-}, \vec{\tau_0^+}]
+\]
+
+\[
+\vec{\eta^{-}} = -\eta^- \cdot \vec{1}, \quad \vec{\eta^+} = \eta^+ \cdot \vec{1}
+\]
+
+\[
+\vec{\eta} = [\vec{\eta^-}, \vec{\eta^+}]^T
+\]
+
+Concatenamos estos vectores para formar la matriz $ \boldsymbol{\tau\eta}$:
+
+\[
+\boldsymbol{\tau\eta} = \begin{pmatrix} \vec{\tau_0} \\ \vec{\eta} \end{pmatrix}
+\]
+
+Luego, ordenamos la matriz $ \boldsymbol{\tau\eta}$ en base a los valores de $ \vec{\tau_0}$, de manera que los elementos de $ \vec{\eta}$ y $ \vec{\tau_0}$ estén cronológicamente ordenados y alineados:
+
+Generamos la matriz $ \boldsymbol{\tau}$ y $ \boldsymbol{\eta}$ como:
+
+\[
+\boldsymbol{\tau} = \vec{\tau_0} \times \vec{1}^T, \quad \boldsymbol{\eta} = \vec{\eta_0} \times \vec{1}^T
+\]
+
+Para calcular las diferencias temporales utilizamos el vector $ \vec{t_+}$ y la matriz $ \boldsymbol{\tau}$, obteniendo las diferencias positivas:
+
+\[
+\boldsymbol{t_+} =\vec{t_+} \times \vec{1}^T
+\]
+
+\[
+\boldsymbol{\tau_{\text{diff}}} = \boldsymbol{t_+}  - \boldsymbol{\tau}
+\]
+
+Tomamos solo las diferencias positivas de $\boldsymbol{\tau_{\text{diff}}}$.
+
+Calculamos ahora $ \boldsymbol{\alpha_\tau}$ como:
+
+\[
+\boldsymbol{\alpha_\tau} = \boldsymbol{\eta} \cdot e^{-k \cdot \boldsymbol{\tau_{\text{diff}}}}
+\]
+
+Finalmente, obtenemos la suma de $ \boldsymbol{\alpha_\tau}$ a lo largo del eje temporal:
+
+\[
+\vec{\alpha_{\tau}} = \sum_{j} \boldsymbol{\alpha_\tau}
+\]
+
+Para los valores positivos de $\vec{\alpha_{\tau}}$, realizamos el cálculo logarítmico:
+
+\[
+\sum_{i=1}^{m^{+}} \log \left[\left(\alpha_{t_i^{+-}}\right)_{+}+\theta\right] = \sum_i \log(\max(\vec{\alpha_{\tau}}, 0) + \theta)
+\]
+
+\subsubsection{ $\sum_{i=1}^{m^{-}} \log \left[\left(\alpha_{t_i^{--}}\right)_{-}+\theta\right] $}
+El calculo matricial para este caso es análogo al de la Sección \ref{sum_log_alpha}.
 
 \subsubsection{Consideraciones técnicas}
 
 % Scipy minimize
-Se utilizó una implementación del método de optimización Nelder-Mead de la librería \texttt{scipy} que se invoca utilizando la función \texttt{minimize}. El ejemplo proveído por la librería es el de la optimización de la función \texttt{rosen} está en la Figura \ref{code:scipyexample}. 
+Se utilizó una implementación del método de optimización Nelder-Mead de la librería \texttt{scipy} que se invoca utilizando la función \texttt{minimize}. 
 
 % TODO: FIX Scipy cite
 
 \begin{figure}[H]
-	\begin{lstlisting}[language=Python]
+	\begin{lstlisting}[style=mypython]
 >>> from scipy.optimize import minimize, rosen
 >>> x0 = [1.3, 0.7, 0.8, 1.9, 1.2]
 >>> res = minimize(rosen, x0, method='Nelder-Mead', tol=1e-6)
 >>> res.x
 array([ 1.,  1.,  1.,  1.,  1.])
 	\end{lstlisting}
-	\caption{Código necesario para invocar \texttt{scipy} \texttt{minimize}}
+	\caption{Código necesario para invocar \texttt{scipy} \texttt{minimize}. Librería de \texttt{Python} usada en la optimización.}
 	\label{code:scipyexample}
 \end{figure}
 
-Es necesario transformar el problema de máxima verosimilitud en un problema de minimización. Esto se logra con una inversión de signo en  la función de máxima verosimilitud de forma tal que el optimizador encuentre un mínimo.  Así como el ejemplo utiliza la función \texttt{rosen} es necesario definir la función \texttt{likelihood\_to\_minimize} para optimizarla, como en la Figura \ref{code:funcionaminimizar}
+El ejemplo proveído por la librería es el de la optimización de la función \texttt{rosen} está en la Figura \ref{code:scipyexample}. 
 
 \begin{figure}[H]
 \begin{lstlisting}[style=mypython]
     def likelihood_to_minimize(self, x):
         return -self.likelihood(x)
 \end{lstlisting}
-\caption{Función a minimizar.}
+\caption{Código de la función a minimizar en el estimador de máxima verosimilitud.}
 	\label{code:funcionaminimizar}
 \end{figure}
-
-
-Para resolver esto se debe expresar los datos en forma matricial, operarlos y finalmente realizar una sumatoria. En primer lugar se define la parte central de código en la Figura \ref{code:funcionaamaximizar}
+Así como el ejemplo utiliza la función \texttt{rosen} es necesario definir la función \texttt{likelihood\_to\_minimize} para optimizarla, como en la Figura \ref{code:funcionaminimizar}
 \begin{figure}[H]
 \begin{lstlisting}[style=mypython]
     def likelihood(self, x):
@@ -684,51 +858,11 @@ Para resolver esto se debe expresar los datos en forma matricial, operarlos y fi
         )
         return likelihood
 \end{lstlisting}
-\caption{Función a maximizar.}
+\caption{Código de la función a maximizar en el estimador de máxima verosimilitud.}
 	\label{code:funcionaamaximizar}
 \end{figure}
-El primer término es trivial, en el segundo término se intenta calcular la sumatoria sobre alfa. Para ello se plantean una serie de vectores y matrices.
 
-Definimos
-\begin{equation}
-\tau_0 = [0, \boldsymbol{\tau_0^-}, \boldsymbol{\tau_0^+}, T] 
-\end{equation}
-
-los vectores $\boldsymbol{\eta}$
-
-\begin{align*}
-\boldsymbol{\eta^{-}} &= -\eta^- \cdot \mathbf{1} \\
-\boldsymbol{\eta^+} &= \eta^+ \cdot \mathbf{1} \\
-\boldsymbol{\eta} &= [0, \boldsymbol{\eta^-}, \boldsymbol{\eta^+}, 0]^T \\
-\end{align*}
-
-
-
-\begin{align*}
-\boldsymbol{\tau\eta} &= \begin{pmatrix}
-\boldsymbol{\tau_0} \\
-\boldsymbol{\eta}
-\end{pmatrix}\\
-\end{align*}
-
-Luego se ordena \(\boldsymbol{\tau\eta}\) en base a los valores de \(\boldsymbol{\tau_0}\).
-
-Para hacerlo más amigable, se puede plantear un ejemplo donde se tienen los vectores de tiempos:
-
-\begin{lstlisting}[style=mypython]
-T=10
-tau_0_plus = np.array([[0.1, 0.3, 0.5,0.7,0.9]]) * T
-tau_0_minus = np.array([[0.2, 0.4, 0.6]])*T
-\end{lstlisting}
-
-los cuales se concatenan para forma un solo vector
-
-\begin{lstlisting}[style=mypython]
-tau_0 = np.concatenate(
-    [np.zeros([1,1]), tau_0_minus, tau_0_plus, np.ones([1,1]) * T], axis=1
-)
-\end{lstlisting}
-
+Para resolver esto se debe expresar los datos en forma matricial, operarlos y finalmente realizar una sumatoria. El flujo principal de la función se muestra en la Figura \ref{code:funcionaamaximizar}. La definición de estos métodos se encuentra en el Apéndice \ref{apendix:codeestimador}.
 % \text{result} &= \eta_\text{vector} \cdot \mathbf{1}_{1\times|\tau_0|} \\
 % \boldsymbol{\tau_\eta} &= \text{sort columns of }\tau_\eta\text{ based on first row} \\
 % \tau_0 &= \text{first row of sorted }\tau_\eta \\
@@ -769,7 +903,7 @@ El objetivo principal de esta propuesta fue replicar los resultados obtenidos po
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.95\linewidth]{figuras/h_final}
-	\caption{Función h.}
+	\caption{Superficie de nivel de la función h.}
 	\label{fig:h}
 \end{figure}
 
@@ -881,7 +1015,7 @@ En ambos casos la estrategia que considera alfa obtuvo resultados con mayor bene
 
  \begin{table}[htbp]
  	\centering
- 	\caption{\textit{PnL} y desvío estándar de la estrategia base y la estrategia que no considera a la señal alfa.}
+ 	\caption{Resultados de \textit{PnL} y desvío estándar simulados. Estrategia base y considerando la señal $\alpha$. $\phi$ con 2 niveles de aversión al riesgo, un numero menor es más averso al riesgo. }
  	\label{table:pnlstdevalpha}
  	\begin{tabular}{lcc}
  		\toprule
@@ -1066,7 +1200,7 @@ La estimación de parámetros es fundamental para la realización de este trabajo. 
 \label{subsubsect:validación_del_estimador}
 Previo a poder utilizar un estimador, el mismo debería poder auto-validarse con una simulación. Resulta necesario que para una serie de datos de mercado generados de forma sintética puedan obtenerse los parámetros generadores sin tener esa información. Esta suerte de caja negra permite que se valide el funcionamiento del estimador fehacientemente.
 
-Se generaron 10 simulaciones utilizando los parámetros DEFAULT que son $k=200$, $\eta_+=60$, $\eta_-=60$ y $\theta=0.1$. En base a los datos obtenidos en la simulación se buscó optimizar la sumatoria de las simulaciones obteniéndose los valores $k=198.6$, $\eta_+=58.2$, $\eta_-=57.76$ y $\theta=0.1104$. Esto representa una diferencia de alrededor del 10\%, siendo los números obtenidos muy cercanos al valor elegido originalmente y para la escasa cantidad de simulaciones realizadas. El método utilizado para la optimización fue "Nelder-Mead" con una configuración de 1000 iteraciones máximas.
+Se generaron 10 simulaciones utilizando los parámetros DEFAULT que son $k=200$, $\eta_+=60$, $\eta_-=60$ y $\theta=0.1$. En base a los datos obtenidos en la simulación se buscó optimizar la sumatoria de las simulaciones obteniéndose los valores $k=198.6$, $\eta_+=58.2$, $\eta_-=57.76$ y $\theta=0.1104$. Esto representa una diferencia de alrededor del 10\%, siendo los números obtenidos muy cercanos al valor elegido originalmente y para la escasa cantidad de simulaciones realizadas. El método utilizado para la optimización fue \textit{Nelder-Mead} con una configuración de 1000 iteraciones máximas.
 
 
 %TODO: Se podría generar un grafico que maneje un rango de parámetros y se muestre como al cambiar los parámetros la estimación se acerca bastante, aunque no hay tiempo para este tipo de cosas.
@@ -1627,9 +1761,241 @@ Aquí se describen algunas posibles extensiones a la presente tesis:
 
 
 \begin{appendices}
+
+\section{Cálculo de la integral de \(\alpha_s\) ejemplificado}
+\label{apendix:ejemplo_alpha}
+Se puede plantear un ejemplo donde se tienen los vectores de tiempos:
+
+\begin{figure}[H]
+\begin{lstlisting}[style=mypython]
+T=10
+tau_0_plus = np.array([[0.1, 0.3, 0.5,0.7,0.9]]) * T
+tau_0_minus = np.array([[0.2, 0.4, 0.6]])*
+\end{lstlisting}
+\caption{Definición de vectores $\tau$}
+\end{figure}
+los cuales se concatenan para forma un solo vector
+
+\begin{lstlisting}[style=mypython]
+tau_0 = np.concatenate(
+    [np.zeros([1,1]), tau_0_minus, tau_0_plus, np.ones([1,1]) * T], axis=1
+)
+\end{lstlisting}
+
+Se concatenan \(0\), \(\vec{\tau_0^-}\), \(\vec{\tau_0^+}\), y \(T\) en un único vector
+
+\[
+\tau_0 = 
+\begin{bmatrix}
+0 & 2 & 4 & 6 & 10
+\end{bmatrix}
+\]
+
+Se definen los valores de \(\eta_+\) y \(\eta_-\), y se crean los vectores correspondientes:
+
+\begin{figure}[H]
+\begin{lstlisting}[style=mypython]
+eta_plus = 100
+eta_minus = 90
+eta_minus_vector = -np.ones([tau_0_minus.shape[1], 1]) * eta_minus
+eta_plus_vector = np.ones([tau_0_plus.shape[1], 1]) * eta_plus
+\end{lstlisting}
+\caption{Definición de vectores $\eta$}
+\end{figure}
+
+Definimos \(\eta_+ = 100\) y \(\eta_- = 90\), y creamos los vectores de \(\eta\) correspondientes a los tiempos \(\tau_0^+\) y \(\tau_0^-\).
+
+Creamos el vector \(\eta\) y lo concatenamos con \(0\) al inicio y al final:
+
+\begin{lstlisting}[style=mypython]
+eta_vector = np.concatenate([np.zeros([1,1]), eta_minus_vector, eta_plus_vector, np.zeros([1,1])], axis=0).T
+\end{lstlisting}
+
+A continuación, ordenamos el vector \(\tau_0\) junto con el vector \(\eta\):
+
+\begin{figure}[H]
+\begin{lstlisting}[style=mypython]
+tau_eta = np.concatenate([tau_0, eta_vector])
+tau_eta = tau_eta[:, tau_eta[0, :].argsort()]
+
+tau_0 = tau_eta[:, tau_eta[0, :].argsort()][0:1, :]
+eta_0 = tau_eta[:, tau_eta[0, :].argsort()][1:2, :]
+\end{lstlisting}
+\caption{Definición de matriz $\tau\eta$}
+\end{figure}
+
+\[
+\tau\eta = 
+\begin{bmatrix}
+  0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9  & 10 \\
+  0 & 100 & -90 & 100 & -90 & 100 & -90 & 100 & 100 & 0
+\end{bmatrix}
+\]
+
+Ahora generamos las matrices de tiempos y diferencias:
+
+\begin{figure}[H]
+\begin{lstlisting}[style=mypython]
+tau_matrix = tau_0 * np.ones([1, tau_0.shape[1]]).T
+eta_matrix = eta_0 * np.ones([1, eta_0.shape[1]]).T
+tau_matrix_diff = tau_matrix - tau_matrix.T
+tau_matrix_diff = np.where(tau_matrix_diff > 0, tau_matrix_diff, 0)
+\end{lstlisting}
+\caption{Definición de matriz $\tau\text{diff}$}
+\end{figure}
+
+Las matrices correspondientes son:
+
+\[\boldsymbol{\tau} =
+\begin{bmatrix}
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+\end{bmatrix}
+\]
+
+\[\boldsymbol{\eta} =
+\begin{bmatrix}
+0 & 100 & -90 & 100 & -90 & 100 & -90 & 100 & 100 & 0 \\
+0 & 100 & -90 & 100 & -90 & 100 & -90 & 100 & 100 & 0 \\
+0 & 100 & -90 & 100 & -90 & 100 & -90 & 100 & 100 & 0 \\
+0 & 100 & -90 & 100 & -90 & 100 & -90 & 100 & 100 & 0 \\
+0 & 100 & -90 & 100 & -90 & 100 & -90 & 100 & 100 & 0 \\
+0 & 100 & -90 & 100 & -90 & 100 & -90 & 100 & 100 & 0 \\
+0 & 100 & -90 & 100 & -90 & 100 & -90 & 100 & 100 & 0 \\
+0 & 100 & -90 & 100 & -90 & 100 & -90 & 100 & 100 & 0 \\
+0 & 100 & -90 & 100 & -90 & 100 & -90 & 100 & 100 & 0 \\
+0 & 100 & -90 & 100 & -90 & 100 & -90 & 100 & 100 & 0 \\
+\end{bmatrix}
+\]
+
+\[\boldsymbol{\tau_\text{diff}} =
+\begin{bmatrix}
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+-1 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 8 & 9 \\
+-2 & -1 & 0 & 1 & 2 & 3 & 4 & 5 & 7 & 8 \\
+-3 & -2 & -1 & 0 & 1 & 2 & 3 & 4 & 6 & 7 \\
+-4 & -3 & -2 & -1 & 0 & 1 & 2 & 3 & 5 & 6 \\
+-5 & -4 & -3 & -2 & -1 & 0 & 1 & 2 & 4 & 5 \\
+-6 & -5 & -4 & -3 & -2 & -1 & 0 & 1 & 3 & 4 \\
+-7 & -6 & -5 & -4 & -3 & -2 & -1 & 0 & 2 & 3 \\
+-9 & -8 & -7 & -6 & -5 & -4 & -3 & -2 & 0 & 1 \\
+-10 & -9 & -8 & -7 & -6 & -5 & -4 & -3 & -1 & 0 \\
+\end{bmatrix}
+\]
+
+\[\boldsymbol{\tau_\text{diff}} =
+\begin{bmatrix}
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 \\
+0 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 8 & 9 \\
+0 & 0 & 0 & 1 & 2 & 3 & 4 & 5 & 7 & 8 \\
+0 & 0 & 0 & 0 & 1 & 2 & 3 & 4 & 6 & 7 \\
+0 & 0 & 0 & 0 & 0 & 1 & 2 & 3 & 5 & 6 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 2 & 4 & 5 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 3 & 4 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 & 3 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+\end{bmatrix}
+\]
+
+Se agrega una diferencia temporal de 1.
+\begin{figure}[H]
+\begin{lstlisting}[style=mypython]
+tau_matrix_1 = np.roll(tau_matrix,-1)
+\end{lstlisting}
+\caption{Definición de matriz $\boldsymbol{\tau_1}$}
+\end{figure}
+
+
+\[\boldsymbol{\tau_1} =
+\begin{bmatrix}
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 & 0 \\
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 & 0 \\
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 & 0 \\
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 & 0 \\
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 & 0 \\
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 & 0 \\
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 & 0 \\
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 & 0 \\
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 & 0 \\
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 & 0 \\
+\end{bmatrix}
+\]
+
+Ahora se calcula  $\boldsymbol{\tau_{\text{diff1}}}$.
+
+\begin{figure}[H]
+\begin{lstlisting}[style=mypython]
+tau_matrix_diff_1 = tau_matrix_1 - tau_matrix.T
+tau_matrix_diff_1 = np.where(tau_matrix_diff_1>0, tau_matrix_diff_1, 0)
+\end{lstlisting}
+\caption{Definición de matriz $\tau_\text{diff1}$}
+\end{figure}
+
+
+\[\boldsymbol{\tau_\text{diff 1}} =
+\begin{bmatrix}
+1 & 2 & 3 & 4 & 5 & 6 & 7 & 9 & 10 & 0 \\
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 8 & 9 & 0 \\
+0 & 0 & 1 & 2 & 3 & 4 & 5 & 7 & 8 & 0 \\
+0 & 0 & 0 & 1 & 2 & 3 & 4 & 6 & 7 & 0 \\
+0 & 0 & 0 & 0 & 1 & 2 & 3 & 5 & 6 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1 & 2 & 4 & 5 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 3 & 4 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 & 3 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+\end{bmatrix}
+\]
+
+Finalmente, se plantea la matriz final $\boldsymbol{\alpha\tau}$
+
+\begin{figure}[H]
+\begin{lstlisting}[style=mypython]
+k = 200
+alpha_tau_matrix = eta_matrix * (np.exp(-k * tau_matrix_diff) - np.exp(-k * (tau_matrix - tau_matrix.T)))
+\end{lstlisting}
+\caption{Definición de matriz $\alpha_{\tau}$}
+\end{figure}
+
+\[\boldsymbol{\alpha\tau} =
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & -100 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 90 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & -100 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 90 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & -100 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 90 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & -100 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & -100 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+\end{bmatrix}
+\]
+
+Se suma en uno de sus ejes.
+
+\[\alpha\tau =
+\begin{bmatrix}
+0.0 & -100.0 & 90.0 & -100.0 & 90.0 & -100.0 & 90.0 & -100.0 & -100.0 & 0.0 \\
+\end{bmatrix}
+\]
+
+Finalmente $\alpha_s^+ = -1.35$, $\alpha_s^-=-2.5$ y 
+
+\[\int_{0}^{T} \alpha_s = 1.15\]
+
 \section{Código} \label{sec:codigo}
 \subsection{Parámetros}
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[style=mypython]
 from types import SimpleNamespace
 simulation_parameters = {
 	'q_max': 4,
@@ -1654,7 +2020,7 @@ p = SimpleNamespace(**simulation_parameters)
 p.dt = (p.k * p.A / p.dalpha + p.lambda_plus + p.lambda_minus)**(-1)
 \end{lstlisting}
 \subsection{Definiciones}
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[style=mypython]
 import numpy as np
 
 q_max, T, A, dalpha, Delta, epsilon, psi, phi_, eta, sigma, k,
@@ -1826,7 +2192,7 @@ def find_optimal_postings(h, t_i, q_i):
    
 \end{lstlisting}
 \subsection{Cálculo de h}
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[style=mypython]
 h[-1, :, :] = (
     np.ones((1, n_alpha)) *
     np.array([(q_a * (-np.sign(q_a) * Upsilon - psi * q_a))]).T
@@ -1844,7 +2210,7 @@ for t_i in range(n_t - 2, -1, -1):
         h[t_i, :, q_i] = S_dt_dalpha(h, t_i, q_i, d_alpha_h, dd_alpha_h)
 \end{lstlisting}
 \subsection{Obtención de órdenes de mercado óptimas}
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[style=mypython]
 def find_optimal_MO(h, t_i, q_i):
     if q_a[q_i] > -(q_max - 1):
         mo_minus_i = np.where((
@@ -1868,11 +2234,12 @@ for t_i in range(n_t - 2, -1, -1):
     for q_i in range(n_q):
         mo_plus[t_i + 1, :, q_i], mo_minus[
         	t_i + 1, :, q_i] = find_optimal_MO(
-            h, t_i, q_i
-        )
+            h, t_i, q_i)
 \end{lstlisting}
+
+
 \subsection{Simulaciones}
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[style=mypython]
 import numpy as np
 h = np.load("h.npy")
 q = np.load("q.npy")
@@ -2127,7 +2494,8 @@ pnl, dMt_plus, dMt_minus, p_executions_count, m_executions_count, pnl, X =
 generate_simulations(p, h, l_plus, l_minus, mo_plus, mo_minus, plot=True)
 \end{lstlisting}
 \subsection{Estimador de parámetros}
-\begin{lstlisting}[language=Python]
+\label{apendix:codeestimador}
+\begin{lstlisting}[style=mypython]
 import numpy as np
 
 
@@ -2315,3 +2683,4 @@ class MaximumLikelihood:
 
 
 \end{document}
+
