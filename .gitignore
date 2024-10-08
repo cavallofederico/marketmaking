@@ -9,5 +9,6 @@
 *.synctex.gz
 *.toc
 *.bbl
+*.lot
 alpha_signals/brazil_parameters/md_20230731.csv
 alpha_signals/brazil_parameters/optimizaciones/31chunks.txt
