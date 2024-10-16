@@ -1100,7 +1100,7 @@ Se usan estos parámetros para validar comportamiento en diferentes escenarios qu
 	$\epsilon$ & 0,005 \\
 	\hline
 \end{tabular}
-	\caption{Parámetros constantes utilizados en las simulaciones de validación.}
+	\caption{Parámetros constantes utilizados en las simulaciones de validación. Están asociados al modelo de la Sección \ref{sec:modelo}. T: tiempo, A: amplitud de $\alpha$, $s_0$: precio inicial, $n$: cant. simulaciones, $q$: inventario máximo, $\psi$: costo de saltar libro de órdenes, $\xi$: amplitud de shocks novedosos, $\sigma$: tick mínimo , $\Delta$: medio spread, $\epsilon$: costo de transacción.}
 	\label{table:constant_parameters}
 \end{table}
 
@@ -1110,7 +1110,7 @@ Hay una serie de parámetros que son constantes a través de todas las simulacione
 El costo computacional de correr simulaciones de este tipo es elevado, ya que los intervalos mínimos de tiempo en \textit{trading} de alta frecuencia son pequeños. Al tratarse de una sesión de 300 segundos esto aumenta en gran medida el costo en memoria, procesamiento y tiempo utilizado. Para la simulación se utilizó un diferencial alfa de tan solo 30 para evitar que ese costo supere la capacidad del hardware disponible. A su vez, para cada set de parámetros es necesario calcular la función h cuyas dimensiones son $T$, $q$ y $\partial_\alpha$.
 \begin{table}[H]
 	\centering
-	\caption{Resultados de simulaciones usando datos del NASDAQ combinados por \textit{ticker} y $\phi$}
+	\caption{Resultados de PnL y Desvío Medio. Simulaciones con parámetros del NASDAQ de la Tabla \ref{table:parametros} y parámetros constantes para todas las simulaciones de la Tabla \ref{table:constant_parameters}. Dos valores de aversión al riesgo $\phi$. Resultados con y sin \textit{drift}.}
 	\label{table:validation_results}
 	\footnotesize
 	\begin{tabular}{cccccc}
