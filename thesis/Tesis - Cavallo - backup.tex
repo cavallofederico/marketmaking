@@ -1550,7 +1550,7 @@ Todas estas estrategias son válidas para obtener parámetros en base a los datos 
 
 \begin{table}[H]
 	\centering
-	\caption{Valores estimados de \( k \), \( \eta_+ \), \( \eta_- \), y \( \theta \) para diferentes heurísticas. Incluyendo media y mediana sobre las 2000 estimaciones, lo mismo sobre las 32 sesiones no divergentes, una optimización sobre toda la serie y casos seleccionados.}
+	\caption{Valores estimados de \( k \), \( \eta_+ \), \( \eta_- \), y \( \theta \) para diferentes heurísticas: media y mediana sobre 2000 simulaciones, optimización, submuestreo y selección de casos No Divergentes.}
 	\label{table:valuesestimationparams}
 	\begin{tabular}{lccccc}
 		\toprule
@@ -1576,7 +1576,7 @@ En la Tabla \ref{table:valuesestimationparams} se condensan todos los parámetros
 Una vez obtenidos los parámetros de la Tabla \ref{table:valuesestimationparams}, se realizan simulaciones para verificar si la estrategia puede generar retornos en ese entorno y para analizar los beneficios de la señal alfa.
 \begin{table}[H]
 	\centering
-	\caption{Resultados de simulaciones usando parámetros estimados}
+	\caption{\textit{PnL} y Desvío Estándar con y sin Drift simulados utilizando parámetros obtenidos en base a diferentes heurísticas. Parámetros constantes de Tabla \ref{table:constant_parameters}.}
 	\label{table:estimated_params_results}
 	\scriptsize
 	\begin{tabular}{lccccc}
@@ -1683,7 +1683,7 @@ Una gran porción del trabajo consistió en replicar y validar el trabajo previo d
 En una primera instancia, se logró validar que la señal alfa otorga resultados superiores para cuando se utilizó con los parámetros por default y los correspondientes al NASDAQ, pero se encontró un resultado contrario al utilizar los parámetros estimados para el activo brasilero WINQ23. Estos resultados mixtos despiertan varios interrogantes sobre la estimación de los parámetros, la naturaleza de los activos latinoamericanos y la replicabilidad de los resultados para nuevos activos. 
 
 %falla en validar numeros para activos del nasdaq - TODO: Sobre la validación?
-No se logró replicar los resultados para los activos del NASDAQ. Si bien se pudo obtener una mejora de perfil de riesgo retorno para el caso de utilizar la señal alfa compara contra el caso de no usarla, no fue posible obtener los mismos valores esperados inicialmente. Se desconoce la causa de la diferencia en el \textit{PnL} de los resultados. Se vió un retorno inferior al mostrado en la bibliografía.
+No se logró replicar los resultados para los activos del NASDAQ. Si bien se pudo obtener una mejora de perfil de riesgo retorno para el caso de utilizar la señal alfa compara contra el caso de no usarla, no fue posible obtener los mismos valores esperados inicialmente. Se desconoce la causa de la diferencia en el \textit{PnL} de los resultados. Se vió un retorno inferior al mostrado en la bibliografía. Se intentó contactar a los autores originales del modelo de forma tal de consultar esta discrepancia pero sin éxito.
 
 
 %- TODO: Sobre la estimaci?n? - TODO: Se puede estimar los parametros de mercado de un activo cualquiera para simularlo con el framework propuesto
@@ -1698,7 +1698,7 @@ Utilizando los parámetros estimados y el algoritmo de \textit{Market Making} con
 
 %Sobre las formas de estimar los parámetros y elegir lambda = 1?
 
-En la propuesta de tesis se planteó la idea de desarrollar un simulador que funcione sobre datos de la realidad para testear el modelo en una sesión de \textit{trading} real. Eso no fue implementado.
+%Removido por pedido de Tutor: En la propuesta de tesis se planteó la idea de desarrollar un simulador que funcione sobre datos de la realidad para testear el modelo en una sesión de \textit{trading} real. Eso no fue implementado.
 
 En el trabajo se pudo validar el algortimo de \textit{Market Making} con señal alfa de \cite{Cartea2019}, su simulador y estimador así como la utilidad de la señal alfa para mejorar el perfil de retornos. Se logró también extenderlo exitosamente a un activo latinoamericano: el futuro del índice BOVESPA Mini (WINQ23) obteniendo un set de parámetros compatibles con el activo. Se intentó con escaso éxito simular con los parámetros obtenidos, aunque en los casos donde se logró el retorno fue positivo. Todo esto indica la validez del modelo, la posibilidad de su extensión y la utilidad de usar un desbalance en las órdenes de mercado para predecir el futuro movimiento del precio. Sin embargo, hace falta más trabajo para comprender la compatibilidad del modelo con otros activos como el futuro del índice brasilero y no se logró responder a la pregunta sobre sí es posible utilizar un modelo como el propuesto para el mercado brasilero y si la señal alfa mejora los retornos respecto a un modelo de base.
 
