@@ -59,7 +59,7 @@
 \renewcommand{\appendixtocname}{Apéndices}
 \renewcommand{\appendixname}{Apéndices}
 \renewcommand{\algorithmname}{Algoritmo}
-
+\AtBeginDocument{\renewcommand{\harvardand}{y}}
 \lstdefinestyle{mypython}{
     language=Python,
     basicstyle=\ttfamily\footnotesize,
@@ -135,8 +135,8 @@ Gabriel Basaluzzo
 \end{titlepage}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\bibliographystyle{plainnat}
-
+%\bibliographystyle{plainnat}
+\bibliographystyle{apalike}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \cleardoublepage
 \thispagestyle{empty}
@@ -280,7 +280,7 @@ Finalmente, ataca el problema de selección adversa, evitado por Avellaneda, de d
 %%ML
 Los algoritmos de programación dinámica y los de aprendizaje reforzado comparten muchas características. Ambos deben maximizar una función de utilidad al finalizar el tiempo t. A su vez, ambos poseen un espacio de estados definido donde pueden actuar. En mucho casos ambos atacan el problema de \textit{market making}. Por esta razón, si bien el aprendizaje reforzado no es el foco principal de este trabajo, en esta sección se presentan diferentes autores que o bien describen esta técnica o atacan este problema con esa técnica particular.
 
-\cite{RichardS.Sutton2018} explica las bases del aprendizaje reforzado. Plantea que se trata del aprendizaje desde el error. Hay una serie de elementos comunes como el agente, el ambiente, una política, una señal de recompensa, una función de valor y un modelo. 
+\cite{RichardS.Sutton2018} explican las bases del aprendizaje reforzado. Plantean que se trata del aprendizaje desde el error. Hay una serie de elementos comunes como el agente, el ambiente, una política, una señal de recompensa, una función de valor y un modelo. 
 
 %Spooner et al.
 \cite{Spooner2018} diseñan un simulador que recrea la microestructura del libro de órdenes en base a los datos históricos de mercado. Diseñan un agente con un espacio de aciones discreto escalado por un \textit{spread} y definen tres funciones de recompensa distintas, incluyendo dos funciones de recompensa moderadas que desincentivan el seguimiento de tendencias y fomentan capturar \textit{spread}. Definen un estado del sistema que incluye el inventario y la microestructura, entre otros.
@@ -929,7 +929,7 @@ Para resolver esto se debe expresar los datos en forma matricial, operarlos y fi
 
 \subsection{Validación del modelo}
 \label{subsec:validacion_del_modelo}
-El objetivo principal de esta propuesta fue replicar los resultados obtenidos por \cite{Cartea2019} en su modelo con señal alfa en el tope del libro de órdenes. Estos resultados, y el modelo programado con el que se obtuvieron, son la base fundamental para aplicar este modelo a datos de mercados emergentes.
+En primer lugar, se buscó replicar los resultados obtenidos por \cite{Cartea2019} en su modelo con señal alfa en el tope del libro de órdenes. Estos resultados, y el modelo programado con el que se obtuvieron, son la base fundamental para aplicar este modelo a datos de mercados emergentes.
 
 \begin{figure}[H]
 	\centering
@@ -1213,7 +1213,7 @@ En el caso de ORCL, se obtuvo una solución superior para $\phi=10^{-6}$ y no se 
 %$\phi=10^{-6}$ superior
 %$\phi=10^{-4}$ unfinished
 
-\paragraph{PYPL, QCOM VRTX}: Para PYPL, QCOM y VRTX no se concluyó de realizar las simulaciones de forma de poder comparar el caso con alfa contra el caso sin alfa pero se mantuvieron los \textit{data-points} de forma de poder realizar otras comparaciones, como por ejemplo, entre \textit{tickers}.
+\paragraph{PYPL, QCOM y VRTX}: Para PYPL, QCOM y VRTX no se concluyó de realizar las simulaciones de forma de poder comparar el caso con alfa contra el caso sin alfa pero se mantuvieron los \textit{data-points} de forma de poder realizar otras comparaciones, como por ejemplo, entre \textit{tickers}.
 
 % + PnL + Std
 En muchos casos se obtuvieron soluciones mixtas, pero en todos ellos ocurrió que se obtuvo mayor \textit{PnL} y también mayor desvío estándar, lo cual es razonable desde el punto de vista de riesgo/retorno.
